@@ -1,0 +1,74 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="大厂实践案例" description="Shopify、Google、Meta 等科技公司在 AI 辅助开发方面的内部实践和公开分享">
+  <Sidebar currentPath="/research/company-cases" slot="sidebar" />
+  <h1>大厂实践案例</h1>
+  <div class="meta-line"><span class="tag">案例研究</span> 2026 年 7 月</div>
+
+  <h2 id="shopify">Shopify：平台 AI 化的标杆</h2>
+  <p>Shopify 在 2026 年 4 月发布了 <strong>Shopify AI Toolkit</strong>，是「平台 AI 化」思路的先行者。</p>
+  <h3>做了什么</h3>
+  <ul>
+    <li>发布了 Dev MCP Server（<code>@shopify/dev-mcp</code>），让任何 AI 工具都能通过 MCP 协议访问 Shopify API 文档和 schema</li>
+    <li>提供 Agent Skills 插件（Claude Code、Codex、Cursor、VS Code、Hermes），自动安装和更新</li>
+    <li>发布 Code Validation 能力，AI 生成的代码在本地就能验证是否符合 Shopify API 规范</li>
+  </ul>
+  <h3>为什么重要</h3>
+  <p>Shopify 没有要求员工用特定工具，而是<strong>让所有工具都能理解 Shopify 平台</strong>。这是一种「基础设施思维」——不是选边站，是建生态。</p>
+  <blockquote>
+    <p>The toolkit builds on Shopify's Dev MCP Server—the open standard Anthropic developed for connecting AI models to external tools.</p>
+  </blockquote>
+  <h3>启示</h3>
+  <ol>
+    <li>平台公司与其要求员工用某个 AI 工具，不如为所有工具提供 MCP Server</li>
+    <li>Agent Skills 插件自动更新 API schema，解决了「AI 用旧文档生成幻觉代码」的问题</li>
+    <li>Shopify 的 CTO Farhan Thawar 预测下一步：多 Agent 协作系统</li>
+  </ol>
+
+  <h2 id="google">Google：从 Agent Bake-Off 到内部平台</h2>
+  <p>Google 在 2026 年 4 月举办了 Agent Bake-Off，并公开了 5 条 Agent 构建建议：</p>
+  <ol>
+    <li><strong>从简单开始，逐步增加复杂度。</strong> 不要一开始就建多 Agent 系统。</li>
+    <li><strong>给 Agent 明确的退出条件。</strong> 无限循环是 Agent 最常见的失败模式。</li>
+    <li><strong>多模态输入是关键。</strong> 让 Agent 能「看」UI 截图、「读」错误日志。</li>
+    <li><strong>评估框架必须独立于开发框架。</strong></li>
+    <li><strong>人类在循环中（Human-in-the-loop）。</strong> 关键决策必须经过人类确认。</li>
+  </ol>
+  <p>Google Cloud 内部实践：</p>
+  <ul>
+    <li>内部使用 Gemini CLI 进行代码迁移和重构</li>
+    <li>Developer Knowledge API 连接内部文档和代码库</li>
+    <li>Data Commons MCP 连接外部公共数据集</li>
+  </ul>
+  <blockquote>
+    <p>Three things defined 2025: agents got jobs, evaluation became architecture, and trust became the bottleneck.</p>
+  </blockquote>
+
+  <h2 id="meta">Meta：AI 辅助代码审查</h2>
+  <p>Meta 在内部大规模部署了 AI 辅助代码审查（基于内部 LLM），关键发现：</p>
+  <ul>
+    <li>AI 在检测「命名不规范」「缺少 null check」「潜在的 N+1 查询」方面表现优秀</li>
+    <li>AI 在「业务逻辑正确性」「架构合理性」方面完全不可靠</li>
+    <li>最终方案：AI 做第一轮审查（机械性检查），人类做第二轮审查（逻辑和架构）</li>
+  </ul>
+
+  <h2 id="enterprise">企业级部署的共同模式</h2>
+  <p>来自 GitLab Field CTO 团队的调研（2025 年底）：</p>
+  <ul>
+    <li>企业不开放「每个开发者自行选择 AI 工具」——而是由<strong>集中化的「AI Enablement」团队</strong>统一管理</li>
+    <li>优先关注数据隐私、IP 保护、模型托管</li>
+    <li>AI Enablement 团队通常与 Platform Engineering / DevOps 团队重叠</li>
+    <li>主要框架：OpenAI Agent SDK、Anthropic Claude Agent SDK、Google ADK、Vertex AI Agent Builder</li>
+  </ul>
+
+  <h2 id="takeaway">关键启示</h2>
+  <ol>
+    <li><strong>平台思维优于工具思维。</strong> Shopify 的做法最值得学习：建 MCP Server + Agent Skills，而不是选一个工具锁定员工。</li>
+    <li><strong>AI 代码审查有明确边界。</strong> 机械检查（命名、null、N+1）交给 AI；逻辑和架构必须人审。</li>
+    <li><strong>企业需要 AI Enablement 团队。</strong> 不是给每个开发装个 Copilot 就完了——需要统一的策略、工具链和护栏。</li>
+    <li><strong>MCP 协议成为生态标准。</strong> 各个平台通过 MCP 暴露能力给 AI，而不是要求 AI 工具适配自己。</li>
+  </ol>
+</MainLayout>

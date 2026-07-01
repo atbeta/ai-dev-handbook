@@ -1,0 +1,60 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="澄清循环协议" description="人+AI 如何协作澄清模糊需求：5 阶段澄清循环、对抗性 AI 提问、三选一裁决机制">
+  <Sidebar currentPath="/handbook/clarification" slot="sidebar" />
+  <h1>澄清循环协议</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 人+AI 协作澄清需求</div>
+
+  <h2 id="essence">澄清循环的本质</h2>
+  <blockquote>
+    <p>澄清循环的目标不是「让 AI 把需求写完整」，而是<strong>「让人把需求想完整」</strong>。</p>
+  </blockquote>
+  <p>AI 是<strong>提问者</strong>，不是<strong>答题者</strong>。提问必须有对抗性（找茬，不是顺从）。</p>
+
+  <h2 id="five-stages">5 个阶段</h2>
+  <ol>
+    <li><strong>人写初稿</strong>（带 TODO 占位，不知道的标 <code>[TODO: 需要澄清]</code>）</li>
+    <li><strong>AI 4 段 Lint</strong>（4 个独立会话，不同维度审查）</li>
+    <li><strong>合并报告 + 排序</strong>（去重，按 P0/P1/P2 分类）</li>
+    <li><strong>人类裁决</strong>（每条必须三选一）</li>
+    <li><strong>修订 spec + bump 版本</strong>（回阶段 2 直到 P0=0）</li>
+  </ol>
+
+  <h2 id="todo">为什么不让 AI 写初稿</h2>
+  <div class="admonition danger">
+    <div class="admonition-title">AI 会填空</div>
+    <p>AI 的根本倾向——遇到模糊点，它倾向于「给出看起来合理的内容」而不是「承认不知道」。</p>
+    <p>后果：你以为需求清晰了，其实 AI 帮你脑补了。你的评审基准被破坏。</p>
+  </div>
+
+  <h2 id="ruling">人类裁决：每条必须三选一</h2>
+  <table>
+    <thead><tr><th>裁决</th><th>含义</th><th>后续动作</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A. 改 spec</strong></td><td>AI 说对了</td><td>修订字段，bump 版本</td></tr>
+      <tr><td><strong>B. DEFERRED</strong></td><td>暂时不解决</td><td>加 <code>[DEFERRED-YYYY-MM-DD: 原因]</code></td></tr>
+      <tr><td><strong>C. 反驳 AI</strong></td><td>AI 说错了</td><td>在 spec 注释里写理由，<strong>不许简单「不同意」</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="stop">循环终止条件</h2>
+  <ul>
+    <li>连续两轮 Lint P0=0</li>
+    <li>P1 ≤ 3 条且都有 DEFERRED 截止日期</li>
+    <li>所有 AI 反驳都有依据</li>
+  </ul>
+
+  <h2 id="anti-patterns">5 个反模式</h2>
+  <ol>
+    <li><strong>让 AI「帮我写写」：</strong>AI 会填空，把模糊变「看起来清楚」</li>
+    <li><strong>拒绝承认不知道：</strong>AI 追问你没想过的场景，你编答案</li>
+    <li><strong>把 Lint 当投票：</strong>没有裁决纪律，「看心情」决定</li>
+    <li><strong>单会话跑多轮 Lint：</strong>AI 会跨段留情</li>
+    <li><strong>AI 评审通过 = Spec 合格：</strong>AI 找不到问题 ≠ spec 没问题</li>
+  </ol>
+
+  <p style="margin-top:24px"><a href="/handbook/lint-protocol">下一章：AI Lint 协议 →</a></p>
+</MainLayout>

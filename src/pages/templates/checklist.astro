@@ -1,0 +1,83 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="流程 Checklist" description="6 步转换工作流的完整打卡表">
+  <Sidebar currentPath="/templates/checklist" slot="sidebar" />
+  <h1>流程 Checklist</h1>
+  <div class="meta-line"><span class="tag">可打印打卡表</span> 6 步工作流</div>
+
+  <h2>Step 1: 收集原始素材</h2>
+  <ul>
+    <li>☐ 原始需求描述已存放</li>
+    <li>☐ 涉及的源项目代码/文档已收集</li>
+    <li>☐ 相关方名单已确认</li>
+    <li>☐ 已知依赖系统清单已整理</li>
+    <li>☐ 现有 REQ 已关联</li>
+    <li>☐ 法规/合规要求已列出</li>
+    <li>☐ 时间/预算/优先级约束已明确</li>
+    <li>☐ 「绝对不能做」清单已记录</li>
+    <li>☐ 出门：能向完全不了解项目的人说清这条需求的来龙去脉</li>
+  </ul>
+
+  <h2>Step 2: 逐句断句</h2>
+  <ul>
+    <li>☐ 所有句子已切完</li>
+    <li>☐ 每句标了类型（功能/不变量/约束/性能/安全/体验/集成）</li>
+    <li>☐ 每句标了清晰度（清楚/部分清楚/模糊）</li>
+    <li>☐ 模糊句子 &gt; 30% 已回 Step 1 澄清</li>
+    <li>☐ 没有任何句子被合并或省略</li>
+  </ul>
+
+  <h2>Step 3: 按模板填空</h2>
+  <ul>
+    <li>☐ 所有原子命题都有归属（某个 REQ 或 DEFERRED）</li>
+    <li>☐ 按顺序填空：WHY → WHO → WHEN → Examples → Post → Pre → Error Paths → Inv</li>
+    <li>☐ grep「应该/通常/尽量/合理」命中 → 已改掉</li>
+    <li>☐ Post 用「必须/不得/等于」开头</li>
+    <li>☐ Example 是具体字面值，无 &lt;...&gt; 占位符</li>
+    <li>☐ Error Paths 表格化，5+ 场景</li>
+    <li>☐ WHY 段不是 Title 的重复</li>
+  </ul>
+
+  <h2>Step 4: AI 反向核对</h2>
+  <ul>
+    <li>☐ 新开干净会话（无上下文）</li>
+    <li>☐ AI 还原了叙述</li>
+    <li>☐ 高风险/高严重度 = 0</li>
+    <li>☐ 中风险已记录并决策</li>
+  </ul>
+
+  <h2>Step 5: AI 4 段 Lint + 裁决</h2>
+  <ul>
+    <li>☐ 4 个独立新会话，分别跑 Lint 1-4</li>
+    <li>☐ 4 份报告已合并去重，按 P0/P1/P2 排序</li>
+    <li>☐ 每条 P0/P1 已有裁决（改/DEFERRED/反驳+理由）</li>
+    <li>☐ 连续两轮 P0=0</li>
+    <li>☐ P1 ≤ 3 条且都有 DEFERRED 截止日</li>
+    <li>☐ Lint 报告归档到 reqs/[REQ-ID]/lint/</li>
+    <li>☐ 裁决记录归档到 reqs/[REQ-ID]/decisions/</li>
+  </ul>
+
+  <h2>Step 6: 冻结签字</h2>
+  <ul>
+    <li>☐ 人肉通读一遍（不用 AI）</li>
+    <li>☐ 每个 Post 能转成测试断言</li>
+    <li>☐ 每个 Example 同事看了能写出相同代码</li>
+    <li>☐ 冻结元数据已填写</li>
+    <li>☐ Spec 移到 frozen/ 目录</li>
+    <li>☐ Status: InReview → Frozen</li>
+    <li>☐ 相关方已通知</li>
+    <li>☐ 草稿版本已归档保留</li>
+  </ul>
+
+  <h2>实现阶段</h2>
+  <ul>
+    <li>☐ 设计文档每个决策可追溯到 Spec 条目</li>
+    <li>☐ 按切片（非按层）分解任务</li>
+    <li>☐ 测试从 Post 倒推（每条 Post 至少 1 个测试）</li>
+    <li>☐ AI 代码已 review（正确性/健壮性/可读性/可维护性）</li>
+    <li>☐ 上线 checklist 已过（测试/性能/安全/监控/回滚）</li>
+  </ul>
+</MainLayout>

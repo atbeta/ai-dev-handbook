@@ -1,0 +1,141 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="AI Lint Prompt 模板" description="4 段 AI Lint 的完整 Prompt 模板，可直接复制使用">
+  <Sidebar currentPath="/templates/lint-prompts" slot="sidebar" />
+  <h1>AI Lint Prompt 模板</h1>
+  <div class="meta-line"><span class="tag">可复制 Prompt</span> 4 段对抗性 AI 评审</div>
+
+  <div class="admonition warning">
+    <div class="admonition-title">使用前必读</div>
+    <p>每个 Prompt 必须用<strong>全新独立会话</strong>。只贴入 spec 文本 + 对应 Prompt，不带任何上下文。</p>
+  </div>
+
+  <h2 id="system">系统提示（所有 Lint 共用）</h2>
+  <pre><code>你是一个对工程交付负全责的高级工程师。
+我会给你一份 spec 草案。
+你的任务是找出其中的问题。
+不要赞美，不要总结，不要替我改写。
+找不到问题是你没看仔细——怀疑自己是你的默认状态。</code></pre>
+
+  <h2 id="lint1">Lint 1: 歧义扫描</h2>
+  <pre><code>【任务】歧义扫描
+
+【操作】
+1. 完整通读下方 spec
+2. 标记所有模糊词：
+   - 模糊副词：应该/通常/尽量/大概/合理/适当/在某些情况下/可能会/也许/或许
+   - 未量化形容词：高/低/大/小/快/慢/重要/复杂/简单/大量/少量/频繁/偶尔
+   - 未量化副词：立即/尽快/异步/并发/实时
+   - 模糊代词：它/此/该/上述（如果指代对象不止一个）
+3. 对每处模糊，给出至少 2 种可能的解读
+4. 给出建议的精确措辞
+
+【输出格式】
+| # | 位置 | 原文 | 歧义类型 | 解读 A | 解读 B | 建议措辞 |
+
+【spec 原文】
+（在此贴入 spec v0.X 全文）</code></pre>
+
+  <h2 id="lint2">Lint 2: 缺失扫描</h2>
+  <pre><code>【任务】缺失扫描
+
+【操作】
+1. 按字段完整性清单逐项核对：
+   ID / Title / WHY / WHO / WHEN / Pre / Post / Inv / Error Paths / Examples / Dependencies / Priority / Version
+2. 按强制问题清单追问（每条必问）：
+   - 未登录用户行为？
+   - 外部服务不可用行为？
+   - 并发：同一 actor 同时多次调用？
+   - 超时/时区/时钟漂移？
+   - 数据边界：空值/重复/超大值/Unicode？
+   - 金钱/计数：精度/舍入/溢出？
+   - 权限：越权访问？
+   - 资源限制：超过配额/限流？
+   - 幂等：是否需要幂等？怎么实现？
+   - 副作用失败：部分失败时行为？
+   - 可观测性：埋点/审计/日志？
+   - 可恢复性：能否重试？重试是否幂等？
+3. 区分空字段和"显然没说"
+
+【输出格式】
+### 字段缺失
+| # | 缺失字段 | 为什么需要 | 严重程度(P0/P1/P2) |
+### 必问清单
+| # | 问题 | 严重程度 |
+
+【spec 原文】
+（在此贴入 spec v0.X 全文）</code></pre>
+
+  <h2 id="lint3">Lint 3: 冲突扫描</h2>
+  <pre><code>【任务】冲突扫描
+
+【检查】
+A. 内部冲突（同文档内）
+   - Post vs Post 矛盾
+   - Pre vs When 矛盾
+   - Inv vs Post 矛盾
+   - Examples vs Post 矛盾
+B. 与其他 REQ 的冲突（如提供了其他 REQ 文本）
+   - 状态机不一致
+   - 命名/术语不一致
+   - 错误码冲突
+C. 与外部世界的冲突
+   - HTTP 标准
+   - 现有 OpenAPI/JSON Schema
+   - 日期格式/时区约定
+   - 法规（GDPR / PCI-DSS / 等保）
+   - 数据库约束
+   - 第三方服务 SLO
+
+【输出格式】
+| # | 冲突点 | 类型 | A 说 | B 说 | 严重程度 |
+
+【spec 原文】
+（在此贴入 spec v0.X 全文）</code></pre>
+
+  <h2 id="lint4">Lint 4: 可执行性扫描</h2>
+  <pre><code>【任务】可执行性扫描
+
+【核心测试】每条 Post 能否转成测试用例？
+
+【检查维度】
+1. 数值确定性：数字/字符串是字面值吗？
+2. 可断言：能区分成功/失败吗？
+3. 时间可测：时区/精度/参考时钟？
+4. 副作用可观测：怎么验证副作用？
+5. 幂等性：场景需要幂等吗？
+6. Examples 可执行：能放进代码跑吗？
+
+【操作】
+对每条 Post，判断能否直接转成测试断言。
+对每个 Example，尝试转成伪代码测试函数。
+转不了就标 ❌，说明卡在哪。
+
+【输出格式】
+## Post 可执行性
+| Post | 可断言? | 卡在哪 | 建议 |
+## Examples 可执行性
+| Example | 可执行? | 卡在哪 | 建议 |
+## 整体判断
+
+【spec 原文】
+（在此贴入 spec v0.X 全文）</code></pre>
+
+  <h2 id="optional">可选：Lint 5 (合规/安全扫描)</h2>
+  <pre><code>【任务】合规与安全扫描（项目涉及法规时使用）
+
+【检查】
+1. GDPR：数据保留/删除策略？最小化？跨境传输？
+2. SOC2：访问控制可审计？变更记录？
+3. PCI-DSS：支付数据处理？加密标准？
+4. 等保：身份鉴别？访问控制？安全审计？
+5. OWASP Top 10 覆盖
+
+【输出格式】
+| # | 合规要求 | 当前状态 | 差距 | 建议 |</code></pre>
+
+  <p style="margin-top:24px"><a href="/templates/checklist">附录：流程 Checklist →</a></p>
+</MainLayout>

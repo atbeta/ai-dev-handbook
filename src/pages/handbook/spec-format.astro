@@ -1,0 +1,96 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const specFormatContent = `
+  <h2 id="overview">13 字段一览</h2>
+  <table>
+    <thead><tr><th>#</th><th>字段</th><th>必填</th><th>缺它的后果</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>ID</strong></td><td>✅</td><td>没法追溯、没法交叉引用</td></tr>
+      <tr><td>2</td><td><strong>Title</strong></td><td>✅</td><td>检索不到</td></tr>
+      <tr><td>3</td><td><strong>WHY / 动机</strong></td><td>✅</td><td>后续变更时无法判断该不该改</td></tr>
+      <tr><td>4</td><td><strong>WHO / 主体</strong></td><td>✅</td><td>责任链不清</td></tr>
+      <tr><td>5</td><td><strong>WHEN / 触发</strong></td><td>✅</td><td>边界场景全凭猜</td></tr>
+      <tr><td>6</td><td><strong>Pre 前置条件</strong></td><td>✅</td><td>失败模式不确定</td></tr>
+      <tr><td>7</td><td><strong>Post 后置条件</strong></td><td>✅</td><td><strong>实现「对不对」无法验证</strong></td></tr>
+      <tr><td>8</td><td><strong>Inv 不变量</strong></td><td>⬜</td><td>状态机漏洞</td></tr>
+      <tr><td>9</td><td><strong>Error Paths</strong></td><td>✅</td><td>容易写出「try-catch 一下」</td></tr>
+      <tr><td>10</td><td><strong>Examples</strong></td><td>✅</td><td>抽象描述一定有歧义</td></tr>
+      <tr><td>11</td><td><strong>Dependencies</strong></td><td>⬜</td><td>集成时才发现冲突</td></tr>
+      <tr><td>12</td><td><strong>Priority + Source</strong></td><td>✅</td><td>扯皮时无法裁断</td></tr>
+      <tr><td>13</td><td><strong>Version + Status</strong></td><td>✅</td><td>文档漂移无人察觉</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="id">ID 命名规范</h2>
+  <p>格式：<code>REQ-{模块}-{类型}-{3位序号}</code></p>
+  <p>类型缩写：<code>FUNC</code>（功能）/ <code>INV</code>（不变量）/ <code>PERF</code>（性能）/ <code>SEC</code>（安全）/ <code>UX</code>（体验）/ <code>INT</code>（集成）</p>
+  <p>例：<code>REQ-AUTH-FUNC-001</code>、<code>REQ-ORDER-INV-002</code></p>
+
+  <h2 id="post">Post 后置条件（最关键字段）</h2>
+  <div class="admonition danger">
+    <div class="admonition-title">禁用词清单</div>
+    <p><code>应该 / 通常 / 尽量 / 大概 / 合理 / 适当 / 在某些情况下 / 可能会 / 也许 / 或许</code></p>
+  </div>
+  <p>全部用<strong>「必须/不得/等于」</strong>开头。每条独立可断言。</p>
+
+  <h3>推荐句式（借鉴 EARS）</h3>
+  <table>
+    <thead><tr><th>句式</th><th>模板</th><th>适用</th></tr></thead>
+    <tbody>
+      <tr><td>常态型</td><td><code>Post-N. {系统} 必须 {行为}</code></td><td>无条件的后置条件</td></tr>
+      <tr><td>事件型</td><td><code>Post-N. 当 {事件} 时，{系统} 必须 {行为}</code></td><td>事件触发</td></tr>
+      <tr><td>状态型</td><td><code>Post-N. 在 {状态} 下，{系统} 必须 {行为}</code></td><td>状态条件</td></tr>
+      <tr><td>防错型</td><td><code>Post-N. 若 {异常情况}，{系统} 必须 {行为}</code></td><td>错误处理</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-example">Post 好 vs 坏对比</h3>
+  <table>
+    <thead><tr><th>反例</th><th>问题</th><th>正例</th></tr></thead>
+    <tbody>
+      <tr><td>返回结果应该合理</td><td>= 没说</td><td>HTTP 状态码必须等于 200</td></tr>
+      <tr><td>登录成功返回 token</td><td>什么 token？</td><td>响应体 data.sessionId 必须等于 32 字节 base64url 安全随机串</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="examples">Examples 字段</h2>
+  <p>至少 1 个 happy + 1 个 error，使用 Gherkin (Given-When-Then) 格式，完整可执行。</p>
+  <pre><code>### Example A: 登录成功
+Given: 数据库存在 user_id=U001, email=alice@x.com
+       客户端 POST /auth/login, body={"email":"alice@x.com","password":"correct"}
+When:  系统处理该请求
+Then:  HTTP 200
+       body.data.sessionId = "32B base64url 随机串"
+       sessions 表新增 1 行</code></pre>
+
+  <h2 id="error-paths">Error Paths 字段</h2>
+  <p>必须表格化，至少覆盖 5 类错误：</p>
+  <table>
+    <thead><tr><th>错误场景</th><th>HTTP</th><th>业务码</th><th>响应体</th><th>副作用</th></tr></thead>
+    <tbody>
+      <tr><td>邮箱格式不合法</td><td>400</td><td>AUTH.E001</td><td><code>{code, message}</code></td><td>无</td></tr>
+      <tr><td>用户不存在</td><td>401</td><td>AUTH.E010</td><td><code>{code, message}</code></td><td>审计 login_fail_notfound</td></tr>
+      <tr><td>密码错误</td><td>401</td><td>AUTH.E011</td><td><code>{code, message}</code></td><td>审计 + fail_count++</td></tr>
+      <tr><td>账户锁定</td><td>423</td><td>AUTH.E020</td><td><code>{code, message, unlockAt}</code></td><td>无</td></tr>
+      <tr><td>系统内部错误</td><td>500</td><td>AUTH.E500</td><td><code>{code, message}</code></td><td>error 日志</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="status">Status 状态机</h2>
+  <pre><code>Draft → InReview → Frozen → Deprecated</code></pre>
+  <div class="admonition danger">
+    <div class="admonition-title">绝对禁止</div>
+    <p>Frozen 后<strong>不许原地改</strong>。必须开新版本（v1.0 → v1.1），记录修订原因。</p>
+  </div>
+`;
+---
+
+<MainLayout title="Spec 字段规范" description="一条可冻结的 Spec 必须包含的 13 个字段：ID、WHY、WHO、WHEN、Pre、Post、Inv、Error Paths、Examples 等">
+  <Sidebar currentPath="/handbook/spec-format" slot="sidebar" />
+  <h1>Spec 字段规范</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 13 字段详解</div>
+  <Fragment set:html={specFormatContent} />
+  <p style="margin-top:24px"><a href="/handbook/clarification">下一章：澄清循环协议 →</a></p>
+</MainLayout>

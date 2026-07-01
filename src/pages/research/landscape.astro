@@ -1,0 +1,108 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="行业全景图" description="AI 辅助生产级开发的行业全景图：2026 年的核心议题、关键玩家和主要趋势">
+  <h1>行业全景图</h1>
+  <div class="meta-line">调研报告 · 2026 年 7 月</div>
+
+  <h2 id="one-sentence">一句话总结</h2>
+  <blockquote>
+    <p>2026 年，AI 辅助开发已从「要不要用」进入「怎么用好」的新阶段。核心矛盾不再是模型能力，而是<strong>工程流程和人机协作模式</strong>。</p>
+  </blockquote>
+
+  <h2 id="timeline">演化时间线</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>时间</th><th>特征</th><th>代表事件</th></tr></thead>
+    <tbody>
+      <tr><td><strong>代码补全</strong></td><td>2021-2023</td><td>行级/函数级补全</td><td>GitHub Copilot 发布</td></tr>
+      <tr><td><strong>AI 对话编程</strong></td><td>2023-2024</td><td>Chat 界面、多文件编辑</td><td>Cursor、Claude Code 崛起</td></tr>
+      <tr><td><strong>Coding Agent</strong></td><td>2024-2025</td><td>自主任务执行、工具调用</td><td>Devin、OpenHands、SWE-agent</td></tr>
+      <tr><td><strong>Agent 协作</strong></td><td>2025-2026</td><td>多 Agent、MCP 生态、企业平台</td><td>Shopify AI Toolkit、Google Agent Bake-Off</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="core-debates">2026 年六大核心议题</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>1. Vibe Coding vs Spec-Driven</h3>
+      <p>行业从两极分化走向务实。原型用 vibe，生产用 spec，两者互补而非对立。</p>
+      <a href="/research/vibe-vs-spec">详细分析 →</a>
+    </div>
+    <div class="card">
+      <h3>2. Coding Agent 生态爆发</h3>
+      <p>Devin、Claude Code Agent、Cursor Agent、Codex CLI——各自的设计哲学、适用场景和盲区。</p>
+      <a href="/research/agent-ecosystem">详细分析 →</a>
+    </div>
+    <div class="card">
+      <h3>3. 上下文工程成为新热点</h3>
+      <p>AGENTS.md、Repo Map、MCP 工具接入——给 AI 什么上下文，比 prompt 本身更能决定输出质量。</p>
+      <a href="/research/context-engineering">详细分析 →</a>
+    </div>
+    <div class="card">
+      <h3>4. AI 代码质量的实证数据</h3>
+      <p>SWE-bench 从 4% 到 40%+、AI 代码 churn rate 1.5x、开发者信任度下降——数据说了什么。</p>
+      <a href="/research/quality-metrics">详细分析 →</a>
+    </div>
+    <div class="card">
+      <h3>5. 大厂内部实践揭秘</h3>
+      <p>Shopify AI Toolkit、Google 内部 agent 平台、Meta 代码生成基础设施——真实落地案例。</p>
+      <a href="/research/company-cases">详细分析 →</a>
+    </div>
+    <div class="card">
+      <h3>6. 安全与合规挑战</h3>
+      <p>AI 生成代码的 OWASP 风险、IP 争议、GDPR/SOC2 合规——不可回避的红线。</p>
+      <a href="/research/security">详细分析 →</a>
+    </div>
+  </div>
+
+  <h2 id="players">关键玩家格局</h2>
+  <table>
+    <thead><tr><th>类别</th><th>玩家</th><th>定位</th></tr></thead>
+    <tbody>
+      <tr><td><strong>AI IDE</strong></td><td>Cursor、Windsurf、Zed AI</td><td>原生 AI 集成编辑器</td></tr>
+      <tr><td><strong>终端 Agent</strong></td><td>Claude Code、Codex CLI、Gemini CLI</td><td>命令行 AI 编码助手</td></tr>
+      <tr><td><strong>云 Agent</strong></td><td>Devin、Factory、Cosine、OpenHands</td><td>云端自治编码 Agent</td></tr>
+      <tr><td><strong>CI/CD 集成</strong></td><td>GitHub Copilot Code Review、Qodo、Propel</td><td>AI 代码审查 + 测试生成</td></tr>
+      <tr><td><strong>平台生态</strong></td><td>Shopify AI Toolkit、Google Vertex AI Agent</td><td>垂直领域 AI 开发平台</td></tr>
+      <tr><td><strong>开源协议</strong></td><td>MCP (Anthropic)、A2A (Google)</td><td>Agent 间通信标准</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="consensus">业界共识（2026 年中）</h2>
+  <div class="admonition info">
+    <div class="admonition-title">五条基本共识</div>
+    <ol>
+      <li><strong>Spec 必须工程化。</strong> 不管用什么工具，spec 要可断言、可测试、可版本控制。</li>
+      <li><strong>AI 写代码可以，但 review 不能缩水。</strong> AI 让写代码变快，review 应该加严而非放松。</li>
+      <li><strong>上下文 > Prompt。</strong> 给 AI 提供高质量的代码上下文（结构、约定、依赖），比精心设计 prompt 更有效。</li>
+      <li><strong>Agent 需要护栏，不是放养。</strong> 自治 Agent 必须有边界——能碰什么、不能碰什么、什么时候必须等人类确认。</li>
+      <li><strong>人始终是验收方。</strong> AI 可以建议，但不能决定"可上线"。这个责任永远在人。</li>
+    </ol>
+  </div>
+
+  <h2 id="trends">三个值得关注的趋势</h2>
+  <h3>趋势 1：从 AI 工具到 AI 平台</h3>
+  <p>Shopify 不是给员工装个 Copilot，而是发布了一整套 AI Toolkit（MCP Server + Agent Skills + 文档 Schema），让任何 AI 编码工具都能理解 Shopify 平台。这是一种「平台 AI 化」的思路，可能成为大公司标配。</p>
+
+  <h3>趋势 2：多 Agent 协作</h3>
+  <p>单个 Agent 的上下文窗口和推理能力有限。Google Agent Bake-Off 验证：规划 Agent + 编码 Agent + 审查 Agent 的多 Agent 架构，在复杂任务上显著优于单一 Agent。</p>
+
+  <h3>趋势 3：AI 在 CI 管道中的深度嵌入</h3>
+  <p>不仅是 AI 写代码，还有 AI 写测试、AI 审查、AI 扫描安全漏洞、AI 生成发布说明——CI 管道正在变成一个 AI 流水线。</p>
+
+  <h2 id="next">下一步</h2>
+  <p>建议按以下顺序阅读调研专题：</p>
+  <ol>
+    <li><a href="/research/vibe-vs-spec">Vibe Coding vs Spec-Driven 辩论</a> — 理解当前最大的方法论分歧</li>
+    <li><a href="/research/agent-ecosystem">Coding Agent 生态</a> — 知道有什么工具、怎么选</li>
+    <li><a href="/research/quality-metrics">AI 代码质量度量</a> — 用数据说话，而不是感觉</li>
+    <li><a href="/research/context-engineering">上下文工程</a> — 2026 年最实用的技能</li>
+    <li><a href="/research/company-cases">大厂实践案例</a> — 看别人怎么做的</li>
+    <li><a href="/research/security">安全合规</a> — 不可回避的红线</li>
+  </ol>
+</MainLayout>
+
+<Sidebar currentPath="/research/landscape" slot="sidebar" />

@@ -1,0 +1,67 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="反模式与失败模式" description="AI 辅助开发流程中已知的 40 种反模式，按阶段分类，附识别方法和纠正路径">
+  <Sidebar currentPath="/handbook/anti-patterns" slot="sidebar" />
+  <h1>反模式与失败模式</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 40 种已知的坑</div>
+
+  <h2 id="top10">Top 10 高频反模式</h2>
+  <table>
+    <thead><tr><th>反模式</th><th>严重程度</th><th>出现频率</th></tr></thead>
+    <tbody>
+      <tr><td>S-1: 让 AI 写 Spec 初稿</td><td>高</td><td>极高</td></tr>
+      <tr><td>S-2: 结构化表演（字段齐全但内容空）</td><td>高</td><td>极高</td></tr>
+      <tr><td>L-1: AI 通过 = Spec 合格</td><td>高</td><td>高</td></tr>
+      <tr><td>I-2: 只测 happy path</td><td>高</td><td>极高</td></tr>
+      <tr><td>M-1: Frozen 后原地改</td><td>高</td><td>中</td></tr>
+      <tr><td>R-1: PM 说「差不多」</td><td>高</td><td>高</td></tr>
+      <tr><td>I-1: AI 代码不 review</td><td>高</td><td>高</td></tr>
+      <tr><td>S-5: Example 是抽象描述</td><td>中</td><td>极高</td></tr>
+      <tr><td>L-3: Lint 流于形式</td><td>中</td><td>高</td></tr>
+      <tr><td>D-1: 设计不引用 Spec</td><td>中</td><td>中</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="symptoms">流程「形式化」的 6 个信号</h2>
+  <p>以下任一信号出现，立即停下来 review 流程：</p>
+  <ol>
+    <li>Lint 输出越来越短（AI 在顺从）</li>
+    <li>DEFERRED 越来越多（没人想真解决）</li>
+    <li>Spec 越来越长（没人 review 增量内容）</li>
+    <li>Spec 和代码不一致（Spec 失去权威性）</li>
+    <li>PM 不参与评审（业务和技术脱节）</li>
+    <li>测试覆盖率虚高（测试是事后补的）</li>
+  </ol>
+
+  <h2 id="correct-order">纠正优先级</h2>
+  <ol>
+    <li><strong>S-1（让 AI 写 Spec）</strong> → 立即停止，重写</li>
+    <li><strong>S-2（结构化表演）</strong> → 立即停止，重写 Post</li>
+    <li><strong>L-1（AI 通过就 Frozen）</strong> → 回到 Lint</li>
+    <li><strong>M-1（Frozen 后原地改）</strong> → 开新版本</li>
+    <li><strong>I-2（只测 happy path）</strong> → 补测试</li>
+  </ol>
+
+  <h2 id="by-stage">按阶段速查</h2>
+  <details>
+    <summary>需求分析 (5)</summary>
+    <p>R-1: PM 说「差不多」| R-2: PM 省略 WHY | R-3: 业务裁决推给工程师 | R-4: 需求方换人 | R-5: 客户反馈当需求</p>
+  </details>
+  <details>
+    <summary>Spec 撰写 (8)</summary>
+    <p>S-1: AI 写初稿 | S-2: 结构化表演 | S-3: WHY 重复 Title | S-4: 后置条件用形容词 | S-5: Example 抽象 | S-6: 错误只写「失败」| S-7: Inv 和 Post 重复 | S-8: TODO 永不清理</p>
+  </details>
+  <details>
+    <summary>Spec 评审 (6)</summary>
+    <p>L-1: AI 通过就 Frozen | L-2: 单会话多轮 | L-3: 流于形式 | L-4: 反驳不写依据 | L-5: DEFERRED 无日期 | L-6: Lint 输出越来越短</p>
+  </details>
+  <details>
+    <summary>设计 (5) | 实现 (7) | 协作 (5) | 维护 (4)</summary>
+    <p>详见完整版 Spec 手册反模式章节。</p>
+  </details>
+
+  <p style="margin-top:24px"><a href="/handbook/tools">下一章：工具链 →</a></p>
+</MainLayout>

@@ -1,0 +1,90 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="Vibe Coding vs Spec-Driven Development" description="2025-2026 软件工程最大的方法论辩论：Vibe Coding 和 Spec-Driven Development 的对决与融合">
+  <Sidebar currentPath="/research/vibe-vs-spec" slot="sidebar" />
+  <h1>Vibe Coding vs Spec-Driven Development</h1>
+  <div class="meta-line"><span class="tag">核心辩论</span> 2026 年 7 月</div>
+
+  <h2 id="origin">起源：从 Karpathy 的一条推特开始</h2>
+  <p>2025 年初，Andrej Karpathy（前 Tesla AI 总监、OpenAI 联合创始人）在 X 上发了一条推文：</p>
+  <blockquote>
+    <p>There's a new kind of coding I call "vibe coding", where you fully give in to the vibes, embrace exponentials, and forget that the code even exists. It's possible because the LLMs (e.g. Cursor Composer w Sonnet) are getting so much better.</p>
+  </blockquote>
+  <p>这个看似随意的说法引爆了整个开发社区。Karpathy 本人后来补充说，vibe coding 适合个人项目和原型，<strong>不适合生产环境</strong>。但「vibe coding」这个词已经脱缰了。</p>
+
+  <h2 id="definitions">两种模式的定义</h2>
+  <table>
+    <thead><tr><th>维度</th><th>Vibe Coding</th><th>Spec-Driven Development</th></tr></thead>
+    <tbody>
+      <tr><td><strong>核心流程</strong></td><td>描述需求 → AI 生成代码 → 跑一下 → 不行就改 prompt → 再生成</td><td>写 Spec（可断言的合同）→ AI 评审 → 人工裁决 → Frozen → 设计 → 实现</td></tr>
+      <tr><td><strong>Truth Source</strong></td><td>AI 生成的代码即事实</td><td>Spec 是单一事实源，代码是 Spec 的衍生品</td></tr>
+      <tr><td><strong>迭代方式</strong></td><td>Prompt → Code → 看效果 → 改 Prompt</td><td>Spec → Lint → 裁决 → 修订 → 再 Lint → Frozen</td></tr>
+      <tr><td><strong>人的角色</strong></td><td>Prompt 工程师 + 测试员</td><td>Spec Author + 裁决者 + Reviewer</td></tr>
+      <tr><td><strong>AI 的角色</strong></td><td>实现者</td><td>评审者 + 辅助实现者</td></tr>
+      <tr><td><strong>速度感</strong></td><td>前 80% 极快</td><td>前 30% 慢，后 70% 极快</td></tr>
+      <tr><td><strong>3 个月后的状态</strong></td><td>代码混乱、难以维护</td><td>代码有序、Spec 可追溯</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="vibe-wall">Vibe Coding 的「3 个月墙」</h2>
+  <p>来自 Augment Code 和 InfoWorld 的调研揭示了一个规律：</p>
+  <div class="admonition warning">
+    <div class="admonition-title">3 个月墙现象</div>
+    <p>Vibe coding 项目前 2-4 周产出惊人快。但从第 6-8 周开始，返工、调试、重构的时间急剧上升。到第 3 个月，维护成本超过新功能开发速度，项目实质上陷入停滞。</p>
+    <p><strong>原因</strong>：没有 spec 约束，AI 每次自由发挥，代码风格和设计模式在每次迭代中漂移，累积技术债的速度远超人力偿还的速度。</p>
+  </div>
+
+  <h2 id="spec-wall">Spec-Driven 的「前期慢墙」</h2>
+  <p>Spec-Driven 的瓶颈在前端：写一个好 Spec 需要 1-3 天（简单功能）到 1-4 周（复杂业务/移植）。团队需要一个心理转变：</p>
+  <blockquote>
+    <p>你现在花的每一小时写 Spec，后面省回来的是 3-5 倍的调试和返工时间。</p>
+  </blockquote>
+
+  <h2 id="synthesis">务实融合：分场景使用</h2>
+  <p>2026 年中，业界形成了务实共识：<strong>不选边，选场景。</strong></p>
+
+  <table>
+    <thead><tr><th>场景</th><th>推荐模式</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>个人项目 / Hackathon</td><td>Vibe Coding</td><td>速度优先，维护不重要</td></tr>
+      <tr><td>原型 / PoC / Demo</td><td>Vibe Coding</td><td>需要验证想法，不是交付产品</td></tr>
+      <tr><td>数据探索 / 一次性脚本</td><td>Vibe Coding</td><td>用完即弃</td></tr>
+      <tr><td>生产级新功能</td><td>Spec-Driven</td><td>需要可维护、可测试、可追溯</td></tr>
+      <tr><td>核心业务逻辑</td><td>Spec-Driven（最严）</td><td>错了影响用户/金钱</td></tr>
+      <tr><td>合规相关功能</td><td>Spec-Driven + 人工法务 Review</td><td>法规红线</td></tr>
+      <tr><td>技术债清理 / 重构</td><td>混合：Spec 定义目标 → Vibe Code 执行</td><td>有明确约束的 vibe</td></tr>
+      <tr><td>Bug 修复</td><td>Spec-Driven（轻量版）</td><td>需要精确理解预期行为</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="redhat">Red Hat 的观点</h2>
+  <p>Red Hat Developer 博客在 2026 年 2 月发表了一篇重要文章《The uncomfortable truth about vibe coding》：</p>
+  <blockquote>
+    <p>Spec-driven development flips the relationship between instructions and code. Instead of treating your prompts as throwaway tasks, you treat your specifications as the authoritative blueprint—the single source of truth that the code must conform to.</p>
+  </blockquote>
+  <p>Red Hat 的核心论点是：<strong>vibe coding 把 prompt 当一次性消费品，spec-driven 把 spec 当长期资产</strong>。对于需要长期维护的生产级项目，这是一个根本性的区别。</p>
+
+  <h2 id="karpathy-evolution">Karpathy 自己的演变</h2>
+  <p>到 2026 年中，Karpathy 本人已经开始谈论「Agentic Engineering」——一个比 vibe coding 更严谨、但比传统 spec-driven 更灵活的新范式：</p>
+  <blockquote>
+    <p>We're entering the age of agentic engineering — orchestrating agents against detailed specifications with human oversight.</p>
+  </blockquote>
+  <p>这实际上是在承认：<strong>纯 vibe coding 不适用于生产环境，需要 spec 作为锚点。</strong></p>
+
+  <h2 id="decision">决策框架</h2>
+  <p>问自己三个问题：</p>
+  <ol>
+    <li><strong>这段代码要活多久？</strong> → &lt; 1 个月：vibe；&gt; 3 个月：spec。</li>
+    <li><strong>出错了后果是什么？</strong> → 丢了也不心疼：vibe；丢了要赔钱/丢用户：spec。</li>
+    <li><strong>会有别人接手吗？</strong> → 不会：vibe；会：spec（让别人能读懂）。</li>
+  </ol>
+
+  <div class="admonition tip">
+    <div class="admonition-title">实践建议</div>
+    <p>即使是 vibe coding 项目，建议至少写一个最小 Spec：WHY + Post + 1 个 Example。这 3 个字段只需要 15 分钟，但能让 AI 的产出质量提升一个档次。</p>
+  </div>
+</MainLayout>
+

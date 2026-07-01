@@ -1,0 +1,89 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="为什么需要这套流程" description="AI 辅助开发的心智模型：为什么 Spec 工程化是 ROI 最高的单一投入">
+  <Sidebar currentPath="/handbook/why" slot="sidebar" />
+  <h1>为什么需要这套流程</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 心智模型</div>
+
+  <h2 id="amplifier">AI 不是工程师，是放大器</h2>
+  <table>
+    <thead><tr><th>输入</th><th>AI 产出</th><th>结果</th></tr></thead>
+    <tbody>
+      <tr><td>模糊需求</td><td>模糊设计的快版本</td><td>幻觉、返工</td></tr>
+      <tr><td>清晰 Spec</td><td>正确实现</td><td>高效交付</td></tr>
+      <tr><td>清晰 Spec + 评审</td><td>正确实现 + 反幻觉保护</td><td><strong>高质量交付</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="three-gates">3 道闸门心智模型</h2>
+  <table>
+    <thead><tr><th>闸门</th><th>验收方</th><th>出门条件</th></tr></thead>
+    <tbody>
+      <tr><td><strong>闸门 1: Spec</strong></td><td>人类 + 对抗性 AI</td><td>13 字段齐全 + Post 可断言 + Lint 两轮 P0=0</td></tr>
+      <tr><td><strong>闸门 2: 设计</strong></td><td>人类</td><td>每个设计决策可追溯到 Spec 条目</td></tr>
+      <tr><td><strong>闸门 3: 实现</strong></td><td>自动化测试 + 人类抽样</td><td>每条 Post 有测试覆盖 + 集成验证通过</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="five-failures">5 种典型失败模式</h2>
+  <ol>
+    <li><strong>跳过 Spec，直接进设计：</strong>AI 生成的设计基于「填空」不是业务意图</li>
+    <li><strong>Spec 写得很漂亮，但是叙述型：</strong>读完后两个工程师写出不同实现——歧义即幻觉</li>
+    <li><strong>Spec 评审流于形式：</strong>AI 通过一轮就 Frozen，缺少硬性的出门条件</li>
+    <li><strong>测试写得松：</strong>只覆盖 happy path，AI 代码「过测试」但行为错</li>
+    <li><strong>移植项目当 greenfield：</strong>把源项目当需求文档，「未文档化契约」全丢失</li>
+  </ol>
+
+  <h2 id="two-engineer">「两工程师测试」—— 金标准</h2>
+  <blockquote>
+    <p>两个没参与过这个项目的合格工程师，能否独立写出<strong>同样</strong>的实现？</p>
+  </blockquote>
+  <p>能 → Spec 没有歧义。不能 → Spec 有歧义，AI 也会陷入同样歧义。</p>
+
+  <h2 id="time">为什么这套流程「不慢」</h2>
+  <table>
+    <thead><tr><th></th><th>不写 Spec</th><th>写 Spec</th></tr></thead>
+    <tbody>
+      <tr><td>需求澄清</td><td>0.5 周</td><td>1.5 周</td></tr>
+      <tr><td>写代码</td><td>1 周</td><td>1 周</td></tr>
+      <tr><td>调试 + 返工</td><td>3 周 + 2 周</td><td>0.5 周</td></tr>
+      <tr><td><strong>合计</strong></td><td><strong>6 周</strong></td><td><strong>3 周</strong></td></tr>
+    </tbody>
+  </table>
+  <blockquote>
+    <p>写 Spec 不慢，省下来的时间在返工里。</p>
+  </blockquote>
+
+  <h2 id="ten-rules">10 条铁律</h2>
+  <ol>
+    <li>Spec 是合同，不是叙述。</li>
+    <li>不许让 AI 写 Spec 初稿。</li>
+    <li>Spec 的每个 Post 必须可断言。</li>
+    <li>Example 必须可执行（无抽象占位符）。</li>
+    <li>每个 Lint Prompt 用全新会话。</li>
+    <li>P0 问题不解决不许 Frozen。</li>
+    <li>Spec Frozen 后不许原地改。</li>
+    <li>测试是反幻觉的硬约束。</li>
+    <li>切片实现，不许 big-bang。</li>
+    <li>人工永远是验收方。</li>
+  </ol>
+
+  <h2 id="consensus">团队共识（5 条）</h2>
+  <ol>
+    <li>AI 是工具，工程师是责任主体。</li>
+    <li>Spec 是合同，Frozen 后是 single source of truth。</li>
+    <li>AI 评审是补充，人工评审是必需。</li>
+    <li>测试从 Spec 倒推，不从代码倒推。</li>
+    <li>流程的存在是为了降低返工率，不是为了仪式感。</li>
+  </ol>
+
+  <div class="admonition tip">
+    <div class="admonition-title">一句话总结</div>
+    <p>Spec 工程化是 AI 辅助开发的 ROI 最高的单一投入。把 30-50% 的时间花在 Spec 上，换来 70%+ 的返工下降。</p>
+  </div>
+
+  <p style="margin-top:24px"><a href="/handbook/spec-format">下一章：Spec 字段规范 →</a></p>
+</MainLayout>

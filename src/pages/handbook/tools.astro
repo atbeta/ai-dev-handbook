@@ -1,0 +1,85 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="工具链" description="支持 AI 辅助开发流程的工具栈：选型原则、推荐方案、评估清单">
+  <Sidebar currentPath="/handbook/tools" slot="sidebar" />
+  <h1>工具链</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 选型原则与推荐方案</div>
+
+  <h2 id="principles">5 个选型原则</h2>
+  <ol>
+    <li><strong>Spec 是 single source of truth</strong> — 工具围绕 Spec 组织</li>
+    <li><strong>流程比工具重要</strong> — 工具不解决流程问题</li>
+    <li><strong>选能用起来的最小集</strong> — 不要追求全工具栈</li>
+    <li><strong>支持 PR review</strong> — Spec 评审本质是多人协作</li>
+    <li><strong>AI 工具支持「干净会话」</strong> — Lint 必须用新会话</li>
+  </ol>
+
+  <h2 id="starter">起步推荐配置（最小可用）</h2>
+  <table>
+    <thead><tr><th>能力</th><th>推荐</th></tr></thead>
+    <tbody>
+      <tr><td>Spec 存储</td><td>Git + Markdown</td></tr>
+      <tr><td>AI Lint</td><td>Claude / ChatGPT 网页（每个 Lint 新会话）</td></tr>
+      <tr><td>AI 编码</td><td>Cursor（日常）+ Claude Code（复杂任务）</td></tr>
+      <tr><td>测试</td><td>语言原生（pytest/jest/go test）+ testcontainers</td></tr>
+      <tr><td>CI</td><td>GitHub Actions / GitLab CI</td></tr>
+      <tr><td>项目管理</td><td>GitHub Issues / GitLab Issues</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="spec-storage">Spec 存储方案</h2>
+  <div class="admonition danger">
+    <div class="admonition-title">不推荐</div>
+    <p>Notion/Confluence 存 Spec（失去版本控制和 PR review）、Word 评审（没 diff、没评论流）。</p>
+  </div>
+  <p>推荐目录结构：</p>
+  <pre><code>reqs/
+├── glossary.md
+├── REQ-AUTH-FUNC-001/
+│   ├── v1.0.md              # Frozen
+│   ├── draft/               # 草稿版本
+│   ├── lint/                # Lint 报告
+│   ├── decisions/           # 决策记录
+│   └── sources/             # 原始素材</code></pre>
+
+  <h2 id="ai-coding">AI 编码工具对比</h2>
+  <table>
+    <thead><tr><th>工具</th><th>适用场景</th><th>关键优势</th></tr></thead>
+    <tbody>
+      <tr><td>Cursor</td><td>日常编码</td><td>IDE 集成、实时上下文</td></tr>
+      <tr><td>Claude Code</td><td>复杂多文件重构</td><td>超长上下文、Agent 模式、MCP</td></tr>
+      <tr><td>GitHub Copilot</td><td>简单补全</td><td>IDE 集成好、低门槛</td></tr>
+      <tr><td>Codex CLI</td><td>终端流</td><td>OpenAI 官方、沙箱执行</td></tr>
+      <tr><td>Aider</td><td>Git 驱动</td><td>Git-aware、开源</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="test-tools">测试工具</h2>
+  <table>
+    <thead><tr><th>场景</th><th>推荐</th></tr></thead>
+    <tbody>
+      <tr><td>单元测试</td><td>语言原生（pytest/jest/go test）</td></tr>
+      <tr><td>集成测试</td><td>testcontainers / docker-compose</td></tr>
+      <tr><td>BDD 测试</td><td>Cucumber / Behave / SpecFlow</td></tr>
+      <tr><td>E2E 测试</td><td>Playwright / Cypress</td></tr>
+      <tr><td>性能测试</td><td>k6 / Locust</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="evaluate">工具评估清单</h2>
+  <p>引入任何工具前先问：</p>
+  <ol>
+    <li>这个工具能解决明确痛点吗？</li>
+    <li>团队会真的用吗？</li>
+    <li>工具不增加流程复杂度吗？</li>
+    <li>支持版本控制/PR review 吗？</li>
+    <li>与现有栈兼容吗？</li>
+    <li>学习成本值得吗？</li>
+    <li><strong>如果这个工具明天消失，流程还能跑吗？</strong></li>
+  </ol>
+
+  <p style="margin-top:24px"><a href="/templates/spec">附录：Spec 模板 →</a></p>
+</MainLayout>

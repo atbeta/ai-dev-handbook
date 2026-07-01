@@ -1,0 +1,78 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="AI 代码质量度量" description="AI 生成代码的质量如何度量？实证数据：SWE-bench、churn rate、bug 率、开发者信任度">
+  <Sidebar currentPath="/research/quality-metrics" slot="sidebar" />
+  <h1>AI 代码质量度量</h1>
+  <div class="meta-line"><span class="tag">实证数据</span> 2026 年 7 月</div>
+
+  <h2 id="problem">问题：怎么判断 AI 代码「好不好」？</h2>
+  <p>传统指标（测试覆盖率、lint 通过率）在 AI 时代严重不够用。因为 AI 可以「过测试」但行为错，AI 代码可以「看起来漂亮」但逻辑有漏洞。</p>
+
+  <h2 id="benchmarks">基准测试：从 HumanEval 到 SWE-bench</h2>
+  <table>
+    <thead><tr><th>基准</th><th>测试内容</th><th>难度</th><th>顶级模型得分 (2026)</th></tr></thead>
+    <tbody>
+      <tr><td>HumanEval</td><td>独立函数生成</td><td>低</td><td>90%+（已饱和）</td></tr>
+      <tr><td>MBPP</td><td>Python 基础编程</td><td>低</td><td>85%+（近饱和）</td></tr>
+      <tr><td>SWE-bench Verified</td><td>真实 GitHub Issue 修复</td><td><strong>高</strong></td><td>~40-50%（GPT-5.2/Claude 4.5）</td></tr>
+      <tr><td>SWE-bench Multilingual</td><td>多语言 Issue 修复</td><td>很高</td><td>~30%</td></tr>
+      <tr><td>AgentBench</td><td>多步骤 Agent 任务</td><td>很高</td><td>~25-35%</td></tr>
+    </tbody>
+  </table>
+  <div class="admonition warning">
+    <div class="admonition-title">关键认知</div>
+    <p>HumanEval 已经不能用来评估 AI 代码能力。SWE-bench 更能反映真实工程能力，但最高分也只在 40-50%——<strong>AI 在真实工程任务上还有很长的路</strong>。</p>
+  </div>
+
+  <h2 id="real-metrics">生产环境中的真实度量</h2>
+  <h3>1. AI vs Human Turnover Ratio（代码翻修率）</h3>
+  <p>来自 2026 年 Developer Productivity Benchmarks 的数据：</p>
+  <blockquote>
+    <p>如果 AI 生成代码的 churn rate（提交后 3 周内被修改的比例）超过人工代码的 1.5 倍，说明 AI 代码占比过高，review 跟不上。</p>
+  </blockquote>
+  <p>建议目标：AI 代码 churn rate ≤ 1.3x 人工代码 churn rate。</p>
+
+  <h3>2. 开发者信任度下降趋势</h3>
+  <p>Exceeds.ai 的调查显示：</p>
+  <ul>
+    <li>2024 年：40% 开发者「信任 AI 生成代码的准确性」</li>
+    <li>2025 年：下降到 <strong>29%</strong></li>
+    <li>原因：团队发现通过 review 的 AI 代码，在生产环境中 30/60/90 天后依然出问题</li>
+  </ul>
+
+  <h3>3. AI 代码的 Bug 引入率</h3>
+  <p>GitClear 和 Qodo 的研究：</p>
+  <ul>
+    <li>AI 辅助团队的 bug 引入率在短期（1-2 周）降低了 15-20%</li>
+    <li>但长期（3-6 个月）的 bug 密度反而上升了 10-15%——技术债累积效应</li>
+    <li>有强制 Code Review 的团队，这个反转不出现</li>
+  </ul>
+
+  <h2 id="metric-framework">建议的度量框架</h2>
+  <table>
+    <thead><tr><th>指标</th><th>测量什么</th><th>预警阈值</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Churn Rate</strong></td><td>AI 代码的翻修频率</td><td>&gt; 1.5x 人工基准</td></tr>
+      <tr><td><strong>Review Pass Rate</strong></td><td>AI PR 首次通过率</td><td>&lt; 60% 可能 prompt 有问题</td></tr>
+      <tr><td><strong>Bug Attribution</strong></td><td>AI 代码 bug 占比 vs 代码量占比</td><td>AI bug% &gt; AI code% — 需要加严 review</td></tr>
+      <tr><td><strong>Spec Traceability</strong></td><td>多少代码变更能追溯到 Spec</td><td>&lt; 80% — spec 失去权威</td></tr>
+      <tr><td><strong>Time-to-Resolve</strong></td><td>AI 代码 vs 人工代码的 bug 修复时间</td><td>AI &gt; 1.3x 人工 — 可维护性差</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="anti-patterns">常见度量反模式</h2>
+  <ol>
+    <li><strong>只看测试覆盖率。</strong> AI 可以生成「覆盖率高但断言弱」的测试。要检查断言质量。</li>
+    <li><strong>只看 lint 通过。</strong> AI 代码 lint 通过率极高（因为 AI 擅长语法），但逻辑错误 lint 检测不到。</li>
+    <li><strong>忽略代码简化度。</strong> AI 倾向于过度工程化。度量复杂度（cyclomatic complexity）和抽象层数。</li>
+    <li><strong>不追踪长期指标。</strong> 只看当下，不看 3 个月后的维护成本。</li>
+  </ol>
+
+  <h2 id="takeaway">关键结论</h2>
+  <blockquote>
+    <p>AI 让代码写得快，但代码质量是<strong>流程的函数</strong>，不是模型的函数。好流程 + 弱模型 > 坏流程 + 强模型。</p>
+  </blockquote>
+</MainLayout>

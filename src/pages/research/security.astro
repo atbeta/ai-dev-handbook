@@ -1,0 +1,68 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="安全与合规" description="AI 生成代码的安全风险和合规要求：OWASP Top 10 for AI、IP 风险、GDPR/SOC2 合规">
+  <Sidebar currentPath="/research/security" slot="sidebar" />
+  <h1>安全与合规</h1>
+  <div class="meta-line"><span class="tag">不可回避的红线</span> 2026 年 7 月</div>
+
+  <h2 id="problem">AI 代码的安全盲区</h2>
+  <p>AI 在安全方面有一个独特的陷阱：<strong>它生成的代码看起来太「正常」了</strong>。语法正确、结构清晰、注释齐全——这让安全漏洞特别容易通过 review。</p>
+
+  <h2 id="owasp">AI 代码常见安全风险（OWASP 映射）</h2>
+  <table>
+    <thead><tr><th>风险</th><th>OWASP 对应</th><th>AI 为什么容易犯</th><th>检查方法</th></tr></thead>
+    <tbody>
+      <tr><td>SQL/NoSQL 注入</td><td>A03:2021 Injection</td><td>AI 常直接拼接用户输入到查询</td><td>强制使用参数化查询/ORM</td></tr>
+      <tr><td>认证逻辑漏洞</td><td>A07:2021 Identification Failures</td><td>AI 简化的 auth 实现容易漏边界</td><td>Spec 中强制覆盖 Error Paths</td></tr>
+      <tr><td>敏感信息泄露</td><td>A04:2021 Insecure Design</td><td>AI 常在日志/响应中泄露 PII/token</td><td>Spec Post 中明确禁止项</td></tr>
+      <tr><td>不安全加密</td><td>A02:2021 Crypto Failures</td><td>AI 会「发明」加密方案或用弱算法</td><td>Spec 中指定具体算法和参数</td></tr>
+      <tr><td>SSRF</td><td>A10:2021 SSRF</td><td>AI 对用户提供的 URL 无验证</td><td>URL 白名单机制</td></tr>
+      <tr><td>权限绕过</td><td>A01:2021 Broken Access Control</td><td>AI 容易漏掉越权检查</td><td>Spec Inv 中强制权限不变量</td></tr>
+    </tbody>
+  </table>
+
+  <div class="admonition danger">
+    <div class="admonition-title">最关键的风险</div>
+    <p>AI 会<strong>自信地生成不安全的代码</strong>——它不会说「这个加密方案可能不安全」，而是直接给你一个「看起来专业但本质有漏洞」的实现。如果你不懂安全，AI 不会拯救你，反而会放大你的无知。</p>
+  </div>
+
+  <h2 id="ip">IP 与版权风险</h2>
+  <p>AI 生成代码的 IP 归属是 2025-2026 年持续争议的领域：</p>
+  <ul>
+    <li><strong>训练数据争议</strong>：AI 模型可能用 GPL 等 copyleft 许可证的代码训练，产出的代码是否有许可证传染风险？（目前法律尚无定论）</li>
+    <li><strong>企业对策</strong>：大部分企业使用 AI 编码工具时，在合同中明确要求「不使用客户代码训练模型」（如 GitHub Copilot Business、Claude Code Enterprise）</li>
+    <li><strong>风险管理</strong>：对核心 IP 相关代码（算法、商业逻辑），人工编写为主，AI 仅做 review 和文档</li>
+  </ul>
+
+  <h2 id="compliance">合规要求（GDPR / SOC2 / 等保）</h2>
+  <table>
+    <thead><tr><th>合规框架</th><th>AI 代码的特殊关注</th><th>Spec 中如何覆盖</th></tr></thead>
+    <tbody>
+      <tr><td>GDPR</td><td>数据最小化、删除权、数据不出境</td><td>Post 中明确数据保留策略、Error Paths 中覆盖「用户请求删除」</td></tr>
+      <tr><td>SOC2</td><td>访问控制、变更管理、审计追踪</td><td>Inv 中定义权限不变量、Post 中要求审计日志</td></tr>
+      <tr><td>等保 2.0</td><td>身份鉴别、访问控制、安全审计</td><td>Pre 中覆盖鉴权要求、Inv 中定义会话管理</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="practices">安全实践建议</h2>
+  <ol>
+    <li><strong>在 Spec 中显式声明安全约束。</strong> Spec 的 Pre/Post/Inv 字段就是天然的安全策略声明点。</li>
+    <li><strong>对 AI 代码运行专门的安全扫描。</strong> 常规 SAST（如 SonarQube）+ AI 特化扫描（如检查 AI 常见的错误模式：拼接 SQL、弱加密、硬编码密钥）。</li>
+    <li><strong>安全敏感的代码不由 AI 主导。</strong> 认证、授权、加密、支付——这些模块人写，AI review。</li>
+    <li><strong>Code Review 时专门检查安全类问题。</strong> 使用安全检查清单（如 OWASP ASVS），不依赖审查者的「感觉」。</li>
+    <li><strong>AI 生成的依赖项也要审计。</strong> AI 容易引入不安全的第三方库版本。</li>
+  </ol>
+
+  <h2 id="redlines">三条红线</h2>
+  <div class="admonition danger">
+    <div class="admonition-title">绝对不交给 AI 自主处理的</div>
+    <ol>
+      <li><strong>密码学实现</strong>：使用标准库、标准算法、标准参数。AI 不能「发明」加密方案。</li>
+      <li><strong>认证与授权逻辑</strong>：AI 可以写框架代码，但核心逻辑必须人设计和 review。</li>
+      <li><strong>涉及 PII/金融数据的处理</strong>：数据脱敏、加密、保留策略必须 Spec 中明确定义，AI 不能自行决定。</li>
+    </ol>
+  </div>
+</MainLayout>

@@ -1,0 +1,55 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="从 Spec 到代码" description="Spec Frozen 之后的设计、切片实现、测试和验证流程">
+  <Sidebar currentPath="/handbook/spec-to-code" slot="sidebar" />
+  <h1>从 Spec 到代码</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> Spec → 设计 → 实现 → 验证</div>
+
+  <h2 id="flow">总体节奏</h2>
+  <pre><code>Frozen Spec → 设计闸门 → 切片实现 → 测试覆盖 → 集成验证 → 可上线</code></pre>
+
+  <h2 id="design">设计闸门</h2>
+  <p>设计文档必须包含 4 部分，每部分都能<strong>追溯到 Spec 条目</strong>：</p>
+  <table>
+    <thead><tr><th>部分</th><th>追溯到</th></tr></thead>
+    <tbody>
+      <tr><td>架构图</td><td>WHEN + Dependencies</td></tr>
+      <tr><td>数据模型</td><td>Post 中的 DB 副作用</td></tr>
+      <tr><td>API 契约</td><td>Post 中的对外接口</td></tr>
+      <tr><td>任务分解</td><td>REQ 整体（按切片组织）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="slicing">切片实现</h2>
+  <blockquote>
+    <p>切片（Vertical Slice）= 一个端到端能跑通的最小功能单位</p>
+  </blockquote>
+  <p>按层切（<strong>错误</strong>）：DAO → Service → API → 测试 → 集成</p>
+  <p>按切片切（<strong>正确</strong>）：最小登录 → 校验失败计数 → 锁定机制 → 解锁机制</p>
+  <p>每片：覆盖完整链路、可独立测试、可独立回滚。</p>
+
+  <h2 id="test">测试：从 Post 倒推</h2>
+  <div class="admonition danger">
+    <div class="admonition-title">错误 vs 正确</div>
+    <p><strong>错误</strong>：代码 → 测试 → 「好像都过了」——测的是「代码做什么」</p>
+    <p><strong>正确</strong>：Spec Post → 测试用例 → 实现 → 测试通过——测的是「应该做什么」</p>
+  </div>
+  <p>每条 Post 至少一个测试。每条 Error Path 至少一个测试。</p>
+
+  <h2 id="ai-code">AI 编码协作纪律</h2>
+  <p><strong>DO</strong>：提供 Spec 的 Post 和 Example、提供现有代码约定、明确输入输出、逐行 review。</p>
+  <p><strong>DON'T</strong>：一次性写整个模块、让 AI 决定命名、让 AI 决定错误处理、让 AI 跳过测试。</p>
+
+  <h2 id="review">Code Review 的 4 个维度</h2>
+  <ol>
+    <li><strong>正确性</strong>：实现是否满足 Spec Post</li>
+    <li><strong>健壮性</strong>：是否处理了 Error Paths</li>
+    <li><strong>可读性</strong>：命名/结构/注释是否清晰</li>
+    <li><strong>可维护性</strong>：是否便于后续修改</li>
+  </ol>
+
+  <p style="margin-top:24px"><a href="/handbook/team-roles">下一章：团队角色与协作 →</a></p>
+</MainLayout>

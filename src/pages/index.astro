@@ -1,0 +1,193 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="AI 辅助生产级开发指南"
+  description="AI 辅助生产级软件开发的完整指南：行业调研、工程实践、工具链、案例研究"
+  showSidebar={false}
+  showToc={false}
+>
+  <section class="hero">
+    <h1>AI 辅助生产级开发</h1>
+    <p class="subtitle">
+      从「AI 能不能写代码」到「AI 怎么写好生产级代码」——一份基于行业调研和工程实践的系统性指南。
+    </p>
+    <div class="hero-actions">
+      <a href="/research/landscape" class="btn-primary">开始阅读调研 →</a>
+      <a href="/handbook/why" class="btn-secondary">查看实践指南 →</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>这个网站解决什么问题</h2>
+    <p>2026 年，AI 辅助开发已不再是新鲜事。但大多数团队仍面临同一个困境：</p>
+    <blockquote>
+      <p><strong>AI 能写出看起来正确的代码，但离「可上生产」还有很大距离。</strong></p>
+    </blockquote>
+    <p>这个距离不是模型能力的问题，是<strong>工程流程</strong>的问题。本指南从两个维度切入：</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🔬 深度调研</h3>
+        <p>Vibe Coding vs Spec-Driven 辩论、大厂内部实践、Coding Agent 生态全景、AI 代码质量实证数据、上下文工程、安全合规。</p>
+        <a href="/research/landscape">查看调研 →</a>
+      </div>
+      <div class="card">
+        <h3>🛠️ 实践指南</h3>
+        <p>13 字段 Spec 模板、6 步转换工作流、4 段 AI Lint 协议、3 道闸门心智模型——一套经过验证的工程化方法论。</p>
+        <a href="/handbook/why">查看实践指南 →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>核心结论</h2>
+    <div class="insights">
+      <div class="insight">
+        <span class="insight-num">01</span>
+        <div>
+          <strong>AI 是放大器，不是工程师。</strong>
+          <p>输入模糊 → 快速产出模糊。输入清晰 → 高效产出正确。Spec 是流程中唯一可由人完全控制的变量。</p>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-num">02</span>
+        <div>
+          <strong>Vibe Coding 和 Spec-Driven 不是二选一。</strong>
+          <p>原型探索用 vibe，生产交付用 spec。区分场景比争论方法更重要。两者互补，分阶段使用。</p>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-num">03</span>
+        <div>
+          <strong>写 Spec 的阶段值得投入 30-50% 的时间。</strong>
+          <p>Spec 写得好的项目，返工率降低 70%+，移植成功率提升 3-5 倍。省下来的时间在返工和调试里。</p>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-num">04</span>
+        <div>
+          <strong>2026 年，上下文工程是新的核心竞争力。</strong>
+          <p>给 AI 提供什么上下文（AGENTS.md、Repo Map、MCP 工具），比 prompt 本身更能决定代码质量。</p>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-num">05</span>
+        <div>
+          <strong>AI 代码的长期维护成本被严重低估。</strong>
+          <p>实证数据显示，AI 生成代码的 churn rate 可能达到人工代码的 1.5 倍。Code review 和测试不能在 AI 时代缩水，反而应该加严。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>阅读路径</h2>
+    <table>
+      <thead>
+        <tr><th>你是谁</th><th>推荐阅读</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>技术负责人 / CTO</strong></td><td>调研全景 → 团队转型路线图 → 实践指南·为什么 → 反模式</td></tr>
+        <tr><td><strong>产品经理 / PM</strong></td><td>Vibe vs Spec → 实践指南·Spec 格式 → 澄清循环 → 团队角色</td></tr>
+        <tr><td><strong>开发工程师</strong></td><td>上下文工程 → 实践指南·工作流 → AI Lint 协议 → 模板</td></tr>
+        <tr><td><strong>QA / 测试</strong></td><td>代码质量度量 → 实践指南·Spec 到代码 → 反模式 → 模板</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section cta">
+    <h2>这不是学术论文，是工程手册</h2>
+    <p>所有内容来自真实项目经验、行业调研和实证数据。每个建议都经过生产环境验证。</p>
+    <p>可以从任何一章开始读，每章独立。但建议先读<a href="/research/landscape">行业全景图</a>建立全局认知。</p>
+    <a href="/research/landscape" class="btn-primary" style="margin-top:16px">开始 →</a>
+  </section>
+</MainLayout>
+
+<style>
+  .hero {
+    padding: 48px 0 32px;
+  }
+  .hero h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #58a6ff, #a371f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero .subtitle {
+    font-size: 1.15rem;
+    color: var(--c-text-secondary);
+    max-width: 650px;
+    margin-bottom: 28px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-primary, .btn-secondary {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--c-accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--c-accent-dim); text-decoration: none; }
+  .btn-secondary {
+    background: var(--c-bg-tertiary);
+    color: var(--c-text);
+    border: 1px solid var(--c-border);
+  }
+  .btn-secondary:hover { border-color: var(--c-accent); text-decoration: none; }
+
+  .section {
+    margin-top: 48px;
+  }
+  .section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .insights {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .insight {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .insight-num {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--c-accent);
+    opacity: 0.5;
+    min-width: 36px;
+  }
+  .insight p {
+    color: var(--c-text-secondary);
+    font-size: 0.92rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+
+  .cta {
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .cta h2 { margin-top: 0; }
+</style>

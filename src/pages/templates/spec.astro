@@ -1,0 +1,131 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const fullTemplate = `# REQ-{模块}-{类型}-{序号}: {Title}
+
+## Metadata
+- **ID**: REQ-{模块}-{类型}-{序号}
+- **Title**: {Title}
+- **Status**: Draft | InReview | Frozen | Deprecated
+- **Version**: v0.X
+- **Priority**: Must | Should | Could | Won't
+- **Source**: {票号} / {提出人} / {客户}
+- **Created**: YYYY-MM-DD
+- **Last Updated**: YYYY-MM-DD
+- **Frozen by**: {姓名}
+- **Frozen at**: YYYY-MM-DD
+- **Lint Rounds Completed**: N
+- **Open Questions Deferred**:
+  - DEFERRED-YYYY-MM-DD: {原因}
+
+## WHY / 动机
+{1-3 段，讲清业务原因和"不这么做的代价"}
+
+## WHO / 主体
+- {actor 1}: {状态描述}
+- {actor 2}: {状态描述}
+**不覆盖**：
+- {场景 A}: 见 REQ-{ID}
+
+## WHEN / 触发条件
+**触发场景**：1. {主动触发} 2. {被动触发} 3. {边界场景}
+**非触发**：- {场景 X}: 见 REQ-{ID}
+
+## Pre 前置条件
+- Pre-1. {事实 1，用"必须/不得"开头} ... (至少 3 条)
+
+## Post 后置条件
+- Post-1. {事实 1，用"必须/不得/等于"开头} ... (至少 5 条)
+
+## Inv 不变量（涉及状态/并发/缓存时必填）
+- Inv-1. {事实，任意时刻为真}
+
+## Error Paths
+| 错误场景 | HTTP | 业务码 | 响应体 | 副作用 |
+|---|---|---|---|---|
+| {场景} | {code} | {code} | {shape} | {side effects} |
+
+## Examples
+### Example A: Happy Path
+Given: {前置条件}
+When:  {动作}
+Then:  {断言}
+
+### Example B: Error Path
+Given: {前置条件}
+When:  {动作}
+Then:  {断言}
+
+## Dependencies
+### Upstream: REQ-{X}, REQ-{Y}
+### Downstream: REQ-{Z}
+### External: {API/DB/服务}
+
+## Revision History
+| 版本 | 日期 | 主要变化 | 修订人 |
+|---|---|---|---|
+
+## Lint & Decisions
+### Lint Round 1 → Lint Round 2 → ...
+
+## Freeze Record
+- **Frozen by**: {姓名}
+- **Frozen at**: YYYY-MM-DD
+- **Sign-off**: 我已通读全文，确认实现方按本 Spec 可以无歧义交付。`;
+
+const minimalTemplate = `# REQ-{模块}-{类型}-{序号}: {Title}
+- **ID**: REQ-{模块}-{类型}-{序号}
+- **Status**: Draft
+- **Priority**: Must | Should | Could
+- **Source**: {票号 / 提出人}
+
+## WHY
+{业务原因}
+
+## WHO / WHEN
+- {actor + 状态}
+- {触发场景}
+
+## Pre (至少 3 条)
+- Pre-1. 必须/不得...
+
+## Post (至少 5 条，用"必须/不得/等于"开头)
+- Post-1. 必须/不得/等于...
+
+## Examples (至少 1 happy + 1 error)
+### Happy Path
+Given: ... When: ... Then: ...
+
+### Error Path
+Given: ... When: ... Then: ...
+
+## Error Paths
+| 场景 | HTTP | 业务码 | 副作用 |
+
+## Dependencies
+- 依赖 REQ-{X} / {外部系统}`;
+---
+
+<MainLayout title="Spec 模板" description="可直接复制使用的 13 字段 Spec 模板和最小可用 6 字段模板">
+  <Sidebar currentPath="/templates/spec" slot="sidebar" />
+  <h1>Spec 模板</h1>
+  <div class="meta-line"><span class="tag">可复制模板</span></div>
+
+  <h2 id="full">完整模板（13 字段）</h2>
+  <pre><code set:html={fullTemplate} /></pre>
+
+  <h2 id="minimal">最小模板（6 字段，快速上手）</h2>
+  <pre><code set:html={minimalTemplate} /></pre>
+
+  <h2 id="checklist">填写自检清单</h2>
+  <ol>
+    <li><code>grep '应该/通常/尽量/合理/适当'</code> 命中 → 改掉</li>
+    <li>后置条件能用「必须/不得/等于」开头吗？</li>
+    <li>Example 是具体字面值还是抽象描述？</li>
+    <li>错误路径是否表格化 5+ 场景？</li>
+    <li>WHY 段是否和 Title 几乎一样？（是 → 重写）</li>
+  </ol>
+
+  <p style="margin-top:24px"><a href="/templates/lint-prompts">附录：AI Lint Prompt 模板 →</a></p>
+</MainLayout>

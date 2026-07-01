@@ -1,0 +1,96 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="AI Lint 协议" description="4 段 AI Lint 的完整协议：歧义扫描、缺失扫描、冲突扫描、可执行性扫描">
+  <Sidebar currentPath="/handbook/lint-protocol" slot="sidebar" />
+  <h1>AI Lint 协议</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 4 段对抗性 AI 评审</div>
+
+  <h2 id="why-four">为什么需要 4 段 Lint</h2>
+  <p>单段 Lint：AI 走马观花、顺着你的意图走、浅尝辄止。</p>
+  <p>4 段 Lint：拆成 4 个<strong>正交维度</strong>，每个维度一个会话、一个 prompt、一个专注角度。</p>
+
+  <table>
+    <thead><tr><th>段</th><th>维度</th><th>关注</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Lint 1</strong></td><td>歧义扫描</td><td>模糊词、未量化形容词、范围不清</td></tr>
+      <tr><td><strong>Lint 2</strong></td><td>缺失扫描</td><td>字段完整性、强制问题清单</td></tr>
+      <tr><td><strong>Lint 3</strong></td><td>冲突扫描</td><td>spec 内部/间冲突 + 与外部世界冲突</td></tr>
+      <tr><td><strong>Lint 4</strong></td><td>可执行性扫描</td><td>Post 能否转测试</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="discipline">核心纪律</h2>
+  <div class="admonition warning">
+    <div class="admonition-title">每个 prompt 一个全新会话</div>
+    <p>绝对不要把历史讨论带进 Lint 会话。上下文会污染 AI 的「对抗性」。</p>
+  </div>
+
+  <h2 id="lint1">Lint 1: 歧义扫描</h2>
+  <p>关注的「模糊词」：</p>
+  <ul>
+    <li>模糊副词：应该/通常/尽量/大概/合理/适当</li>
+    <li>未量化形容词：高/低/大/小/快/慢/大量/少量/频繁</li>
+    <li>模糊代词：它/此/该/上述（如果指代不清）</li>
+  </ul>
+
+  <h2 id="lint2">Lint 2: 缺失扫描</h2>
+  <p>强制问题清单（每条 REQ 必问）：</p>
+  <ol>
+    <li>未登录行为是什么？</li>
+    <li>外部服务不可用时行为？</li>
+    <li>并发：同一 actor 同时多次调用？</li>
+    <li>超时/时区/时钟漂移？</li>
+    <li>空值/重复/超大值/Unicode？</li>
+    <li>金钱/计数精度/舍入/溢出？</li>
+    <li>越权访问？</li>
+    <li>超过配额/限流？</li>
+    <li>是否需要幂等？</li>
+    <li>副作用部分失败？</li>
+    <li>埋点/审计/日志？</li>
+    <li>失败能否重试？</li>
+  </ol>
+
+  <h2 id="lint3">Lint 3: 冲突扫描</h2>
+  <ul>
+    <li><strong>内部冲突</strong>：Post vs Post 矛盾、Pre vs When、Inv vs Post、Examples vs Post</li>
+    <li><strong>跨 REQ 冲突</strong>：状态机不一致、命名不一致、错误码冲突</li>
+    <li><strong>与外部世界冲突</strong>：HTTP 标准、OpenAPI/JSON Schema、GDPR/PCI、DB 约束、第三方 SLO</li>
+  </ul>
+
+  <h2 id="lint4">Lint 4: 可执行性扫描</h2>
+  <p>6 个可执行性维度：</p>
+  <table>
+    <thead><tr><th>维度</th><th>问题</th><th>反例</th><th>正例</th></tr></thead>
+    <tbody>
+      <tr><td>数值确定</td><td>数字是字面值吗？</td><td>"适量"</td><td>"5 次"</td></tr>
+      <tr><td>可断言</td><td>能区分成功/失败吗？</td><td>"返回成功"</td><td>"HTTP 200 + body 含 sessionId"</td></tr>
+      <tr><td>时间可测</td><td>时区/精度/参考时钟？</td><td>"立即返回"</td><td>"now() + 24h, ISO 8601 UTC"</td></tr>
+      <tr><td>副作用可观测</td><td>怎么验证副作用？</td><td>"应当记录日志"</td><td>"audit_log 新增 1 行 event=login_success"</td></tr>
+      <tr><td>幂等性</td><td>场景需要幂等吗？</td><td>"重复调用安全"</td><td>"重复调用 5 次结果一致，DB 只 1 条"</td></tr>
+      <tr><td>Examples 可执行</td><td>能放进代码跑吗？</td><td>"任意值"</td><td>具体字面值</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="severity">严重程度定义</h2>
+  <table>
+    <thead><tr><th>等级</th><th>含义</th><th>处理</th></tr></thead>
+    <tbody>
+      <tr><td><strong>P0</strong></td><td>实现会错 / 用户行为错</td><td><strong>必须解决</strong>，不许 Deferred</td></tr>
+      <tr><td><strong>P1</strong></td><td>影响实现正确性或集成</td><td>可 Deferred，但必须有截止日</td></tr>
+      <tr><td><strong>P2</strong></td><td>影响一致性 / 可维护性</td><td>建议解决，下轮 Lint 前处理</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="custom">Lint 定制</h2>
+  <ul>
+    <li><strong>强合规项目</strong>：增加 Lint 5 (合规扫描)</li>
+    <li><strong>强并发项目</strong>：强化 Lint 4 (并发可执行性)</li>
+    <li><strong>UI 密集项目</strong>：增加 Lint 5 (体验扫描)</li>
+    <li><strong>高安全项目</strong>：强化 Lint 3 (安全冲突)</li>
+  </ul>
+
+  <p style="margin-top:24px"><a href="/templates/lint-prompts">查看完整 AI Lint Prompt 模板 →</a> | <a href="/handbook/workflow">下一章：6 步工作流 →</a></p>
+</MainLayout>

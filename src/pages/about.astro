@@ -1,0 +1,51 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+---
+
+<MainLayout title="关于" description="关于 AI Dev Handbook 项目" showSidebar={false} showToc={false}>
+  <h1>关于</h1>
+  <div class="meta-line">v1.0 · 2026 年 7 月</div>
+
+  <h2>这是什么</h2>
+  <p>AI Dev Handbook 是一份关于 <strong>AI 辅助生产级软件开发的系统性指南</strong>。它包含两个部分：</p>
+  <ul>
+    <li><strong>深度调研</strong>：基于 2025-2026 年业界实践的广泛调研，覆盖 Vibe Coding vs Spec-Driven 辩论、Coding Agent 生态、代码质量度量、上下文工程、大厂案例、安全合规等核心话题。</li>
+    <li><strong>实践指南</strong>：一套经过验证的 Spec 工程化方法论，包含 13 字段 Spec 模板、6 步转换工作流、4 段 AI Lint 协议、40 种反模式分析等——可直接用于团队实践。</li>
+  </ul>
+
+  <h2>核心理念</h2>
+  <blockquote>
+    <p>AI 是放大器，不是工程师。放大正确的工程过程 = 高质量；放大错误的流程 = 更快的错误。Spec 是流程中唯一可以由人完全控制的输入，把它工程化是 ROI 最高的单一投入。</p>
+  </blockquote>
+
+  <h2>适用对象</h2>
+  <ul>
+    <li>使用 AI 辅助编码工具（Cursor、Claude Code、Copilot 等）的开发团队</li>
+    <li>正在思考「如何让 AI 写出生产级代码」的技术负责人</li>
+    <li>需要建立 AI 辅助开发流程规范的工程管理者</li>
+    <li>任何关心 AI 如何真正提升软件质量而非仅提升速度的开发者</li>
+  </ul>
+
+  <h2>不适用场景</h2>
+  <ul>
+    <li>一次性 demo / Hackathon 项目（用 vibe coding 更快）</li>
+    <li>个人玩具项目</li>
+    <li>完全不需要维护的临时代码</li>
+  </ul>
+
+  <h2>方法论来源</h2>
+  <p>本指南的方法论来自三个来源的融合：</p>
+  <ol>
+    <li><strong>业界实践调研</strong>：EARS (Rolls-Royce)、BDD/Gherkin、Spec-Kit (GitHub)、Contract-Driven 开发、DDD、Constitutional AI (Anthropic)</li>
+    <li><strong>大厂内部实践</strong>：Shopify AI Toolkit、Google Agent Bake-Off、Meta 内部 AI 代码审查</li>
+    <li><strong>真实项目验证</strong>：在多个生产级项目中的反复试验和迭代</li>
+  </ol>
+
+  <h2>贡献</h2>
+  <p>本项目开源在 <a href="https://github.com/atbeta/ai-dev-handbook">GitHub</a>。欢迎提交 Issue 和 PR。</p>
+  <p>如果你有 AI 辅助生产级开发的实践经验（无论成功还是失败），欢迎分享。</p>
+
+  <h2>许可</h2>
+  <p>CC BY-SA 4.0 — 自由使用、自由分享、自由改编，但请署名并保持相同许可。</p>
+</MainLayout>

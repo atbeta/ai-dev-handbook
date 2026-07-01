@@ -1,0 +1,55 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="6 步转换工作流" description="拿到模糊需求到 Frozen Spec 的完整 6 步工作流">
+  <Sidebar currentPath="/handbook/workflow" slot="sidebar" />
+  <h1>6 步转换工作流</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 模糊需求 → Frozen Spec</div>
+
+  <h2 id="overview">整体节奏</h2>
+  <pre><code>Step 1. 收集原始素材        ← 别加工，先收齐
+Step 2. 逐句断句            ← 把叙述切成原子命题
+Step 3. 按模板填空          ← 用 13 字段套
+Step 4. AI 反向核对         ← 防止 spec 与原始需求脱节
+Step 5. AI 4 段 Lint + 裁决 ← 防止 spec 自身有瑕疵
+Step 6. 冻结签字            ← 进入设计阶段</code></pre>
+
+  <h2 id="step1">Step 1: 收集原始素材</h2>
+  <p>必须收集：原始需求描述、涉及的源项目代码/文档、相关方名单、已知依赖系统、现有 REQ、法规/合规要求、时间/预算约束、「绝对不能做」清单。</p>
+  <p>全部原文放进 <code>reqs/{'{REQ-ID}'}/sources/</code>。<strong>不要加工，原样存放。</strong></p>
+
+  <h2 id="step2">Step 2: 逐句断句</h2>
+  <p>把叙述性需求切成原子命题。对每句标：<strong>类型</strong>（功能/不变量/约束/性能/安全）、<strong>清晰度</strong>（清楚/部分清楚/模糊）、<strong>关联</strong>（涉及哪些 actor/系统/数据）。</p>
+  <p>模糊句子 > 30% → 回 Step 1 找需求方澄清。</p>
+
+  <h2 id="step3">Step 3: 按模板填空</h2>
+  <p><strong>填空顺序（重要）</strong>：WHY → WHO → WHEN → Examples → Post（从 example 倒推）→ Pre → Error Paths → Inv → Dependencies → Priority。</p>
+  <p>关键技巧：</p>
+  <ul>
+    <li>从 example 倒推 Post，不要直接写 Post</li>
+    <li>所有数字写出来（「24 小时」不是「一天」）</li>
+    <li>不知道的写 <code>[TODO: 需要澄清]</code>，不要瞎填</li>
+  </ul>
+
+  <h2 id="step4">Step 4: AI 反向核对</h2>
+  <p>新开干净会话，让 AI 把 spec 还原成叙述，对照原始需求找：spec 多写的（幻觉）、spec 漏的（遗漏）。</p>
+
+  <h2 id="step5">Step 5: AI 4 段 Lint + 裁决</h2>
+  <p>开 4 个新会话跑 4 段 Lint → 合并去重按 P0/P1/P2 排序 → 逐条裁决（三选一）。修订后 bump 版本号，再来一轮直到连续两轮 P0=0。</p>
+
+  <h2 id="step6">Step 6: 冻结签字</h2>
+  <p>最后一轮人肉通读 → 填写冻结元数据 → 移到 <code>frozen/</code> 目录 → 通知相关方。</p>
+
+  <h2 id="time">时间投入参考</h2>
+  <table>
+    <thead><tr><th>项目类型</th><th>简单功能</th><th>中等模块</th><th>复杂业务</th><th>移植模块</th></tr></thead>
+    <tbody>
+      <tr><td>合计</td><td>~1d</td><td>~3d</td><td>~1w</td><td>~3-4w</td></tr>
+    </tbody>
+  </table>
+  <p>复杂业务/移植：spec 阶段占总工时 50%+ 是正常的，不要试图压缩。</p>
+
+  <p style="margin-top:24px"><a href="/handbook/spec-to-code">下一章：从 Spec 到代码 →</a></p>
+</MainLayout>
