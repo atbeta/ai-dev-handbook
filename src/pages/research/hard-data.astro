@@ -1,0 +1,140 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="硬数据与真实事故" description="MIT 95% 失败率、CodeRabbit 1.7x、Replit 删库——来自业界的量化数据和真实事故">
+  <Sidebar currentPath="/research/hard-data" slot="sidebar" />
+  <h1>硬数据与真实事故</h1>
+  <div class="meta-line"><span class="tag">调研</span> 数据来源：MIT、CodeRabbit、Stack Overflow、GitClear 等 2025-2026 公开报告</div>
+
+  <div class="callout danger">
+    <strong>核心发现</strong>：AI 辅助编码在 Demo 阶段表现惊艳，但在生产级项目中目前面临严峻的质量挑战。以下数据来自多家独立机构的量化分析。
+  </div>
+
+  <h2 id="mit">MIT 2025 报告：95% 企业 AI 试点失败</h2>
+  <p><strong>来源</strong>：MIT <em>The GenAI Divide: State of AI in Business 2025</em>（2025-08 发布，Fortune / Salesforce / VentureBeat 等 9+ 媒体引用）</p>
+  
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>企业 GenAI 试点未交付可衡量价值</td><td><strong>95%</strong></td></tr>
+      <tr><td>成功 5% 的特征</td><td>Agent 嵌入既有工作流，非独立工具</td></tr>
+      <tr><td>失败 95% 的特征</td><td>通用工具在 Demo 好看，真实工作流里脆弱</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <p>AI pilots primarily fail because agents are treated like add-ons or standalone tools—instead of being natively embedded in the existing workflow.</p>
+    <cite>— Salesforce 转述 MIT 报告</cite>
+  </blockquote>
+
+  <blockquote>
+    <p>Autonomy without orchestration rarely yields efficiency.</p>
+    <cite>— VentureBeat</cite>
+  </blockquote>
+
+  <div class="insight">
+    <strong>启示</strong>：「跑起来」不等于「产生价值」。95% 的失败率说明当前 AI 辅助开发的工程化落地远比 Demo 演示复杂。
+  </div>
+
+  <h2 id="coderabbit">CodeRabbit 报告：AI 代码问题数 1.7x</h2>
+  <p><strong>来源</strong>：CodeRabbit <em>State of AI vs Human Code Generation Report</em>（2025-12，470 个开源 PR 分析）</p>
+
+  <table>
+    <thead><tr><th>指标</th><th>AI vs 人类</th></tr></thead>
+    <tbody>
+      <tr><td>AI co-authored PR 包含的问题数</td><td><strong>1.7x</strong> 人类 PR</td></tr>
+      <tr><td>逻辑错误和正确性问题</td><td><strong>+75%</strong></td></tr>
+      <tr><td>安全漏洞</td><td><strong>2.74x</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warning">
+    <strong>注意</strong>：CodeRabbit 分析的 PR 大概率使用 GPT-4 级别模型。如果你用的是更弱的模型，问题数可能更高。
+  </div>
+
+  <h2 id="stackoverflow">Stack Overflow 2025 调查：信任度下降</h2>
+  <p><strong>来源</strong>：Stack Overflow <em>2025 Developer Survey</em></p>
+
+  <table>
+    <thead><tr><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>AI 工具普及率</td><td><strong>84%</strong>（几乎标配）</td></tr>
+      <tr><td>开发者好感度趋势</td><td><strong>70%+ → 60%</strong>（下降）</td></tr>
+      <tr><td>对 AI 输出准确性信任</td><td><strong>40% → 29%</strong>（下降）</td></tr>
+      <tr><td>调试 AI 代码时间超预期</td><td><strong>66%</strong> 开发者</td></tr>
+    </tbody>
+  </table>
+
+  <p>核心趋势：<strong>用了 ≠ 满意</strong>。全行业正在经历「AI 编码祛魅」——AI 是工具不是魔法，调试 AI 代码的成本被严重低估。</p>
+
+  <h2 id="gitclear">GitClear 报告：代码重复率激增 8x</h2>
+  <p><strong>来源</strong>：GitClear <em>2025 AI Copilot Code Quality Research</em>（2.11 亿行代码分析）</p>
+
+  <table>
+    <thead><tr><th>指标</th><th>变化</th></tr></thead>
+    <tbody>
+      <tr><td>2024 年代码重复频率 vs 2023</td><td><strong>+8x</strong></td></tr>
+      <tr><td>重复代码普遍性 vs 2 年前</td><td><strong>10x</strong></td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <p>在我 35 年的技术生涯中，从未见过短时间内产生如此多的技术债务。</p>
+    <cite>— Kin Lane，API 专家</cite>
+  </blockquote>
+
+  <h2 id="replit">真实事故 #1：Replit 删数据库（2025-07）</h2>
+  <p>2025 年最著名的 AI 编码事故——值得每个 AI 协作开发者知道。</p>
+
+  <h3>事故概要</h3>
+  <ul>
+    <li><strong>时间</strong>：2025 年 7 月</li>
+    <li><strong>发生了什么</strong>：Replit Agent 在执行数据库迁移任务时，错误地删除了整个生产数据库</li>
+    <li><strong>破坏性操作</strong>：DROP TABLE / DELETE 无 WHERE 子句</li>
+    <li><strong>根因</strong>：Agent 缺乏对破坏性操作的二次确认机制、缺乏迁移前的备份保护、缺乏干跑（dry-run）检查</li>
+  </ul>
+
+  <div class="callout danger">
+    <strong>教训</strong>：AI Agent 对数据库、文件系统、网络请求等「副作用操作」缺乏天然的敬畏。<strong>任何会改变外部状态的 AI 操作，都需要硬闸门</strong>——不是「建议小心」，是「代码层面禁止无确认执行」。
+  </div>
+
+  <h2 id="kuaishou">快手：3 年代码 AI 辅助迭代之路</h2>
+  <p><strong>来源</strong>：快手技术团队公开分享（2026 年初万字长文）</p>
+
+  <h3>关键时间线</h3>
+  <ul>
+    <li><strong>第 1 年</strong>：全面推广 AI 编码工具，代码生成量暴增</li>
+    <li><strong>第 2 年</strong>：发现代码质量下降，开始引入人工 Code Review 增强</li>
+    <li><strong>第 3 年</strong>：建立「AI 生成 + 自动化检查 + 人工审查」三层防线，代码质量恢复到 AI 引入前水平</li>
+  </ul>
+
+  <p>核心结论：<strong>AI 提高开发速度，但不提高代码质量。质量保障需要额外的机制投入——而且这个投入需要 2-3 年才能见到效果。</strong></p>
+
+  <h2 id="yc">YC 2025 数据：25% 初创公司 95% 代码由 AI 生成</h2>
+  <p><strong>来源</strong>：TechCrunch 报道 Y Combinator W25 批次（2025-03）</p>
+  <ul>
+    <li>YC W25 批次中，<strong>25% 的创业公司</strong>代码库 <strong>95% 以上由 AI 生成</strong></li>
+    <li>这是 Vibe Coding 在创业场景下的极端体现</li>
+    <li>问题是：这些代码在 3 个月、6 个月、12 个月后的可维护性如何？目前缺乏跟踪数据</li>
+  </ul>
+
+  <h2 id="summary">数据汇总</h2>
+  <table>
+    <thead><tr><th>来源</th><th>核心发现</th><th>严重程度</th></tr></thead>
+    <tbody>
+      <tr><td>MIT 2025</td><td>95% 企业 AI 试点失败</td><td>🔴 极高</td></tr>
+      <tr><td>CodeRabbit</td><td>AI 代码问题 1.7x，安全漏洞 2.74x</td><td>🔴 高</td></tr>
+      <tr><td>Stack Overflow</td><td>信任度 40% → 29%，66% 调试超预期</td><td>🟡 中高</td></tr>
+      <tr><td>GitClear</td><td>代码重复率 +8x，技术债爆炸</td><td>🔴 高</td></tr>
+      <tr><td>Replit</td><td>AI 删生产数据库</td><td>🔴 灾难级</td></tr>
+      <tr><td>快手</td><td>3 年才恢复代码质量</td><td>🟡 中</td></tr>
+      <tr><td>YC W25</td><td>25% 公司 95% 代码 AI 生成（可持续性未知）</td><td>🟡 待观察</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout success">
+    <strong>好消息</strong>：这些数据不是劝退 AI——是告诉你「怎么做对」。成功的企业（MIT 报告中的 5%）特征是：<strong>Agent 嵌入既有工作流、有 Gate 评审、有自动化验证</strong>。这正是本手册的核心内容。
+  </div>
+</MainLayout>

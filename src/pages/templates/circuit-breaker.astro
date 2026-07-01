@@ -1,0 +1,70 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="熔断 Checklist" description="AI 协作失败熔断机制——触发条件、熔断后动作、恢复路径">
+  <Sidebar currentPath="/templates/circuit-breaker" slot="sidebar" />
+  <h1>熔断 Checklist</h1>
+  <div class="meta-line"><span class="tag">模板</span> 喊停不是失败，是设计内的一部分</div>
+
+  <p>→ 背景见 <a href="/handbook/lessons#circuit-breaker">实战经验教训 - 失败熔断机制</a></p>
+
+  <h2 id="triggers">触发条件（任一触发即熔断）</h2>
+  <table>
+    <thead><tr><th>#</th><th>触发条件</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>同坑 2 次</strong></td><td>AI 对同一个问题犯了两次同样的错误。说明模型在这个问题上无法自我纠正。</td></tr>
+      <tr><td>2</td><td><strong>重试 > 3 次</strong></td><td>同一任务尝试 3 次以上仍未通过验收。继续重试的期望收益极低。</td></tr>
+      <tr><td>3</td><td><strong>跨会话 > 半天</strong></td><td>AI 在多个会话中处理同一任务，超过半天仍未完成。上下文丢失风险极高。</td></tr>
+      <tr><td>4</td><td><strong>问老问题</strong></td><td>AI 问了一个已经在前面会话中回答过的问题——典型的「失忆」信号。</td></tr>
+      <tr><td>5</td><td><strong>与已确认矛盾</strong></td><td>AI 的输出与已经过人工 Gate 确认的内容产生矛盾。说明上下文管理出了问题。</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="actions">熔断后动作</h2>
+  <ol>
+    <li><strong>写 progress.md</strong>——记录当前进度、已完成和未完成部分</li>
+    <li><strong>触发分工判断</strong>——参考「4 个死亡特征」，决定走下面的哪个路径</li>
+    <li><strong>选择恢复路径</strong>：</li>
+  </ol>
+
+  <table>
+    <thead><tr><th>路径</th><th>适用场景</th><th>操作</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A. 契约分工</strong></td><td>任务有明确的输入/输出边界</td><td>人定义 6 要素契约 → 人实现核心 → AI 实现周边</td></tr>
+      <tr><td><strong>B. 换实现路径</strong></td><td>AI 的方法论有问题但任务边界清晰</td><td>人提供不同的技术方案 → AI 在新方案下重新实现</td></tr>
+      <tr><td><strong>C. 升级人工</strong></td><td>AI 完全无法胜任、或数据安全敏感</td><td>人全量接手，AI 只做辅助（代码补全、文档生成）</td></tr>
+      <tr><td><strong>D. 缩小范围</strong></td><td>任务拆得太粗</td><td>把任务拆成更小的子任务，逐个交付</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="decision">熔断决策 checklist</h2>
+<pre><code>[ ] 触发条件确认（打勾触发项）：
+    [ ] 同坑 2 次
+    [ ] 重试 > 3 次
+    [ ] 跨会话 > 半天
+    [ ] 问老问题
+    [ ] 与已确认矛盾
+
+[ ] 写 progress.md（必做）：
+    [ ] 当前进度
+    [ ] 已完成部分
+    [ ] 未完成部分
+    [ ] AI 卡住的具体原因
+
+[ ] 选择恢复路径（四选一）：
+    [ ] A. 契约分工
+    [ ] B. 换实现路径
+    [ ] C. 升级人工
+    [ ] D. 缩小范围
+
+[ ] 更新度量记录：
+    [ ] 熔断触发次数 +1
+    [ ] 记录选择的恢复路径
+    [ ] 记录从此任务学到的教训</code></pre>
+
+  <div class="callout success">
+    <strong>心态提示</strong>：喊停是正常的。继续让弱模型空转 = 持续损失。熔断不是承认失败——是止损+重置+换路径。
+  </div>
+</MainLayout>

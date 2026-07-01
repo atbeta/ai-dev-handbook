@@ -1,0 +1,90 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="契约优先分工" description="Contract-First Split Implementation：人机协作的核心模式，AI 失败后的兑底策略">
+  <Sidebar currentPath="/handbook/contract-first" slot="sidebar" />
+  <h1>契约优先分工（Contract-First Split Implementation）</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 2026 年业界主流的人机协作模式</div>
+
+  <div class="callout info">
+    <strong>一句话总结</strong>：契约（Contract）是边界——双方按契约并行、独立验证、不互相污染。这是 AI 失败后的兑底策略，不是「最佳实践」的炫耀。
+  </div>
+
+  <h2 id="origin">起源：从「让 AI 独立完成」到「人机契约分工」</h2>
+  <p>2026 年业界在多个大型 AI 协作项目中反复验证了一个模式：<strong>跨系统 + 长程 + 复杂业务 + 接口差异——这四个特征叠加时，弱模型 100% 失败</strong>。</p>
+  <p>解决方案不是「换更强的模型」——而是<strong>改变分工方式</strong>。</p>
+
+  <h2 id="workflow">分工流程</h2>
+  <div class="diagram-box">
+    <pre>
+[1] 人抽象核心逻辑
+        ↓
+[2] 人定义契约（输入/输出/不变量/行为约束/测例集）
+        ↓
+[3] 人实现核心（关键算法、状态机、业务规则）
+        ↓
+[4] AI 拿到契约，并行实现前后端/对接/适配/测试桩
+        ↓
+[5] 集成 + 契约测试（双方独立验证）</pre>
+  </div>
+
+  <h2 id="contract-elements">契约的 6 要素</h2>
+  <p>一份合格的契约不是「我要做一个 X」——是具体到 <strong>可验收</strong>。以下 6 要素缺一不可：</p>
+  <ol>
+    <li><strong>输入接口</strong>：边界、类型、非法值处理</li>
+    <li><strong>输出接口</strong>：空值语义、错误码</li>
+    <li><strong>不变量</strong>：任何路径都不违反的属性</li>
+    <li><strong>行为约束</strong>：纯函数/副作用/异常/性能要求</li>
+    <li><strong>等价性判断</strong>：与源系统一致的条件（跨系统移植场景）</li>
+    <li><strong>测例集</strong>：同输入同输出的覆盖用例</li>
+  </ol>
+
+  <h2 id="when">什么时候用契约分工？</h2>
+  <table>
+    <thead><tr><th>任务类型</th><th>分工建议</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>纯 CRUD（增删改查单实体）</td><td>AI 全做，人验收</td><td>模板化、上下文小</td></tr>
+      <tr><td>列表页 / 详情页</td><td>AI 做，人验收 UI 规范</td><td>UI 有规范即可</td></tr>
+      <tr><td>复杂表单 + 校验</td><td>人定校验规则（契约） + AI 实现</td><td>规则是业务资产</td></tr>
+      <tr><td>跨系统集成</td><td>人写契约 + 核心，AI 实现适配</td><td>跨系统理解是关键</td></tr>
+      <tr><td>算法移植 / 复杂逻辑</td><td>人实现核心，AI 实现周边</td><td>核心算法不能有误</td></tr>
+      <tr><td>数据库迁移</td><td>人设计 schema + 数据校验，AI 生成脚本</td><td>数据安全无小事</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="death-features">任务入口评估：「4 个死亡特征」</h2>
+  <p>给每个新任务前，先判断是否叠加了这 4 个特征：</p>
+  <ol>
+    <li><strong>跨系统</strong>——需要同时理解两个项目语义</li>
+    <li><strong>长程</strong>——跨多天，需要持续记忆</li>
+    <li><strong>复杂业务</strong>——数值计算 / 状态机 / 算法</li>
+    <li><strong>接口/数据有差异</strong>——不是简单「抄函数」</li>
+  </ol>
+  <div class="callout danger">
+    <strong>核心判断</strong>：任何一个不致命，<strong>4 个叠加 = 当前弱模型能力边界，100% 失败</strong>。2 个以上叠加时就该切到契约分工模式。
+  </div>
+
+  <h2 id="principles">核心原则</h2>
+  <ol>
+    <li><strong>契约是边界</strong>——人和 AI 按契约独立工作，不互相污染</li>
+    <li><strong>人接核心，不可让渡</strong>——核心算法、状态机、业务规则必须人做</li>
+    <li><strong>AI 接前后契约</strong>——适配、测试桩、对接代码等「契约明确的部分」交给 AI</li>
+    <li><strong>兑底频率 = AI 失败频率</strong>——人接核心不是「分工模式好」，是「AI 失败的兑底」</li>
+    <li><strong>契约必须可验收</strong>——没有验收标准的契约不是契约，是散文</li>
+  </ol>
+
+  <div class="callout success">
+    <strong>实战案例</strong>：一个跨系统的训练算法移植任务，AI 独立尝试 4 天未完成。切换到契约分工——人花半天定义 6 要素契约 + 实现核心算法，AI 花 1 天完成前后适配——<strong>总耗时 1.5 天</strong>。
+  </div>
+
+  <h2 id="related">相关概念</h2>
+  <ul>
+    <li><strong>Human-on-the-Loop</strong>：人在关键决策点插入，不一定全程在场（Augment Code）</li>
+    <li><strong>Handoff as Governed Checkpoint</strong>：交接不是事故，是设计内的节点（Strata 2026）</li>
+    <li><strong>Maker-Checker Pair</strong>：一个生成一个独立验证</li>
+  </ul>
+
+  <p>→ 完整契约模板见 <a href="/templates/contract">契约模板</a></p>
+</MainLayout>

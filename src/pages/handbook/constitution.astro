@@ -1,0 +1,92 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="Constitution 模式" description="项目级不可变规则，每条配 3 件事：人读说明 + AI 提示片段 + 自动校验">
+  <Sidebar currentPath="/handbook/constitution" slot="sidebar" />
+  <h1>Constitution 模式</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 把团队规范变成 AI 可消费的硬约束</div>
+
+  <h2 id="problem">问题：规范只写在文档里</h2>
+  <p>你的团队可能有完整的技术栈规范、编码规范、安全规范、UI 规范——但 <strong>AI 不会主动遵守</strong>。你写出 100 页规范文档，AI 不在乎。</p>
+  <p>结果是：AI 自由发挥 → 技术债积累 → 后期修复成本高昂（有时候是前期生成成本的 5-10 倍）。</p>
+
+  <h2 id="solution">解决方案：Constitution 模式</h2>
+  <p>Constitution 不是另一份「给人读的文档」。它是 <strong>三道一体的硬约束</strong>：</p>
+  <div class="diagram-box">
+    <pre>
+每条 Constitution 规则配 3 件事：
+
+[1] 人读说明      —— 团队理解这条规则为什么存在
+[2] AI 提示片段   —— 每次 AI 会话前置注入，AI 必须遵守
+[3] 自动校验      —— CI 管线中的硬闸门，不通过 = 不能合并</pre>
+  </div>
+
+  <div class="callout warning"><strong>关键原则</strong>：三件事缺一不算落地。只有文档 = 没有落地。只有 lint 规则 = 人不理解。只有 AI 提示 = 没有硬约束。</div>
+
+  <h2 id="example">示例：一条完整的 Constitution 规则</h2>
+  <pre><code>## Rule: DB-CON-001 - Database Migration Safety
+
+### 人读说明
+所有数据库迁移操作必须在非生产环境验证后方可执行。
+DROP/TRUNCATE/DELETE 操作必须有二次确认机制。
+
+### AI 提示片段
+You are working on database migrations. CRITICAL RULES:
+1. NEVER write DROP TABLE or TRUNCATE without explicit approval
+2. Always include a ROLLBACK script alongside every migration
+3. DELETE statements MUST verify affected row count
+4. All migrations run in a transaction by default
+
+### 自动校验
+- CI check: grep for DROP TABLE without IF EXISTS in migration files → BLOCK
+- CI check: migration file naming must match YYYYMMDDHHMMSS_description.sql
+- Pre-deploy: dry-run migration on staging dump and verify no unexpected drops</code></pre>
+
+  <h2 id="structure">Constitution 结构建议</h2>
+  <table>
+    <thead><tr><th>分类</th><th>典型规则数</th><th>示例</th></tr></thead>
+    <tbody>
+      <tr><td>架构约束</td><td>5-10</td><td>模块依赖方向、不允许循环依赖</td></tr>
+      <tr><td>安全基线</td><td>5-8</td><td>SQL 注入防护、认证中间件</td></tr>
+      <tr><td>编码规范</td><td>10-20</td><td>命名约定、错误处理模式</td></tr>
+      <tr><td>数据安全</td><td>3-5</td><td>敏感数据加密、PII 脱敏</td></tr>
+      <tr><td>API 设计</td><td>3-5</td><td>版本策略、错误响应格式</td></tr>
+      <tr><td>测试要求</td><td>3-5</td><td>覆盖率下限、关键路径必测</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="deploy">落地的 3 个阶段</h2>
+  <h3>Phase 1：最小可行（Week 0，1-2 天）</h3>
+  <ul>
+    <li>选 3-5 条最关键的规则（安全 + 数据安全优先）</li>
+    <li>每条配齐 3 件事</li>
+    <li>CI 先只做 warn（不 block merge），让团队适应</li>
+  </ul>
+  <h3>Phase 2：扩展覆盖（Week 1-2）</h3>
+  <ul>
+    <li>扩展到 15-20 条规则</li>
+    <li>CI 从 warn → block（关键规则）</li>
+    <li>每个迭代 review Constitution 的执行效果</li>
+  </ul>
+  <h3>Phase 3：持续迭代（持续）</h3>
+  <ul>
+    <li>每次「出错」→ 新增一条规则</li>
+    <li>每次「规则没用」→ 删掉或简化</li>
+    <li>Constitution 是活文档，不是一次性产物</li>
+  </ul>
+
+  <h2 id="tools">自动校验工具推荐</h2>
+  <table>
+    <thead><tr><th>技术栈</th><th>推荐工具</th></tr></thead>
+    <tbody>
+      <tr><td>Java</td><td>ArchUnit + SpotBugs + SonarQube</td></tr>
+      <tr><td>Frontend</td><td>ESLint + vue-tsc + stylelint + npm audit</td></tr>
+      <tr><td>CI/CD</td><td>Maven Enforcer / GitHub Actions / GitLab CI rules</td></tr>
+      <tr><td>通用</td><td>自定义 grep/shell check + pre-commit hooks</td></tr>
+    </tbody>
+  </table>
+
+  <p>→ 模板见 <a href="/templates/constitution">Constitution 模板</a></p>
+</MainLayout>

@@ -1,0 +1,147 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const contractBody = `# Contract: [任务名称]
+
+> 契约版本: v1
+> 创建人: [姓名]
+> 创建日期: [YYYY-MM-DD]
+> 状态: [Draft / Review / Approved / Implemented]
+
+---
+
+## 1. 输入接口（What goes in）
+
+### 1.1 参数列表
+| 参数名 | 类型 | 必填 | 默认值 | 合法值范围 | 非法值处理 |
+|--------|------|------|--------|-----------|-----------|
+| userId | string | Y | - | 非空 UUID | throw InvalidArg |
+| fromDate | Date | N | today | 1970-01-01..today | throw InvalidArg |
+| limit | number | N | 20 | 1..100 | clamp to [1, 100] |
+
+### 1.2 输入来源
+- [ ] HTTP request body
+- [ ] Query parameters
+- [ ] Message queue payload
+- [ ] File system path
+
+### 1.3 输入校验规则
+1. [规则描述]
+2. [规则描述]
+
+---
+
+## 2. 输出接口（What comes out）
+
+### 2.1 成功响应
+\`\`\`json
+{
+  "status": "success",
+  "data": {
+    "items": [...],
+    "total": 42,
+    "page": 1
+  }
+}
+\`\`\`
+
+### 2.2 空值语义
+- 列表为空: data.items = [], total = 0
+- 单条不存在: status = "error", code = "NOT_FOUND"
+- 字段为 null vs 字段不存在: 明确区分
+
+### 2.3 错误码
+| 错误码 | HTTP Status | 含义 | 触发条件 |
+|--------|------------|------|---------|
+| INVALID_ARG | 400 | 参数非法 | 参见 1.1 非法值处理 |
+| NOT_FOUND | 404 | 资源不存在 | id 在系统中不存在 |
+| PERMISSION_DENIED | 403 | 无权限 | 用户无该资源的访问权限 |
+
+---
+
+## 3. 不变量（Must hold on every path）
+
+1. 任何情况下不得返回用户未授权的数据
+2. 数据总数 total 必须与 items.length 逻辑一致
+3. 分页游标 cursor 必须可回溯（同 cursor 同结果）
+4. 响应时间 &lt; 200ms (P95)
+
+---
+
+## 4. 行为约束
+
+### 4.1 纯函数性
+- [ ] 无副作用（GET 请求）
+- [x] 有副作用（写入操作，明确标注副作用）
+
+### 4.2 副作用清单（for 有副作用）
+1. 写入 users 表 (UPDATE)
+2. 写入 audit_log 表 (INSERT)
+3. 发送事件到 message queue (topic: user.updated)
+
+### 4.3 异常处理
+- 数据库连接失败: 返回 503 SERVICE_UNAVAILABLE，不重试
+- 第三方 API 超时: 返回 502 BAD_GATEWAY，记录到 dead letter queue
+- 并发冲突: 乐观锁，返回 409 CONFLICT，让调用方重试
+
+### 4.4 性能要求
+- P50: &lt; 50ms
+- P95: &lt; 200ms
+- P99: &lt; 500ms
+
+---
+
+## 5. 等价性判断（跨系统移植场景专用）
+
+### 5.1 与源系统的一致性要求
+- [ ] 功能等价: 相同输入返回相同输出
+- [ ] 性能不退化: 响应时间不超过源系统的 1.5x
+- [ ] 数据一致: 计算精度一致（浮点误差 &lt; 1e-6）
+
+### 5.2 允许的差异
+1. API 格式不同（Rest vs RPC）——功能等价即可
+2. 错误码映射——见错误码转换表
+3. 数据库 schema 差异——不影响外部行为
+
+---
+
+## 6. 测例集（Must pass before integration）
+
+### 6.1 Happy Path
+| # | 输入 | 期望输出 | 备注 |
+|---|------|---------|------|
+| 1 | userId=A, limit=10 | 返回 A 的最近 10 条 | 标准分页 |
+| 2 | userId=B | 返回 B 的最近 20 条 | 默认 limit |
+| 3 | fromDate=2026-01-01 | 返回 2026-01-01 后的记录 | 日期过滤 |
+
+### 6.2 Edge Cases
+| # | 输入 | 期望输出 | 备注 |
+|---|------|---------|------|
+| 4 | userId=不存在的 | NOT_FOUND | 资源不存在 |
+| 5 | limit=1000 | clamp 到 100，返回最多 100 条 | 参数边界 |
+| 6 | userId=空字符串 | INVALID_ARG | 参数校验 |
+
+### 6.3 Error Cases
+| # | 输入 | 期望输出 | 备注 |
+|---|------|---------|------|
+| 7 | 无认证 token | 401 UNAUTHORIZED | 认证 |
+| 8 | 认证但无权限 | 403 PERMISSION_DENIED | 授权 |
+
+---
+
+*此契约由人定义，AI 在契约约束下实现适配代码。*
+*双方按契约独立验证，不互相污染。*
+`;
+---
+
+<MainLayout title="契约模板" description="Contract-First Split Implementation 的契约模板——6 要素齐全的跨系统任务契约">
+  <Sidebar currentPath="/templates/contract" slot="sidebar" />
+  <h1>契约模板</h1>
+  <div class="meta-line"><span class="tag">模板</span> 跨系统 / 复杂任务的 AI 协作契约</div>
+
+  <p>→ 使用场景见 <a href="/handbook/contract-first">契约优先分工</a></p>
+
+  <h2 id="template">模板</h2>
+  <pre><code set:html={contractBody}></code></pre>
+</MainLayout>

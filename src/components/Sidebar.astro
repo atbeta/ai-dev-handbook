@@ -12,11 +12,12 @@ const { currentPath = '/' } = Astro.props;
       <li><a href="/research/quality-metrics" class={currentPath === '/research/quality-metrics' ? 'active' : ''}>代码质量度量</a></li>
       <li><a href="/research/context-engineering" class={currentPath === '/research/context-engineering' ? 'active' : ''}>上下文工程</a></li>
       <li><a href="/research/company-cases" class={currentPath === '/research/company-cases' ? 'active' : ''}>大厂案例</a></li>
+      <li><a href="/research/hard-data" class={currentPath === '/research/hard-data' ? 'active' : ''}>硬数据与事故</a></li>
       <li><a href="/research/security" class={currentPath === '/research/security' ? 'active' : ''}>安全合规</a></li>
       <li><a href="/research/transformation" class={currentPath === '/research/transformation' ? 'active' : ''}>团队转型</a></li>
     </ul>
   </details>
-  <details>
+  <details open>
     <summary>实践指南</summary>
     <ul>
       <li><a href="/handbook/why" class={currentPath === '/handbook/why' ? 'active' : ''}>为什么需要这套流程</a></li>
@@ -25,17 +26,26 @@ const { currentPath = '/' } = Astro.props;
       <li><a href="/handbook/lint-protocol" class={currentPath === '/handbook/lint-protocol' ? 'active' : ''}>AI Lint 协议</a></li>
       <li><a href="/handbook/workflow" class={currentPath === '/handbook/workflow' ? 'active' : ''}>6 步工作流</a></li>
       <li><a href="/handbook/spec-to-code" class={currentPath === '/handbook/spec-to-code' ? 'active' : ''}>Spec 到代码</a></li>
+      <li><a href="/handbook/contract-first" class={currentPath === '/handbook/contract-first' ? 'active' : ''}>契约优先分工</a></li>
+      <li><a href="/handbook/constitution" class={currentPath === '/handbook/constitution' ? 'active' : ''}>Constitution 模式</a></li>
       <li><a href="/handbook/team-roles" class={currentPath === '/handbook/team-roles' ? 'active' : ''}>团队角色</a></li>
       <li><a href="/handbook/anti-patterns" class={currentPath === '/handbook/anti-patterns' ? 'active' : ''}>反模式</a></li>
+      <li><a href="/handbook/lessons" class={currentPath === '/handbook/lessons' ? 'active' : ''}>实战经验教训</a></li>
       <li><a href="/handbook/tools" class={currentPath === '/handbook/tools' ? 'active' : ''}>工具链</a></li>
     </ul>
   </details>
-  <details>
+  <details open>
     <summary>模板</summary>
     <ul>
       <li><a href="/templates/spec" class={currentPath === '/templates/spec' ? 'active' : ''}>Spec 模板</a></li>
       <li><a href="/templates/lint-prompts" class={currentPath === '/templates/lint-prompts' ? 'active' : ''}>AI Lint Prompt</a></li>
       <li><a href="/templates/checklist" class={currentPath === '/templates/checklist' ? 'active' : ''}>流程 Checklist</a></li>
+      <li><a href="/templates/constitution" class={currentPath === '/templates/constitution' ? 'active' : ''}>Constitution 模板</a></li>
+      <li><a href="/templates/contract" class={currentPath === '/templates/contract' ? 'active' : ''}>契约模板</a></li>
+      <li><a href="/templates/task-card" class={currentPath === '/templates/task-card' ? 'active' : ''}>任务卡模板</a></li>
+      <li><a href="/templates/circuit-breaker" class={currentPath === '/templates/circuit-breaker' ? 'active' : ''}>熔断 Checklist</a></li>
+      <li><a href="/templates/metrics" class={currentPath === '/templates/metrics' ? 'active' : ''}>度量模板</a></li>
+      <li><a href="/templates/system-prompt" class={currentPath === '/templates/system-prompt' ? 'active' : ''}>System Prompt 模板</a></li>
     </ul>
   </details>
 </nav>

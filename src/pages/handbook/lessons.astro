@@ -1,0 +1,96 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="实战经验教训" description="来自真实企业级 AI 协作项目的复盘：7 个坑 → 8 条原则，用代价换来的经验">
+  <Sidebar currentPath="/handbook/lessons" slot="sidebar" />
+  <h1>实战经验教训</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> 弱模型 × 大体量 AI 协作开发复盘</div>
+
+  <div class="callout info">
+    <strong>来源</strong>：一个真实的企业级 AI 协作项目——SE 一次性大需求 → 多端系统（Vue + Java），使用 GLM-4.7 / DeepSeek-4 Flash（量化，1–5 tps，128K 上下文）。<strong>项目体感：早期爽 → 中期慢 → 后期磨。</strong>
+  </div>
+
+  <h2 id="seven-pitfalls">7 个坑（按杀伤力排序）</h2>
+  <table>
+    <thead><tr><th>#</th><th>问题</th><th>表现</th><th>后果</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>评审机制缺失</strong></td><td>AI 一片片生成时没有逐条对齐，团队「通读后签字」</td><td>幻觉长进设计，后期发现已晚</td></tr>
+      <tr><td>2</td><td><strong>跨系统长程任务失败</strong></td><td>AI 反复踩坑 + 失忆，4 天未完成训练算法移植</td><td>大量时间浪费</td></tr>
+      <tr><td>3</td><td><strong>需求过载+缺失</strong></td><td>文档「看起来很细」实则不全，AI 主动补全缺失 → 幻觉</td><td>设计偏差</td></tr>
+      <tr><td>4</td><td><strong>架构规范没硬约束</strong></td><td>公司有规范，AI 不主动遵守，自由发挥</td><td>大量技术债</td></tr>
+      <tr><td>5</td><td><strong>任务颗粒度不对</strong></td><td>单任务触发 60K+ token 推理，弱模型失忆</td><td>级联错误</td></tr>
+      <tr><td>6</td><td><strong>流程套用人类模式</strong></td><td>把「开发」当一个线性阶段，AI 错误指数级传播</td><td>返工率 30-50%</td></tr>
+      <tr><td>7</td><td><strong>没设计并行</strong></td><td>1-5 tps 串行排队，人机互等</td><td>N 人天浪费</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="eight-principles">8 条原则</h2>
+
+  <h3 id="p1">原则 1：评审必须有拒绝权 + 证据 + 节奏</h3>
+  <p>评审不是「读一遍提意见」——是「对照规范 / 对照需求 / 敢打回」的工程活动。AI 输出的幻觉 + 团队未消化的需求 = 双重幻觉互相验证。评审如果只剩「提建议」，无法拦截错假设。</p>
+  <ul>
+    <li>评审不通过 = 返工到上一阶段，不是「带建议继续」</li>
+    <li>通过必须有「单条证据」（对照了哪条需求/规范）</li>
+    <li>每次评审有明确节奏（Gate 1 / Gate 2 / Gate 3），不堆到联调一次性 review</li>
+  </ul>
+
+  <h3 id="p2">原则 2：文档必须是机器可消费的契约</h3>
+  <p>「看起来很细」的需求文档往往是陷阱——细的地方过度展开、缺的地方没写。AI 全读后主动补全缺失的部分，幻觉长进设计。</p>
+  <p><strong>解法</strong>：需求结构化为 RI（需求项），显式标注「信息缺失」，人逐条确认后再交给 AI。</p>
+
+  <h3 id="p3">原则 3：任务入口判断「4 个死亡特征」</h3>
+  <p>给每个新任务前，先判断：跨系统？长程？复杂业务？接口有差异？</p>
+  <ul>
+    <li>0-1 个：正常交给 AI</li>
+    <li>2 个：切换到契约分工模式</li>
+    <li>3-4 个：不要让 AI 独立完成</li>
+  </ul>
+  <p>→ 详见 <a href="/handbook/contract-first">契约优先分工</a></p>
+
+  <h3 id="p4">原则 4：人机分工是 AI 失败的兑底</h3>
+  <p>人接核心算法需要 1 周+ 是项目严重损失，不是「分工模式好」。兑底出现频率 = AI 失败频率。降低兑底频率的方法是：<strong>事前评估能力边界</strong>（见原则 8），而非事后被动应对。</p>
+
+  <h3 id="p5">原则 5：Constitution 三件事缺一不可</h3>
+  <p>每条不可变规则必须配：人读说明 + AI 提示片段 + 自动校验。只有文档 = 没有落地。只有 lint 规则 = 人不理解。只有 AI 提示 = 没有硬约束。</p>
+  <p>→ 详见 <a href="/handbook/constitution">Constitution 模式</a></p>
+
+  <h3 id="p6">原则 6：流程打散成 N 个小循环 + 显式 Gate</h3>
+  <p>AI 项目里「开发」不是 1 个阶段——是 N 个「规范→实现→验证」小循环。每个循环有显式 Gate 评审，能打回。不跨特性延续会话（防 attention decay）。单循环控制在 5K-15K token、< 30 分钟。</p>
+
+  <h3 id="p7">原则 7：Week 0 建立度量机制</h3>
+  <p>没有度量 = 全靠感觉 = 没法判断「代价大不大」。Week 0 必须建立基线：每任务 token 消耗 / 时长 / 重做次数 / Gate 通过率。如果没有，就别开新项目。</p>
+
+  <h3 id="p8">原则 8：【v3 新增】正确评估 AI 能力边界</h3>
+  <p>任务入口评估「AI 失败后人兑底要多久」。> 1 周的任务不该让 AI 独立启动。这是对原则 4 的事前补丁——避免「事后兑底」的高代价。</p>
+
+  <div class="callout success">
+    <strong>核心 Insight</strong>：这次失败的根本不是 AI 笨——是让 AI 做了不该让它做的事。好消息：业界也在同一阶段踩同样的坑。坏消息：需要付代价才能学到。下次让边界变成流程，让流程变成机制，让机制不依赖任何一个人。
+  </div>
+
+  <h2 id="circuit-breaker">失败熔断机制</h2>
+  <p>熔断不是失败，是设计内的一部分。继续让弱模型空转 = 持续损失，<strong>喊停是正常的</strong>。</p>
+  <table>
+    <thead><tr><th>触发条件（任一）</th><th>熔断后动作</th></tr></thead>
+    <tbody>
+      <tr><td>同坑 2 次</td><td>写 progress.md → 触发分工判断</td></tr>
+      <tr><td>重试 > 3 次</td><td>走契约分工路径</td></tr>
+      <tr><td>跨会话 > 半天</td><td>考虑更换实现路径</td></tr>
+      <tr><td>问老问题（失忆信号）</td><td>升级人工，重新评估</td></tr>
+      <tr><td>与已确认矛盾</td><td>立即停止，回溯审查</td></tr>
+    </tbody>
+  </table>
+  <p>→ 完整清单见 <a href="/templates/circuit-breaker">熔断 Checklist</a></p>
+
+  <h2 id="wrong-metrics">项目失败的「隐形推手」</h2>
+  <ul>
+    <li><strong>项目定位偏差</strong>：「尝试验证」被理解成「放手做」，忽略了「带着观察指标做」</li>
+    <li><strong>没有度量</strong>：联调返工 30-50%、架构债务 5-10 倍修复成本——这些数字都是事后估算，因为没有从第一天开始度量</li>
+    <li><strong>流程套用</strong>：把人类小项目的线性流程直接套给 AI，导致错误指数级传播</li>
+  </ul>
+
+  <div class="callout warning">
+    <strong>重要提醒</strong>：本页经验来自 <strong>弱模型</strong>（GLM-4.7 / DeepSeek-4 Flash 量化版，1-5 tps）的实战场景。使用更强大模型（GPT-4o、Claude 3.5 Sonnet）时，部分约束可以放宽，但基本原则（评审拒绝权、Constitution 硬约束、契约分工、熔断机制）仍然适用。
+  </div>
+</MainLayout>

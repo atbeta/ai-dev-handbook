@@ -1,0 +1,157 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const apiErrorExampleSimple = `{ "error": { "code": "STRING", "message": "Human readable", "details": {} } }`;
+const apiErrorExampleFull = `{ "error": { "code": "STRING_IDENTIFIER", "message": "Human-readable description", "details": {} } }`;
+---
+
+<MainLayout title="Constitution 模板" description="项目级不可变规则的 Constitution 模板——每条规则配人读说明 + AI 提示片段 + 自动校验">
+  <Sidebar currentPath="/templates/constitution" slot="sidebar" />
+  <h1>Constitution 模板</h1>
+  <div class="meta-line"><span class="tag">模板</span> 直接复制使用</div>
+
+  <h2 id="usage">使用说明</h2>
+  <ol>
+    <li>放在项目根目录的 <code>.specify/constitution.md</code> 或 <code>docs/constitution.md</code></li>
+    <li>每次 AI 会话开始时前置注入（system prompt 中引用）</li>
+    <li>每次迭代 review Constitution 的执行效果，持续增删改</li>
+  </ol>
+
+  <h2 id="template">模板</h2>
+<pre><code># Project Constitution
+
+> 项目不可变规则。每条规则配 3 件事：人读说明 + AI 提示片段 + 自动校验。
+> 三件事缺一不算落地。
+
+---
+
+## 架构约束
+
+### ARCH-001：模块依赖方向
+**人读说明**：业务模块可以依赖公共模块，公共模块不能反向依赖业务模块。
+不允许循环依赖。
+
+**AI 提示片段**：
+NEVER create circular dependencies between modules.
+Shared/common modules (.common, .shared, .util) MUST NOT import from domain modules.
+If you need shared logic, extract it into the common module first.
+
+**自动校验**：ArchUnit test: verify no cycles between packages.
+CI check: ArchUnit rules must pass before merge.
+
+---
+
+### ARCH-002：API 版本策略
+**人读说明**：所有对外 API 必须带版本前缀 /api/v1/。
+Breaking changes 需要新版本号。
+
+**AI 提示片段**：
+All API routes MUST start with /api/v1/.
+If making a breaking change, create a new version (/api/v2/) and deprecate the old one.
+
+**自动校验**：CI check: grep for route definitions without /api/vN/ prefix → BLOCK.
+
+---
+
+## 安全基线
+
+### SEC-001：SQL 注入防护
+**人读说明**：绝对不允许字符串拼接 SQL。
+必须使用参数化查询或 ORM。
+
+**AI 提示片段**：
+CRITICAL: NEVER concatenate user input into SQL strings.
+Always use parameterized queries. In Java: PreparedStatement. In Node: parameterized queries.
+If you need dynamic table/column names, validate against a whitelist.
+
+**自动校验**：CI check: grep for string concatenation in SQL strings (+ "SELECT" etc) → BLOCK.
+SonarQube: SQL injection rules enabled.
+npm audit / Maven dependency check: run on every PR.
+
+---
+
+### SEC-002：认证与授权
+**人读说明**：所有 API 端点（除公开文档和登录接口外）必须经过认证中间件。
+权限检查必须基于角色而非硬编码。
+
+**AI 提示片段**：
+Every API endpoint (except /health, /docs, /auth/login) MUST go through auth middleware.
+Authorization checks must be role-based, NOT hardcoded user IDs.
+NEVER write: if (userId === 'admin') ... — use role/permission system.
+
+**自动校验**：CI check: grep for unprotected routes → WARN.
+Auth middleware unit test must pass.
+
+---
+
+## 数据安全
+
+### DATA-001：敏感数据加密
+**人读说明**：PII（个人身份信息）、密码、Token 不得明文存储。
+日志中不得包含敏感数据。
+
+**AI 提示片段**：
+CRITICAL: NEVER log passwords, tokens, API keys, or PII.
+Passwords MUST be hashed (bcrypt/argon2). Tokens MUST be encrypted at rest.
+Log statements should use placeholder patterns that strip sensitive fields.
+
+**自动校验**：CI check: grep for console.log/System.out with password/token/key → BLOCK.
+Security scan: detect plain-text secrets in codebase.
+
+---
+
+### DATA-002：数据库迁移安全
+**人读说明**：DROP/TRUNCATE/DELETE 操作必须有二次确认和回滚脚本。
+
+**AI 提示片段**：
+NEVER write DROP TABLE or TRUNCATE without explicit approval.
+Always include a ROLLBACK script alongside every migration.
+DELETE statements MUST verify affected row count.
+All migrations run in a transaction by default.
+
+**自动校验**：CI check: grep for DROP TABLE without IF EXISTS in migration files → BLOCK.
+Pre-deploy: dry-run migration on staging dump.
+
+---
+
+## API 设计
+
+### API-001：错误响应格式
+**人读说明**：所有 API 错误必须返回统一格式：
+
+<pre><code set:html={apiErrorExampleSimple}></pre>
+
+**AI 提示片段**：
+All error responses MUST use the standard format:
+
+<pre><code set:html={apiErrorExampleFull}></pre>
+HTTP status codes: 400 (validation), 401 (auth), 403 (permission), 404, 409, 422, 500.
+
+**自动校验**：API test: every error endpoint returns the standard format.
+OpenAPI/Swagger validation: check response schemas.
+
+---
+
+## 测试要求
+
+### TEST-001：关键路径必测
+**人读说明**：核心业务逻辑、支付流程、认证流程的代码覆盖率不低于 80%。
+
+**AI 提示片段**：
+When implementing or modifying core business logic, payment flow, or auth flow:
+- Write tests FIRST (TDD preferred) or alongside implementation
+- Coverage must be >= 80% for these paths
+- Include happy path, edge cases, error cases, and security boundary tests
+
+**自动校验**：CI check: coverage report for core paths must show >= 80%.
+Test run must pass before merge.
+
+---
+
+*版本：v1*
+*每次项目「出错」→ 新增一条规则。每次「规则没用」→ 删掉或简化。*
+</code></pre>
+
+  <p>→ 如何使用见 <a href="/handbook/constitution">Constitution 模式</a></p>
+</MainLayout>
