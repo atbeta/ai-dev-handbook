@@ -3,386 +3,668 @@ import MainLayout from '../layouts/MainLayout.astro';
 ---
 
 <MainLayout
-  title="AI 辅助生产级开发指南"
-  description="从「AI 能不能写代码」到「AI 怎么写好生产级代码」——基于行业调研和工程实践的系统性方法论"
+  title="AI Dev Handbook // ai-dev.pbeta.dev"
+  description="AI 辅助生产级软件开发的工程化方法论：理论有调研，实践有 SOP"
   showSidebar={false}
   showToc={false}
 >
-  <section class="hero">
-    <h1>AI 辅助生产级开发</h1>
-    <p class="subtitle">
-      从该不该用到怎么用好——一份工程化方法论，理论有调研支撑，实践有 SOP 闭环。
-    </p>
-    <div class="hero-actions">
-      <a href="#pyramid" class="btn-primary">按图索骥 →</a>
-      <a href="/research/landscape" class="btn-secondary">从调研开始 →</a>
-    </div>
-  </section>
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="sb-item sb-dot sb-green"></span>
+    <span class="sb-item">~/projects/ai-dev-handbook</span>
+    <span class="sb-item sb-sep">·</span>
+    <span class="sb-item">v2.0</span>
+    <span class="sb-item sb-sep">·</span>
+    <span class="sb-item">42 pages</span>
+    <span class="sb-item sb-sep">·</span>
+    <span class="sb-item">last commit: 2026-07-07</span>
+  </div>
 
-  <section class="section">
-    <h2 id="pyramid">内容组织：5 层金字塔</h2>
-    <p>从认知到行动，按层级递进。可以从任意一层进入，也可以按路径阅读。</p>
-    <div class="pyramid">
-      <div class="pyramid-layer pyramid-5">
-        <div class="layer-label">📦 Toolkit</div>
-        <div class="layer-desc">模板 · Checklist · 可复制工具</div>
-        <div class="layer-links">
-          <a href="/templates/spec">Spec 模板</a>
-          <a href="/templates/checklist">流程 Checklist</a>
-          <a href="/templates/circuit-breaker">熔断 Checklist</a>
-        </div>
+  <!-- Terminal hero -->
+  <section class="terminal-hero">
+    <div class="terminal-header">
+      <span class="term-dot term-red"></span>
+      <span class="term-dot term-yellow"></span>
+      <span class="term-dot term-green"></span>
+      <span class="term-title">ai-dev-handbook — bash — 120×40</span>
+    </div>
+    <div class="terminal-body">
+      <div class="term-line">
+        <span class="term-prompt">$</span>
+        <span class="term-cmd">cat ./README.md | head</span>
       </div>
-      <div class="pyramid-layer pyramid-4">
-        <div class="layer-label">🎯 Scenarios</div>
-        <div class="layer-desc">不同情境下的具体做法</div>
-        <div class="layer-links">
-          <a href="/handbook/unfamiliar-codebase">不熟项目 + AI</a>
-          <a href="/handbook/parallel-sessions">多会话并行</a>
-          <a href="/handbook/async-nightly">夜间异步执行</a>
-          <a href="/handbook/team-roles">团队角色</a>
-        </div>
+      <pre class="ascii-art">{`
+ █████   ██  ██ ██████  ███████  ██    ██ 
+██   ██  ██  ██ ██   ██ ██       ██    ██ 
+███████  ███████ ██   ██ █████    ██    ██ 
+██   ██  ██  ██ ██   ██ ██       ██ ▄▄ ██ 
+██   ██  ██  ██ ██████  ███████  ██████  
+                                   ▀▀     
+      Dev Handbook · v2.0 · 42 pages
+`}</pre>
+      <div class="term-line">
+        <span class="term-prompt">$</span>
+        <span class="term-cmd">echo "AI 辅助生产级开发的工程化方法论"</span>
       </div>
-      <div class="pyramid-layer pyramid-3">
-        <div class="layer-label">🛠️ Methods</div>
-        <div class="layer-desc">团队落地的标准化流程</div>
-        <div class="layer-links">
-          <a href="/handbook/workflow">6 步工作流</a>
-          <a href="/handbook/spec-format">Spec 字段规范</a>
-          <a href="/handbook/clarification">澄清循环</a>
-          <a href="/handbook/lint-protocol">AI Lint 协议</a>
-          <a href="/handbook/anti-patterns">反模式</a>
-        </div>
+      <div class="term-line term-output">
+        AI 辅助生产级开发的工程化方法论
       </div>
-      <div class="pyramid-layer pyramid-2">
-        <div class="layer-label">📐 Foundations</div>
-        <div class="layer-desc">读懂机制，建立共识</div>
-        <div class="layer-links">
-          <a href="/research/vibe-vs-spec">Vibe vs Spec</a>
-          <a href="/research/context-engineering">上下文工程</a>
-          <a href="/research/ai-boundaries">AI 能力边界</a>
-          <a href="/research/quality-metrics">代码质量度量</a>
-          <a href="/research/security">安全合规</a>
-        </div>
+      <div class="term-line">
+        <span class="term-prompt">$</span>
+        <span class="term-cmd">./start.sh</span>
       </div>
-      <div class="pyramid-layer pyramid-1">
-        <div class="layer-label">🌍 Why & Mindset</div>
-        <div class="layer-desc">建立心智，理解本质</div>
-        <div class="layer-links">
-          <a href="/handbook/ai-as-amplifier">AI 是放大器</a>
-          <a href="/handbook/why">为什么需要</a>
-          <a href="/research/landscape">行业全景</a>
-        </div>
+      <div class="term-output">
+        <div class="term-log">[<span class="log-ok">✓</span>] foundations/    loaded (8 papers, 4 cases)</div>
+        <div class="term-log">[<span class="log-ok">✓</span>] methods/        loaded (11 protocols, 13 fields)</div>
+        <div class="term-log">[<span class="log-ok">✓</span>] scenarios/      loaded (6 real-world cases)</div>
+        <div class="term-log">[<span class="log-ok">✓</span>] toolkit/        loaded (9 templates)</div>
+        <div class="term-log">[<span class="log-warn">!</span>] strategy/      loaded (4 playbooks + 3 lessons)</div>
+        <div class="term-log term-em">[<span class="log-ok">→</span>] ready. navigate: <a href="#pyramid">see pyramid</a> · <a href="#paths">see paths</a></div>
       </div>
     </div>
   </section>
 
+  <!-- Pyramid / Tree -->
+  <section class="section" id="pyramid">
+    <h2 class="sec-h2"><span class="sec-bracket">[</span> tree --depth=3 ./handbook <span class="sec-bracket">]</span></h2>
+    <pre class="tree-view">{`./handbook
+├── 🌍 Why & Mindset             ─┐
+│   ├── ai-as-amplifier          │  「判断力是 AI 产出的乘数因子」
+│   ├── why                      │  「为什么需要这套流程」
+│   └── landscape                │  「行业全景图」
+│                                │
+├── 📐 Foundations               ─┤  理论：是什么、为什么有效
+│   ├── vibe-vs-spec             │
+│   ├── context-engineering      │
+│   ├── ai-boundaries            │
+│   ├── quality-metrics          │
+│   ├── security                 │
+│   └── hard-data                │
+│                                │
+├── 🌐 Strategy                  ─┤  战略：要不要做、怎么做
+│   ├── pilot-playbook           │  「试点负责人 Playbook」
+│   ├── pilot-lessons            │  「试点踩坑实录」
+│   ├── transformation           │
+│   └── infrastructure-impact    │
+│                                │
+├── 🛠️ Methods                   ─┤  方法：怎么做（流程化）
+│   ├── workflow                 │  「6 步工作流」
+│   ├── spec-format              │
+│   ├── clarification            │
+│   ├── lint-protocol            │
+│   ├── anti-patterns            │
+│   ├── first-task-sop           │
+│   └── ...                      │
+│                                │
+├── 🎯 Scenarios                 ─┤  场景：不同情境下的具体做法
+│   ├── unfamiliar-codebase      │  「不熟项目 + AI」
+│   ├── parallel-sessions        │  「多会话并行」
+│   ├── time-management          │
+│   ├── async-nightly            │  「夜间异步执行」
+│   ├── docs-sync-strategy       │
+│   └── team-roles               │
+│                                │
+└── 📦 Toolkit                   ─┘  工具：拿来即用
+    ├── spec/        lint-prompts/
+    ├── checklist/   circuit-breaker/
+    ├── constitution/  contract/
+    └── task-card/   system-prompt/
+`}</pre>
+    <p class="tree-hint"># 42 files · structured as 5-layer pyramid · 4 reading paths</p>
+  </section>
+
+  <!-- Core insights as numbered log lines -->
   <section class="section">
-    <h2>核心结论</h2>
-    <div class="insights">
-      <div class="insight">
-        <span class="insight-num">01</span>
-        <div>
+    <h2 class="sec-h2"><span class="sec-bracket">[</span> insights --top=8 <span class="sec-bracket">]</span></h2>
+    <div class="insights-grid">
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">01</span>
+          <span class="ic-tag">core</span>
+        </div>
+        <div class="ic-body">
           <strong>AI 是放大器，不是工程师。</strong>
           <p>输入模糊 → 快速产出模糊。输入清晰 → 高效产出正确。Spec 是流程中唯一可由人完全控制的变量。</p>
         </div>
       </div>
-      <div class="insight">
-        <span class="insight-num">02</span>
-        <div>
-          <strong>Vibe Coding 和 Spec-Driven 不是二选一。</strong>
-          <p>原型探索用 vibe，生产交付用 spec。区分场景比争论方法更重要。两者互补，分阶段使用。</p>
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">02</span>
+          <span class="ic-tag">core</span>
+        </div>
+        <div class="ic-body">
+          <strong>Vibe 和 Spec 不是二选一。</strong>
+          <p>原型探索用 vibe，生产交付用 spec。区分场景比争论方法更重要。</p>
         </div>
       </div>
-      <div class="insight">
-        <span class="insight-num">03</span>
-        <div>
-          <strong>写 Spec 的阶段值得投入 30-50% 的时间。</strong>
-          <p>Spec 写得好的项目，返工率降低 70%+，移植成功率提升 3-5 倍。省下来的时间在返工和调试里。</p>
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">03</span>
+          <span class="ic-tag">data</span>
+        </div>
+        <div class="ic-body">
+          <strong>写 Spec 占总时间的 30-50%。</strong>
+          <p>Spec 写得好的项目，返工率降低 70%+，移植成功率提升 3-5 倍。</p>
         </div>
       </div>
-      <div class="insight">
-        <span class="insight-num">04</span>
-        <div>
-          <strong>2026 年，上下文工程是新的核心竞争力。</strong>
-          <p>给 AI 提供什么上下文（AGENTS.md、Repo Map、MCP 工具），比 prompt 本身更能决定代码质量。</p>
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">04</span>
+          <span class="ic-tag">core</span>
+        </div>
+        <div class="ic-body">
+          <strong>2026 核心竞争力：上下文工程。</strong>
+          <p>给 AI 提供什么上下文（AGENTS.md、Repo Map、MCP），比 prompt 本身更能决定代码质量。</p>
         </div>
       </div>
-      <div class="insight">
-        <span class="insight-num">05</span>
-        <div>
-          <strong>AI 代码的长期维护成本被严重低估。</strong>
-          <p>实证数据显示，AI 生成代码的 churn rate 可能达到人工代码的 1.5 倍。Code review 和测试不能在 AI 时代缩水，反而应该加严。</p>
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">05</span>
+          <span class="ic-tag">data</span>
+        </div>
+        <div class="ic-body">
+          <strong>AI 代码长期维护成本被低估。</strong>
+          <p>实证：AI 代码 churn rate 达人工代码的 1.5 倍。Code review 在 AI 时代不是缩水，而是加严。</p>
         </div>
       </div>
-      <div class="insight">
-        <span class="insight-num">06</span>
-        <div>
-          <strong>不熟项目时，AI 是侦察兵不是将军。</strong>
-          <p>人必须先建心智地图（2-4 小时），AI 才能当工具。三阶段渐进信任：考古 → 侦察 → 协作。不许跳级，跳级必崩。</p>
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">06</span>
+          <span class="ic-tag">scout</span>
+        </div>
+        <div class="ic-body">
+          <strong>不熟项目：AI 是侦察兵不是将军。</strong>
+          <p>人先建心智地图（2-4h），AI 才能当工具。三阶段渐进信任：考古 → 侦察 → 协作。不许跳级。</p>
         </div>
       </div>
-      <div class="insight">
-        <span class="insight-num">07</span>
-        <div>
-          <strong>Files ARE the State：所有上下文压到磁盘。</strong>
-          <p>离开电脑前最后 1 分钟，把所有判断写到 TASK_STATE.md。第二天回来不靠记忆——靠文件接续，省 80% 重新对齐时间。</p>
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">07</span>
+          <span class="ic-tag">flow</span>
+        </div>
+        <div class="ic-body">
+          <strong>Files ARE the State。</strong>
+          <p>离开电脑前最后 1 分钟，所有判断写到 TASK_STATE.md。第二天靠文件接续，省 80% 重新对齐时间。</p>
         </div>
       </div>
-      <div class="insight">
-        <span class="insight-num">08</span>
-        <div>
+      <div class="insight-card">
+        <div class="ic-header">
+          <span class="ic-num">08</span>
+          <span class="ic-tag">infra</span>
+        </div>
+        <div class="ic-body">
           <strong>公司 AI 基础设施决定团队上限。</strong>
-          <p>并行数量瓶颈是 TPS 配额，不是 session 本身。同步对话独占 TPS、异步任务高并发、评审必须强模型——分层配额决定试点成败。</p>
+          <p>并行数量瓶颈是 TPS 配额，不是 session 本身。同步对话独占 TPS、异步任务高并发、评审必须强模型。</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <h2>4 条阅读路径</h2>
-    <table>
-      <thead>
-        <tr><th>你是谁</th><th>推荐路径</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>🏢 公司 AI 试点负责人</strong></td>
-          <td>
-            <a href="/strategy/pilot-playbook">试点负责人 Playbook</a> →
-            <a href="/research/hard-data">硬数据与事故</a> →
-            <a href="/handbook/ai-as-amplifier">AI 是放大器</a> →
-            <a href="/handbook/first-task-sop">第一单 SOP</a> →
-            <a href="/handbook/anti-patterns">反模式</a>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>🛠️ 工程师（刚接触 AI 编程）</strong></td>
-          <td>
-            <a href="/handbook/ai-as-amplifier">AI 是放大器</a> →
-            <a href="/research/ai-boundaries">AI 能力边界</a> →
-            <a href="/handbook/first-task-sop">第一单 SOP</a> →
-            <a href="/handbook/spec-format">Spec 字段规范</a> →
-            <a href="/handbook/anti-patterns">反模式</a>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>👥 技术负责人 / 架构师</strong></td>
-          <td>
-            <a href="/research/landscape">行业全景</a> →
-            <a href="/research/vibe-vs-spec">Vibe vs Spec</a> →
-            <a href="/strategy/pilot-playbook">试点 Playbook</a> →
-            <a href="/research/transformation">团队转型路线</a> →
-            <a href="/handbook/constitution">Constitution 模式</a>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>🏗️ 不熟项目 + 需要迁移 / 重构</strong></td>
-          <td>
-            <a href="/handbook/unfamiliar-codebase">不熟项目 + AI</a> →
-            <a href="/research/ai-boundaries">AI 能力边界</a> →
-            <a href="/handbook/parallel-sessions">多会话并行</a> →
-            <a href="/handbook/async-nightly">夜间异步执行</a> →
-            <a href="/handbook/docs-sync-strategy">文档同步策略</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <!-- Reading paths as CLI -->
+  <section class="section" id="paths">
+    <h2 class="sec-h2"><span class="sec-bracket">[</span> ./read --role=&lt;who&gt; <span class="sec-bracket">]</span></h2>
+    <div class="paths">
+      <div class="path">
+        <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=pilot-lead</div>
+        <div class="path-flow">
+          <a href="/strategy/pilot-playbook">pilot-playbook</a>
+          <span class="arr">→</span>
+          <a href="/research/hard-data">hard-data</a>
+          <span class="arr">→</span>
+          <a href="/handbook/ai-as-amplifier">ai-as-amplifier</a>
+          <span class="arr">→</span>
+          <a href="/handbook/first-task-sop">first-task-sop</a>
+          <span class="arr">→</span>
+          <a href="/handbook/anti-patterns">anti-patterns</a>
+        </div>
+        <div class="path-tag"># 试点负责人</div>
+      </div>
 
-  <section class="section">
-    <h2>🆕 v1.2 新增章节（2026-07-07）</h2>
-    <p>理论补全 + 场景扩展：</p>
-    <div class="card-grid">
-      <div class="card">
-        <h3>🧠 AI 是放大器</h3>
-        <p>为什么判断力是 AI 产出质量的乘数因子，工具熟练度反而是次要的。</p>
-        <a href="/handbook/ai-as-amplifier">阅读 →</a>
+      <div class="path">
+        <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=engineer</div>
+        <div class="path-flow">
+          <a href="/handbook/ai-as-amplifier">ai-as-amplifier</a>
+          <span class="arr">→</span>
+          <a href="/research/ai-boundaries">ai-boundaries</a>
+          <span class="arr">→</span>
+          <a href="/handbook/first-task-sop">first-task-sop</a>
+          <span class="arr">→</span>
+          <a href="/handbook/spec-format">spec-format</a>
+          <span class="arr">→</span>
+          <a href="/handbook/anti-patterns">anti-patterns</a>
+        </div>
+        <div class="path-tag"># 工程师（刚接触 AI 编程）</div>
       </div>
-      <div class="card">
-        <h3>📏 AI 能力边界</h3>
-        <p>AI 真正擅长的 8 类任务，和 6 类结构性做不到的事。含信心等级表。</p>
-        <a href="/research/ai-boundaries">阅读 →</a>
+
+      <div class="path">
+        <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=tech-lead</div>
+        <div class="path-flow">
+          <a href="/research/landscape">landscape</a>
+          <span class="arr">→</span>
+          <a href="/research/vibe-vs-spec">vibe-vs-spec</a>
+          <span class="arr">→</span>
+          <a href="/strategy/pilot-playbook">pilot-playbook</a>
+          <span class="arr">→</span>
+          <a href="/research/transformation">transformation</a>
+          <span class="arr">→</span>
+          <a href="/handbook/constitution">constitution</a>
+        </div>
+        <div class="path-tag"># 技术负责人 / 架构师</div>
       </div>
-      <div class="card">
-        <h3>🚀 第一单 SOP</h3>
-        <p>团队引入 AI 编程后第一个任务怎么跑。选任务 → 准备 → Kickoff → 执行 → 验证 → 复盘。</p>
-        <a href="/handbook/first-task-sop">阅读 →</a>
-      </div>
-      <div class="card">
-        <h3>🏢 试点负责人 Playbook</h3>
-        <p>公司 AI 试点怎么选团队、怎么定指标、怎么从试点到推广。给试点负责人。</p>
-        <a href="/strategy/pilot-playbook">阅读 →</a>
+
+      <div class="path">
+        <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=migrator</div>
+        <div class="path-flow">
+          <a href="/handbook/unfamiliar-codebase">unfamiliar-codebase</a>
+          <span class="arr">→</span>
+          <a href="/research/ai-boundaries">ai-boundaries</a>
+          <span class="arr">→</span>
+          <a href="/handbook/parallel-sessions">parallel-sessions</a>
+          <span class="arr">→</span>
+          <a href="/handbook/async-nightly">async-nightly</a>
+          <span class="arr">→</span>
+          <a href="/handbook/docs-sync-strategy">docs-sync-strategy</a>
+        </div>
+        <div class="path-tag"># 不熟项目，需要迁移/重构</div>
       </div>
     </div>
   </section>
 
+  <!-- What's new -->
+  <section class="section">
+    <h2 class="sec-h2"><span class="sec-bracket">[</span> git log --oneline -5 <span class="sec-bracket">]</span></h2>
+    <div class="changelog">
+      <div class="cl-item">
+        <span class="cl-hash">2ece9ae</span>
+        <span class="cl-date">2026-07-07</span>
+        <span class="cl-msg"><strong>v1.1</strong> 6 章实战内容（不熟项目/多会话并行/时间管理/夜间异步/文档同步/基础设施）</span>
+      </div>
+      <div class="cl-item cl-current">
+        <span class="cl-hash">5e8f0d9</span>
+        <span class="cl-date">2026-07-07</span>
+        <span class="cl-msg"><strong>v2.0</strong> 5 层金字塔重构 + 4 新页（ai-as-amplifier/first-task-sop/ai-boundaries/pilot-playbook）</span>
+      </div>
+      <div class="cl-item">
+        <span class="cl-hash">HEAD</span>
+        <span class="cl-date">2026-07-07</span>
+        <span class="cl-msg"><strong>v2.1</strong> 终端化布局 + 试点踩坑实录</span>
+      </div>
+    </div>
+
+    <h3 class="sec-h3">// latest additions</h3>
+    <div class="card-grid">
+      <a href="/strategy/pilot-lessons" class="card">
+        <div class="card-tag">strategy/</div>
+        <h4>🔥 试点踩坑实录</h4>
+        <p>3 个真实失败案例：跨第三方迁移崩盘 / AI 自信式完成 / 跨语言迁移。归因 + 7 条教训 + 现在的做法。</p>
+      </a>
+      <a href="/handbook/ai-as-amplifier" class="card">
+        <div class="card-tag">handbook/</div>
+        <h4>🧠 AI 是放大器</h4>
+        <p>为什么判断力是 AI 产出的乘数因子。经验的价值不在于记 API，而在于判断力、地图、嗅觉、边界感。</p>
+      </a>
+      <a href="/research/ai-boundaries" class="card">
+        <div class="card-tag">research/</div>
+        <h4>📏 AI 能力边界</h4>
+        <p>AI 真正擅长的 8 类任务 + 结构性做不到的 6 件事 + 4 级信心等级表。</p>
+      </a>
+      <a href="/handbook/first-task-sop" class="card">
+        <div class="card-tag">handbook/</div>
+        <h4>🚀 第一单 SOP</h4>
+        <p>团队引入 AI 编程后第一个任务怎么跑。选任务 → 准备 → Kickoff → 执行 → 验证 → 复盘。</p>
+      </a>
+      <a href="/strategy/pilot-playbook" class="card">
+        <div class="card-tag">strategy/</div>
+        <h4>🏢 试点负责人 Playbook</h4>
+        <p>选团队、评判断力、定指标、从试点到推广。给负责公司 AI 试点的人。</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer CTA -->
   <section class="section cta">
-    <h2>这不是学术论文，是工程手册</h2>
-    <p>所有内容来自真实项目经验、行业调研和实证数据。每个建议都经过生产环境验证。</p>
-    <p>可以从任何一章开始读，每章独立。按上面的阅读路径走效率更高。</p>
-    <a href="#pyramid" class="btn-primary" style="margin-top:16px">按图索骥 →</a>
+    <h2 class="sec-h2"><span class="sec-bracket">[</span> cat ./README.md <span class="sec-bracket">]</span></h2>
+    <pre class="readme-block">{`# AI Dev Handbook
+
+这不是学术论文，是工程手册。
+所有内容来自真实项目经验、行业调研和实证数据。
+每个建议都经过生产环境验证。
+
+## 入口
+- 按角色路径：./read --role=&lt;pilot-lead|engineer|tech-lead|migrator&gt;
+- 按内容树：./tree
+- 按核心结论：./insights --top=8
+
+## 仓库
+git clone https://github.com/atbeta/ai-dev-handbook.git
+`}</pre>
+    <div class="cta-actions">
+      <a href="#pyramid" class="btn-primary">tree →</a>
+      <a href="https://github.com/atbeta/ai-dev-handbook" class="btn-secondary">git clone →</a>
+    </div>
   </section>
 </MainLayout>
 
 <style>
-  .hero {
-    padding: 48px 0 32px;
-  }
-  .hero h1 {
-    font-size: 2.8rem;
-    font-weight: 900;
-    letter-spacing: -1px;
-    line-height: 1.15;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, #58a6ff, #a371f7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero .subtitle {
-    font-size: 1.15rem;
-    color: var(--c-text-secondary);
-    max-width: 650px;
-    margin-bottom: 28px;
-  }
-  .hero-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .btn-primary, .btn-secondary {
-    display: inline-block;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.15s;
-    text-decoration: none;
-  }
-  .btn-primary {
-    background: var(--c-accent);
-    color: #fff;
-  }
-  .btn-primary:hover { background: var(--c-accent-dim); text-decoration: none; }
-  .btn-secondary {
-    background: var(--c-bg-tertiary);
-    color: var(--c-text);
-    border: 1px solid var(--c-border);
-  }
-  .btn-secondary:hover { border-color: var(--c-accent); text-decoration: none; }
-
-  .section {
-    margin-top: 48px;
-  }
-  .section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 16px;
-  }
-
-  /* Pyramid */
-  .pyramid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .pyramid-layer {
-    border-radius: 8px;
-    padding: 12px 16px;
+  /* ========== Status bar ========== */
+  .statusbar {
     display: flex;
     align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .pyramid-1 { background: #eff6ff; border-left: 4px solid #3b82f6; }
-  .pyramid-2 { background: #f5f3ff; border-left: 4px solid #8b5cf6; }
-  .pyramid-3 { background: #f0fdf4; border-left: 4px solid #22c55e; }
-  .pyramid-4 { background: #fffbeb; border-left: 4px solid #f59e0b; }
-  .pyramid-5 { background: #fef2f2; border-left: 4px solid #ef4444; }
-  .layer-label {
-    font-weight: 700;
-    font-size: 0.95rem;
-    min-width: 140px;
-  }
-  .layer-desc {
-    color: var(--c-text-secondary);
-    font-size: 0.85rem;
-    min-width: 180px;
-  }
-  .layer-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .layer-links a {
-    font-size: 0.8rem;
-    background: white;
-    padding: 2px 8px;
-    border-radius: 4px;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--c-bg-tertiary);
     border: 1px solid var(--c-border);
-    color: var(--c-text);
-    text-decoration: none;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--c-text-secondary);
+    margin-bottom: 24px;
   }
-  .layer-links a:hover {
-    border-color: var(--c-accent);
-    color: var(--c-accent);
+  .sb-item { white-space: nowrap; }
+  .sb-sep { color: var(--c-text-muted); }
+  .sb-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c-green);
+    display: inline-block;
+    box-shadow: 0 0 6px var(--c-green);
   }
 
-  /* Insights */
-  .insights {
+  /* ========== Terminal hero ========== */
+  .terminal-hero {
+    background: #0a0e14;
+    border: 1px solid var(--c-border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    margin-bottom: 24px;
+  }
+  .terminal-header {
+    background: #1c2128;
+    padding: 8px 12px;
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--c-border);
   }
-  .insight {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
+  .term-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
   }
-  .insight-num {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--c-accent);
-    opacity: 0.5;
-    min-width: 36px;
+  .term-red { background: #ff5f57; }
+  .term-yellow { background: #febc2e; }
+  .term-green { background: #28c840; }
+  .term-title {
+    margin-left: 12px;
+    font-size: 0.78rem;
+    color: var(--c-text-muted);
   }
-  .insight p {
+  .terminal-body {
+    padding: 20px 24px;
+    color: #c9d1d9;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .term-line { margin-bottom: 4px; }
+  .term-prompt { color: #58a6ff; margin-right: 8px; }
+  .term-cmd { color: #c9d1d9; }
+  .term-output { color: #8b949e; margin-left: 0; margin-bottom: 8px; }
+  .term-log { font-size: 0.82rem; }
+  .log-ok { color: #3fb950; }
+  .log-warn { color: #d29922; }
+  .term-em { color: #58a6ff; margin-top: 4px; }
+  .ascii-art {
+    color: #58a6ff;
+    font-size: 0.72rem;
+    line-height: 1.1;
+    margin: 8px 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* ========== Section headers ========== */
+  .sec-h2 {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--c-text);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .sec-h3 {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
     color: var(--c-text-secondary);
-    font-size: 0.92rem;
+    margin: 24px 0 12px;
+    font-weight: 600;
+  }
+  .sec-bracket { color: var(--c-accent); margin: 0 4px; }
+
+  /* ========== Tree view ========== */
+  .tree-view {
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--c-text-secondary);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .tree-hint {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--c-text-muted);
+    margin-top: 8px;
+  }
+
+  /* ========== Insights grid ========== */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .insight-card {
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-left: 3px solid var(--c-accent);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .ic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .ic-num {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--c-accent);
+    font-weight: 700;
+  }
+  .ic-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--c-text-muted);
+    background: var(--c-bg-tertiary);
+    padding: 1px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .ic-body p {
+    font-size: 0.85rem;
+    color: var(--c-text-secondary);
     margin-top: 4px;
     margin-bottom: 0;
   }
 
+  /* ========== Paths ========== */
+  .paths {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .path {
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    padding: 12px 16px;
+  }
+  .path-prompt {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+  .path-flow {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: var(--c-text-secondary);
+    padding-left: 16px;
+  }
+  .path-flow a {
+    color: var(--c-accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--c-accent);
+  }
+  .path-flow a:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+  }
+  .arr {
+    color: var(--c-text-muted);
+    margin: 0 4px;
+  }
+  .path-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--c-text-muted);
+    margin-top: 6px;
+  }
+
+  /* ========== Changelog ========== */
+  .changelog {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.8;
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .cl-item { color: var(--c-text-secondary); }
+  .cl-item.cl-current { color: var(--c-text); }
+  .cl-hash {
+    color: var(--c-accent);
+    margin-right: 12px;
+  }
+  .cl-date {
+    color: var(--c-text-muted);
+    margin-right: 12px;
+  }
+  .cl-msg strong {
+    color: var(--c-green);
+  }
+
+  /* ========== Card grid ========== */
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
+    gap: 12px;
   }
   .card {
+    display: block;
     background: var(--c-bg-secondary);
     border: 1px solid var(--c-border);
-    border-radius: 10px;
-    padding: 16px;
+    border-radius: 6px;
+    padding: 14px;
+    text-decoration: none;
+    transition: all 0.15s;
   }
-  .card h3 {
-    font-size: 0.95rem;
+  .card:hover {
+    border-color: var(--c-accent);
+    transform: translateY(-1px);
+  }
+  .card-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--c-accent);
     margin-bottom: 6px;
   }
-  .card p {
-    font-size: 0.85rem;
-    color: var(--c-text-secondary);
-    margin-bottom: 8px;
+  .card h4 {
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+    color: var(--c-text);
   }
-  .card a {
-    font-size: 0.85rem;
-    font-weight: 600;
+  .card p {
+    font-size: 0.8rem;
+    color: var(--c-text-secondary);
+    line-height: 1.5;
+    margin: 0;
   }
 
+  /* ========== CTA / Readme block ========== */
   .cta {
     background: var(--c-bg-secondary);
     border: 1px solid var(--c-border);
-    border-radius: 12px;
-    padding: 28px;
+    border-radius: 10px;
+    padding: 24px;
   }
-  .cta h2 { margin-top: 0; }
+  .readme-block {
+    background: #0a0e14;
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #c9d1d9;
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 12px;
+  }
+  .btn-primary, .btn-secondary {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.15s;
+    text-decoration: none;
+    border: 1px solid;
+  }
+  .btn-primary {
+    background: var(--c-accent);
+    color: #0a0e14;
+    border-color: var(--c-accent);
+  }
+  .btn-primary:hover {
+    background: var(--c-accent-dim);
+    color: #fff;
+    text-decoration: none;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--c-text);
+    border-color: var(--c-border);
+  }
+  .btn-secondary:hover {
+    border-color: var(--c-accent);
+    color: var(--c-accent);
+    text-decoration: none;
+  }
+
+  .section {
+    margin-top: 48px;
+  }
 </style>

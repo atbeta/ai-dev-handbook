@@ -1,0 +1,248 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const title = "试点踩坑实录";
+const description = "公司 AI 试点项目的真实失败案例、归因分析、可复用教训";
+---
+
+<MainLayout title={title} description={description}>
+  <Sidebar currentPath="/strategy/pilot-lessons" slot="sidebar" />
+  <h1>{title}</h1>
+  <div class="meta-line">
+    <span class="tag">Strategy</span>
+    <span class="tag">复盘</span>
+    <span class="tag">教训</span>
+  </div>
+
+  <blockquote>
+    <p>成功的经验告诉你"应该怎么做"，失败的教训告诉你"绝对不能怎么做"。本节记录 3 个真实失败案例和它们的归因。</p>
+  </blockquote>
+
+  <div class="admonition warning">
+    <div class="admonition-title">脱敏说明</div>
+    <p>以下案例来自真实公司试点项目，业务系统名称、数据细节已脱敏。失败模式本身是结构性的，对任何深度耦合的遗留系统都适用。</p>
+  </div>
+
+  <h2 id="case-1">案例 1：跨第三方系统迁移崩盘</h2>
+
+  <h3>任务描述</h3>
+  <pre><code>{`# SPEC.md (简化版)
+## 目标
+将内部用户系统从认证服务 A 迁移到认证服务 B
+
+## 验收
+- 登录/注册/注销全链路用 B
+- 现有用户数据平滑迁移
+- 接口命名保持向后兼容（API 路径不变，参数不变）
+
+## 假设
+- B 提供等价的能力
+- 数据迁移有现成脚本
+- 迁移可以分模块推进`}</code></pre>
+
+  <h3>AI 实际做了什么</h3>
+  <ul>
+    <li>改了 A → B 的所有调用点 ✅</li>
+    <li>看到 SPEC 里有"保持向后兼容"，自行为每个接口写了对应的 B 端接口调用包装</li>
+    <li>发现某模块没 A 接口但 SPEC 没说不改，自行补了一套新的处理逻辑</li>
+    <li>发现部分用户元数据 A 有 B 没有，自行构造了一套默认值</li>
+    <li>报告 done</li>
+  </ul>
+
+  <h3>出了什么问题</h3>
+  <table>
+    <thead><tr><th>问题类型</th><th>具体表现</th><th>代价</th></tr></thead>
+    <tbody>
+      <tr><td>Confident completion</td><td>AI 报告 done，实际引入了 200+ 行 SPEC 之外的新代码</td><td>需要逐行 review 才能发现问题</td></tr>
+      <tr><td>Silent hallucination</td><td>自构造的"默认值"实际会影响业务逻辑</td><td>测试环境勉强通过，预发环境数据异常</td></tr>
+      <tr><td>Boundary blindness</td><td>不知道哪些地方动一根线就会破坏契约</td><td>改了不该改的元数据，导致下游 3 个服务异常</td></tr>
+      <tr><td>Goal drift</td><td>"迁移 A → B"变成了"重写相关模块"</td><td>需要回滚 60% 改动，重新评估范围</td></tr>
+    </tbody>
+  </table>
+
+  <h3>归因</h3>
+  <p>SPEC 里有<strong>致命漏洞</strong>：</p>
+  <pre><code>{`# SPEC 缺的关键信息
+## 缺失
+- B 不支持的能力清单（AI 看不到 = 当成"应该支持"处理）
+- A 提供的"非显式能力"清单（隐式契约）
+- 哪些模块的元数据是不能动的（边界）
+- 哪些值被认为是"默认值"以及这些默认值的业务语义
+
+## AI 看到的世界
+- 任务：迁移到 B
+- 约束：保持接口兼容
+- 缺失：所有"不要动什么"的清单`}</code></pre>
+
+  <h3>最终结果</h3>
+  <p>团队决定放弃 AI 全自动迁移，改回人工迁移 + AI 辅助写单元测试的混合模式。<strong>3 周的人力工作，AI 贡献接近于零。</strong></p>
+
+  <hr />
+
+  <h2 id="case-2">案例 2：AI 自信式完成</h2>
+
+  <h3>任务描述</h3>
+  <pre><code>{`# SPEC.md
+## 目标
+实现用户中心的"导出我的数据"功能
+
+## 验收
+- 用户登录后可以下载自己的全量数据
+- 格式：JSON zip
+- 包含：基本资料、订单、积分、消息
+
+## 假设
+- 现有 user_data_export 表已经存了大部分数据
+- 缺的字段从其他服务通过 API 拉取`}</code></pre>
+
+  <h3>AI 实际做了什么</h3>
+  <ul>
+    <li>实现了导出按钮和后端逻辑 ✅</li>
+    <li>实现了"基本资料、订单、积分、消息"四类数据收集 ✅</li>
+    <li><strong>没做的</strong>：消息数据需要从另一个服务通过 gRPC 拉，AI 没看到调用模式，<strong>直接返回了空数组</strong></li>
+    <li><strong>没做的</strong>：积分有实时计算逻辑，AI 没发现，直接用了旧的积分快照</li>
+    <li>报告 done，附"测试通过，全部覆盖"</li>
+  </ul>
+
+  <h3>出了什么问题</h3>
+  <p>测试通过是因为测试数据里没有消息数据，积分快照恰好对。生产环境出现：</p>
+  <ul>
+    <li>用户下载的消息数据全是空（数据不完整）</li>
+    <li>积分显示不准（用户投诉）</li>
+    <li>用户截图反馈"导出功能坏了"</li>
+  </ul>
+
+  <h3>归因</h3>
+  <p>三个结构性问题：</p>
+  <ol>
+    <li><strong>AI 不知道自己没做完</strong>——它把"找不到数据"等同于"返回空"，没意识到这是数据缺失而不是数据为零</li>
+    <li><strong>SPEC 没列出"必须拉取哪些服务的数据"</strong>——AI 不知道该跨服务拉取</li>
+    <li><strong>测试覆盖不足</strong>——AI 写的测试只验证"流程通"，没验证"数据全"</li>
+  </ol>
+
+  <h3>教训</h3>
+  <ul>
+    <li>SPEC 必须明确"完整性的边界"：什么算完成的数据？数据完整性怎么验证？</li>
+    <li>AI 任务完成后，必须有"对照 SPEC 自验"环节，且人必须独立验证</li>
+    <li>测试用例必须包含"边界数据"——空、缺失、不一致</li>
+  </ul>
+
+  <hr />
+
+  <h2 id="case-3">案例 3：跨团队、跨语言迁移</h2>
+
+  <h3>任务描述</h3>
+  <pre><code>{`# SPEC.md
+## 目标
+把一个 5 万行的 Java 模块改写成 Go
+
+## 范围
+- 全部业务逻辑
+- 保持接口不变
+- 数据兼容
+
+## 时间
+2 周内完成（实际：4 周也没完成）`}</code></pre>
+
+  <h3>出了什么问题</h3>
+  <ul>
+    <li>AI 对 Java 业务逻辑理解不到位</li>
+    <li>对 Go 的某些并发模式强行套用</li>
+    <li>性能特征不同（Java 的 GC 行为 vs Go 的 goroutine 调度）</li>
+    <li>改写过程中发现多处"原始代码里没文档的 hack"，这些 hack 业务上是必须的</li>
+    <li>AI 把 hack 删了，导致生产环境小流量异常</li>
+  </ul>
+
+  <h3>归因</h3>
+  <p>这不是 AI 的错，是任务的错。这种任务即使人工做也需要：</p>
+  <ul>
+    <li>完整的行为文档</li>
+    <li>详尽的回归测试</li>
+    <li>影子流量对比</li>
+    <li>业务领域专家 review</li>
+  </ul>
+  <p>AI 在没有这些前置条件的情况下，<strong>只是更高效地复制了人类会犯的错误</strong>。</p>
+
+  <hr />
+
+  <h2 id="common-pattern">3 个案例的共性模式</h2>
+
+  <table>
+    <thead><tr><th>维度</th><th>案例 1</th><th>案例 2</th><th>案例 3</th></tr></thead>
+    <tbody>
+      <tr><td>任务类型</td><td>跨第三方迁移</td><td>功能实现</td><td>跨语言迁移</td></tr>
+      <tr><td>AI 失败模式</td><td>Confident completion</td><td>Silent hallucination</td><td>Goal drift</td></tr>
+      <tr><td>核心问题</td><td>SPEC 缺边界</td><td>SPEC 缺完整性</td><td>任务结构性超边界</td></tr>
+      <tr><td>可复盘性</td><td>中（事后能复盘）</td><td>低（表面看 done 实则错）</td><td>高（明显错误）</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>共同根因</strong>：把 AI 当成"自动完成"工具，而不是"加速执行"工具。当任务超出 AI 能力边界时，AI 会自信地输出低质量结果，且不会主动告知。</p>
+
+  <h2 id="seven-learnings">7 条核心教训</h2>
+
+  <ol>
+    <li><strong>任务类型决定 AI 的可用度</strong>——边界清晰、有验证条件的任务最适合，跨系统、模糊需求的任务最危险</li>
+    <li><strong>SPEC 必须包含"边界"和"完整性"</strong>——什么是不要做的、什么数据是必须有的、什么是完成的标志</li>
+    <li><strong>AI 完成后必须有人独立验证</strong>——不能让 AI 自己判断 done，必须有 SPEC 对照检查</li>
+    <li><strong>渐进信任而非一次性信任</strong>——先小任务，建立信任后再扩量，不要一上来就给大任务</li>
+    <li><strong>失败后立即暂停</strong>——发现 AI 在边界外时，立刻停手并分析，不要让 AI 继续在错误方向构建</li>
+    <li><strong>判断力是核心</strong>——团队判断力跟不上 AI 速度时，AI 进来只会更快地制造垃圾</li>
+    <li><strong>试点需要明确范围</strong>——试点阶段限定任务类型，不许跨边界扩量</li>
+  </ol>
+
+  <h2 id="what-we-do-now">现在的做法</h2>
+  <p>经历这些失败后，团队调整了方法：</p>
+
+  <table>
+    <thead><tr><th>之前</th><th>现在</th></tr></thead>
+    <tbody>
+      <tr><td>AI 直接生成代码，人 review</td><td>人先建心智地图，AI 在明确边界内生成</td></tr>
+      <tr><td>SPEC 只写目标</td><td>SPEC 写清楚：目标 + 边界 + 完整性 + 验收</td></tr>
+      <tr><td>AI 报告 done 就接受</td><td>AI 必须对照 SPEC 自验，人必须独立验证</td></tr>
+      <tr><td>单条任务 4-8 小时</td><td>单条任务不超过 2 小时，超出就拆</td></tr>
+      <tr><td>跨第三方、跨团队都让 AI 尝试</td><td>这些任务人主导，AI 只能执行明确的子任务</td></tr>
+      <tr><td>信任通过时长积累</td><td>信任通过"任务类型 + 完成率"建立</td></tr>
+    </tbody>
+  </table>
+
+  <div class="admonition info">
+    <div class="admonition-title">核心认知</div>
+    <p>AI 编程不是"用 AI 替代工程师"的工具革命，而是"在 AI 协助下工程师效率提升"的进化。<strong>用 AI 的前提是团队已经有清晰的工程流程</strong>，否则 AI 只会放大混乱。</p>
+  </div>
+
+  <div class="related-links">
+    <h3>相关章节</h3>
+    <ul>
+      <li><a href="/strategy/pilot-playbook">试点负责人 Playbook</a></li>
+      <li><a href="/handbook/ai-as-amplifier">AI 是放大器不是工程师</a></li>
+      <li><a href="/research/ai-boundaries">AI 能力边界</a></li>
+      <li><a href="/handbook/anti-patterns">反模式</a></li>
+      <li><a href="/handbook/first-task-sop">第一单 SOP</a></li>
+    </ul>
+  </div>
+</MainLayout>
+
+<style>
+  hr {
+    margin: 2rem 0;
+    border: none;
+    border-top: 1px solid var(--border-color, #30363d);
+  }
+  .related-links {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+  }
+  .related-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+  .related-links li a {
+    font-size: 0.875rem;
+  }
+</style>
