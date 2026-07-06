@@ -4,49 +4,63 @@ const { currentPath = '/' } = Astro.props;
 
 <nav class="sidebar-nav" aria-label="侧边栏导航">
   <details open>
-    <summary>调研</summary>
+    <summary>🌍 Why & Mindset</summary>
     <ul>
+      <li><a href="/handbook/why" class={currentPath === '/handbook/why' ? 'active' : ''}>为什么需要这套流程</a></li>
+      <li><a href="/handbook/ai-as-amplifier" class={currentPath === '/handbook/ai-as-amplifier' ? 'active' : ''}>AI 是放大器不是工程师</a></li>
       <li><a href="/research/landscape" class={currentPath === '/research/landscape' ? 'active' : ''}>行业全景图</a></li>
+    </ul>
+  </details>
+  <details open>
+    <summary>📐 Foundations</summary>
+    <ul>
       <li><a href="/research/vibe-vs-spec" class={currentPath === '/research/vibe-vs-spec' ? 'active' : ''}>Vibe vs Spec 辩论</a></li>
       <li><a href="/research/agent-ecosystem" class={currentPath === '/research/agent-ecosystem' ? 'active' : ''}>Agent 生态</a></li>
-      <li><a href="/research/quality-metrics" class={currentPath === '/research/quality-metrics' ? 'active' : ''}>代码质量度量</a></li>
       <li><a href="/research/context-engineering" class={currentPath === '/research/context-engineering' ? 'active' : ''}>上下文工程</a></li>
+      <li><a href="/research/quality-metrics" class={currentPath === '/research/quality-metrics' ? 'active' : ''}>代码质量度量</a></li>
+      <li><a href="/research/ai-boundaries" class={currentPath === '/research/ai-boundaries' ? 'active' : ''}>AI 能力边界</a></li>
+      <li><a href="/research/security" class={currentPath === '/research/security' ? 'active' : ''}>安全合规</a></li>
       <li><a href="/research/company-cases" class={currentPath === '/research/company-cases' ? 'active' : ''}>大厂案例</a></li>
       <li><a href="/research/hard-data" class={currentPath === '/research/hard-data' ? 'active' : ''}>硬数据与事故</a></li>
-      <li><a href="/research/security" class={currentPath === '/research/security' ? 'active' : ''}>安全合规</a></li>
-      <li><a href="/research/transformation" class={currentPath === '/research/transformation' ? 'active' : ''}>团队转型</a></li>
+    </ul>
+  </details>
+  <details open>
+    <summary>🌐 Strategy</summary>
+    <ul>
+      <li><a href="/strategy/pilot-playbook" class={currentPath === '/strategy/pilot-playbook' ? 'active' : ''}>试点负责人 Playbook</a></li>
+      <li><a href="/research/transformation" class={currentPath === '/research/transformation' ? 'active' : ''}>团队转型路线</a></li>
       <li><a href="/research/infrastructure-impact" class={currentPath === '/research/infrastructure-impact' ? 'active' : ''}>基础设施影响</a></li>
     </ul>
   </details>
   <details open>
-    <summary>实践指南</summary>
+    <summary>🛠️ Methods</summary>
     <ul>
-      <li><a href="/handbook/why" class={currentPath === '/handbook/why' ? 'active' : ''}>为什么需要这套流程</a></li>
+      <li><a href="/handbook/workflow" class={currentPath === '/handbook/workflow' ? 'active' : ''}>6 步工作流</a></li>
       <li><a href="/handbook/spec-format" class={currentPath === '/handbook/spec-format' ? 'active' : ''}>Spec 字段规范</a></li>
       <li><a href="/handbook/clarification" class={currentPath === '/handbook/clarification' ? 'active' : ''}>澄清循环</a></li>
       <li><a href="/handbook/lint-protocol" class={currentPath === '/handbook/lint-protocol' ? 'active' : ''}>AI Lint 协议</a></li>
-      <li><a href="/handbook/workflow" class={currentPath === '/handbook/workflow' ? 'active' : ''}>6 步工作流</a></li>
       <li><a href="/handbook/spec-to-code" class={currentPath === '/handbook/spec-to-code' ? 'active' : ''}>Spec 到代码</a></li>
       <li><a href="/handbook/contract-first" class={currentPath === '/handbook/contract-first' ? 'active' : ''}>契约优先分工</a></li>
       <li><a href="/handbook/constitution" class={currentPath === '/handbook/constitution' ? 'active' : ''}>Constitution 模式</a></li>
-      <li><a href="/handbook/team-roles" class={currentPath === '/handbook/team-roles' ? 'active' : ''}>团队角色</a></li>
       <li><a href="/handbook/anti-patterns" class={currentPath === '/handbook/anti-patterns' ? 'active' : ''}>反模式</a></li>
       <li><a href="/handbook/lessons" class={currentPath === '/handbook/lessons' ? 'active' : ''}>实战经验教训</a></li>
+      <li><a href="/handbook/first-task-sop" class={currentPath === '/handbook/first-task-sop' ? 'active' : ''}>第一单 SOP</a></li>
       <li><a href="/handbook/tools" class={currentPath === '/handbook/tools' ? 'active' : ''}>工具链</a></li>
     </ul>
   </details>
   <details open>
-    <summary>⏰ 节奏与编排</summary>
+    <summary>🎯 Scenarios</summary>
     <ul>
       <li><a href="/handbook/unfamiliar-codebase" class={currentPath === '/handbook/unfamiliar-codebase' ? 'active' : ''}>不熟项目 + AI</a></li>
       <li><a href="/handbook/parallel-sessions" class={currentPath === '/handbook/parallel-sessions' ? 'active' : ''}>多会话并行</a></li>
       <li><a href="/handbook/time-management" class={currentPath === '/handbook/time-management' ? 'active' : ''}>时间管理</a></li>
       <li><a href="/handbook/async-nightly" class={currentPath === '/handbook/async-nightly' ? 'active' : ''}>夜间异步执行</a></li>
       <li><a href="/handbook/docs-sync-strategy" class={currentPath === '/handbook/docs-sync-strategy' ? 'active' : ''}>文档同步策略</a></li>
+      <li><a href="/handbook/team-roles" class={currentPath === '/handbook/team-roles' ? 'active' : ''}>团队角色</a></li>
     </ul>
   </details>
   <details open>
-    <summary>模板</summary>
+    <summary>📦 Toolkit</summary>
     <ul>
       <li><a href="/templates/spec" class={currentPath === '/templates/spec' ? 'active' : ''}>Spec 模板</a></li>
       <li><a href="/templates/lint-prompts" class={currentPath === '/templates/lint-prompts' ? 'active' : ''}>AI Lint Prompt</a></li>

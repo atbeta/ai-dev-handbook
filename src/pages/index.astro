@@ -4,38 +4,74 @@ import MainLayout from '../layouts/MainLayout.astro';
 
 <MainLayout
   title="AI 辅助生产级开发指南"
-  description="AI 辅助生产级软件开发的完整指南：行业调研、工程实践、工具链、案例研究"
+  description="从「AI 能不能写代码」到「AI 怎么写好生产级代码」——基于行业调研和工程实践的系统性方法论"
   showSidebar={false}
   showToc={false}
 >
   <section class="hero">
     <h1>AI 辅助生产级开发</h1>
     <p class="subtitle">
-      从「AI 能不能写代码」到「AI 怎么写好生产级代码」——一份基于行业调研和工程实践的系统性指南。
+      从该不该用到怎么用好——一份工程化方法论，理论有调研支撑，实践有 SOP 闭环。
     </p>
     <div class="hero-actions">
-      <a href="/research/landscape" class="btn-primary">开始阅读调研 →</a>
-      <a href="/handbook/why" class="btn-secondary">查看实践指南 →</a>
+      <a href="#pyramid" class="btn-primary">按图索骥 →</a>
+      <a href="/research/landscape" class="btn-secondary">从调研开始 →</a>
     </div>
   </section>
 
   <section class="section">
-    <h2>这个网站解决什么问题</h2>
-    <p>2026 年，AI 辅助开发已不再是新鲜事。但大多数团队仍面临同一个困境：</p>
-    <blockquote>
-      <p><strong>AI 能写出看起来正确的代码，但离「可上生产」还有很大距离。</strong></p>
-    </blockquote>
-    <p>这个距离不是模型能力的问题，是<strong>工程流程</strong>的问题。本指南从两个维度切入：</p>
-    <div class="card-grid">
-      <div class="card">
-        <h3>🔬 深度调研</h3>
-        <p>Vibe Coding vs Spec-Driven 辩论、大厂内部实践、Coding Agent 生态全景、AI 代码质量实证数据、上下文工程、安全合规。</p>
-        <a href="/research/landscape">查看调研 →</a>
+    <h2 id="pyramid">内容组织：5 层金字塔</h2>
+    <p>从认知到行动，按层级递进。可以从任意一层进入，也可以按路径阅读。</p>
+    <div class="pyramid">
+      <div class="pyramid-layer pyramid-5">
+        <div class="layer-label">📦 Toolkit</div>
+        <div class="layer-desc">模板 · Checklist · 可复制工具</div>
+        <div class="layer-links">
+          <a href="/templates/spec">Spec 模板</a>
+          <a href="/templates/checklist">流程 Checklist</a>
+          <a href="/templates/circuit-breaker">熔断 Checklist</a>
+        </div>
       </div>
-      <div class="card">
-        <h3>🛠️ 实践指南</h3>
-        <p>13 字段 Spec 模板、6 步转换工作流、4 段 AI Lint 协议、3 道闸门心智模型——一套经过验证的工程化方法论。</p>
-        <a href="/handbook/why">查看实践指南 →</a>
+      <div class="pyramid-layer pyramid-4">
+        <div class="layer-label">🎯 Scenarios</div>
+        <div class="layer-desc">不同情境下的具体做法</div>
+        <div class="layer-links">
+          <a href="/handbook/unfamiliar-codebase">不熟项目 + AI</a>
+          <a href="/handbook/parallel-sessions">多会话并行</a>
+          <a href="/handbook/async-nightly">夜间异步执行</a>
+          <a href="/handbook/team-roles">团队角色</a>
+        </div>
+      </div>
+      <div class="pyramid-layer pyramid-3">
+        <div class="layer-label">🛠️ Methods</div>
+        <div class="layer-desc">团队落地的标准化流程</div>
+        <div class="layer-links">
+          <a href="/handbook/workflow">6 步工作流</a>
+          <a href="/handbook/spec-format">Spec 字段规范</a>
+          <a href="/handbook/clarification">澄清循环</a>
+          <a href="/handbook/lint-protocol">AI Lint 协议</a>
+          <a href="/handbook/anti-patterns">反模式</a>
+        </div>
+      </div>
+      <div class="pyramid-layer pyramid-2">
+        <div class="layer-label">📐 Foundations</div>
+        <div class="layer-desc">读懂机制，建立共识</div>
+        <div class="layer-links">
+          <a href="/research/vibe-vs-spec">Vibe vs Spec</a>
+          <a href="/research/context-engineering">上下文工程</a>
+          <a href="/research/ai-boundaries">AI 能力边界</a>
+          <a href="/research/quality-metrics">代码质量度量</a>
+          <a href="/research/security">安全合规</a>
+        </div>
+      </div>
+      <div class="pyramid-layer pyramid-1">
+        <div class="layer-label">🌍 Why & Mindset</div>
+        <div class="layer-desc">建立心智，理解本质</div>
+        <div class="layer-links">
+          <a href="/handbook/ai-as-amplifier">AI 是放大器</a>
+          <a href="/handbook/why">为什么需要</a>
+          <a href="/research/landscape">行业全景</a>
+        </div>
       </div>
     </div>
   </section>
@@ -103,62 +139,88 @@ import MainLayout from '../layouts/MainLayout.astro';
   </section>
 
   <section class="section">
-    <h2>🆕 v1.1 新增章节（2026-07-07）</h2>
-    <p>基于公司试点踩坑，新增 6 章实战内容：</p>
-    <div class="card-grid">
-      <div class="card">
-        <h3>🏚️ 不熟项目 + AI</h3>
-        <p>接手遗留项目时的三阶段渐进信任、4 轮侦察 prompt、杀手锏 prompt。给"被分配到陌生代码库"的工程师。</p>
-        <a href="/handbook/unfamiliar-codebase">阅读 →</a>
-      </div>
-      <div class="card">
-        <h3>🌐 多 AI 会话并行</h3>
-        <p>worktree 隔离决策表、最佳并行数量、5 角色分工、TPS 配额实测方法、3 个常见隔离陷阱。</p>
-        <a href="/handbook/parallel-sessions">阅读 →</a>
-      </div>
-      <div class="card">
-        <h3>⏰ 时间管理</h3>
-        <p>3 任务流切流法、长短任务派单原则、Files ARE the State、TASK_STATE.md 模板、5 步交接标准动作。</p>
-        <a href="/handbook/time-management">阅读 →</a>
-      </div>
-      <div class="card">
-        <h3>🌙 夜间异步执行</h3>
-        <p>什么任务适合睡醒后收、派单模板、早晨 30 分钟接续工作流、3 种熔断信号。给"用睡时间换产出"的团队。</p>
-        <a href="/handbook/async-nightly">阅读 →</a>
-      </div>
-      <div class="card">
-        <h3>📚 文档同步策略</h3>
-        <p>3 层文档（L1 自动生成 / L2 任务 SPEC / L3 架构）、自验证处理流程、同 PR 同步纪律、pre-commit hook。</p>
-        <a href="/handbook/docs-sync-strategy">阅读 →</a>
-      </div>
-      <div class="card">
-        <h3>🖥️ 公司 AI 基础设施影响</h3>
-        <p>U 型注意力曲线、TPS 实测、不同场景的 TPS 要求、给 IT push 的数据、模型够用就好原则。</p>
-        <a href="/research/infrastructure-impact">阅读 →</a>
-      </div>
-    </div>
+    <h2>4 条阅读路径</h2>
+    <table>
+      <thead>
+        <tr><th>你是谁</th><th>推荐路径</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>🏢 公司 AI 试点负责人</strong></td>
+          <td>
+            <a href="/strategy/pilot-playbook">试点负责人 Playbook</a> →
+            <a href="/research/hard-data">硬数据与事故</a> →
+            <a href="/handbook/ai-as-amplifier">AI 是放大器</a> →
+            <a href="/handbook/first-task-sop">第一单 SOP</a> →
+            <a href="/handbook/anti-patterns">反模式</a>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>🛠️ 工程师（刚接触 AI 编程）</strong></td>
+          <td>
+            <a href="/handbook/ai-as-amplifier">AI 是放大器</a> →
+            <a href="/research/ai-boundaries">AI 能力边界</a> →
+            <a href="/handbook/first-task-sop">第一单 SOP</a> →
+            <a href="/handbook/spec-format">Spec 字段规范</a> →
+            <a href="/handbook/anti-patterns">反模式</a>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>👥 技术负责人 / 架构师</strong></td>
+          <td>
+            <a href="/research/landscape">行业全景</a> →
+            <a href="/research/vibe-vs-spec">Vibe vs Spec</a> →
+            <a href="/strategy/pilot-playbook">试点 Playbook</a> →
+            <a href="/research/transformation">团队转型路线</a> →
+            <a href="/handbook/constitution">Constitution 模式</a>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>🏗️ 不熟项目 + 需要迁移 / 重构</strong></td>
+          <td>
+            <a href="/handbook/unfamiliar-codebase">不熟项目 + AI</a> →
+            <a href="/research/ai-boundaries">AI 能力边界</a> →
+            <a href="/handbook/parallel-sessions">多会话并行</a> →
+            <a href="/handbook/async-nightly">夜间异步执行</a> →
+            <a href="/handbook/docs-sync-strategy">文档同步策略</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
   <section class="section">
-    <h2>阅读路径</h2>
-    <table>
-      <thead>
-        <tr><th>你是谁</th><th>推荐阅读</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>技术负责人 / CTO</strong></td><td>调研全景 → 团队转型路线图 → 实践指南·为什么 → 反模式</td></tr>
-        <tr><td><strong>产品经理 / PM</strong></td><td>Vibe vs Spec → 实践指南·Spec 格式 → 澄清循环 → 团队角色</td></tr>
-        <tr><td><strong>开发工程师</strong></td><td>上下文工程 → 实践指南·工作流 → AI Lint 协议 → 模板</td></tr>
-        <tr><td><strong>QA / 测试</strong></td><td>代码质量度量 → 实践指南·Spec 到代码 → 反模式 → 模板</td></tr>
-      </tbody>
-    </table>
+    <h2>🆕 v1.2 新增章节（2026-07-07）</h2>
+    <p>理论补全 + 场景扩展：</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🧠 AI 是放大器</h3>
+        <p>为什么判断力是 AI 产出质量的乘数因子，工具熟练度反而是次要的。</p>
+        <a href="/handbook/ai-as-amplifier">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>📏 AI 能力边界</h3>
+        <p>AI 真正擅长的 8 类任务，和 6 类结构性做不到的事。含信心等级表。</p>
+        <a href="/research/ai-boundaries">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>🚀 第一单 SOP</h3>
+        <p>团队引入 AI 编程后第一个任务怎么跑。选任务 → 准备 → Kickoff → 执行 → 验证 → 复盘。</p>
+        <a href="/handbook/first-task-sop">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>🏢 试点负责人 Playbook</h3>
+        <p>公司 AI 试点怎么选团队、怎么定指标、怎么从试点到推广。给试点负责人。</p>
+        <a href="/strategy/pilot-playbook">阅读 →</a>
+      </div>
+    </div>
   </section>
 
   <section class="section cta">
     <h2>这不是学术论文，是工程手册</h2>
     <p>所有内容来自真实项目经验、行业调研和实证数据。每个建议都经过生产环境验证。</p>
-    <p>可以从任何一章开始读，每章独立。但建议先读<a href="/research/landscape">行业全景图</a>建立全局认知。</p>
-    <a href="/research/landscape" class="btn-primary" style="margin-top:16px">开始 →</a>
+    <p>可以从任何一章开始读，每章独立。按上面的阅读路径走效率更高。</p>
+    <a href="#pyramid" class="btn-primary" style="margin-top:16px">按图索骥 →</a>
   </section>
 </MainLayout>
 
@@ -217,6 +279,55 @@ import MainLayout from '../layouts/MainLayout.astro';
     margin-bottom: 16px;
   }
 
+  /* Pyramid */
+  .pyramid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pyramid-layer {
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .pyramid-1 { background: #eff6ff; border-left: 4px solid #3b82f6; }
+  .pyramid-2 { background: #f5f3ff; border-left: 4px solid #8b5cf6; }
+  .pyramid-3 { background: #f0fdf4; border-left: 4px solid #22c55e; }
+  .pyramid-4 { background: #fffbeb; border-left: 4px solid #f59e0b; }
+  .pyramid-5 { background: #fef2f2; border-left: 4px solid #ef4444; }
+  .layer-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    min-width: 140px;
+  }
+  .layer-desc {
+    color: var(--c-text-secondary);
+    font-size: 0.85rem;
+    min-width: 180px;
+  }
+  .layer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .layer-links a {
+    font-size: 0.8rem;
+    background: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--c-border);
+    color: var(--c-text);
+    text-decoration: none;
+  }
+  .layer-links a:hover {
+    border-color: var(--c-accent);
+    color: var(--c-accent);
+  }
+
+  /* Insights */
   .insights {
     display: flex;
     flex-direction: column;
@@ -239,6 +350,32 @@ import MainLayout from '../layouts/MainLayout.astro';
     font-size: 0.92rem;
     margin-top: 4px;
     margin-bottom: 0;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .card {
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .card h3 {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+  .card p {
+    font-size: 0.85rem;
+    color: var(--c-text-secondary);
+    margin-bottom: 8px;
+  }
+  .card a {
+    font-size: 0.85rem;
+    font-weight: 600;
   }
 
   .cta {

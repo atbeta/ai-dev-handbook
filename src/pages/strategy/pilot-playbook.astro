@@ -1,0 +1,205 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const title = "AI 试点负责人 Playbook";
+const description = "公司引入 AI 编程工具时，试点负责人怎么做——从选人到评估的完整指南";
+---
+
+<MainLayout title={title} description={description}>
+  <Sidebar currentPath="/strategy/pilot-playbook" slot="sidebar" />
+  <h1>{title}</h1>
+  <div class="meta-line">
+    <span class="tag">Strategy</span>
+    <span class="tag">试点</span>
+    <span class="tag">管理者</span>
+  </div>
+
+  <blockquote>
+    <p>试点负责人的核心任务不是证明 AI 有用，而是找出 AI 在哪里有用、怎么用才能真的有用。</p>
+  </blockquote>
+
+  <h2 id="what-pilot-is-not">试点不是什么</h2>
+  <p>很多团队的试点从一开始就注定失败，因为他们把试点当成了"推广前的测试"而不是"探索性研究"。</p>
+  <ul>
+    <li><strong>试点不是推广</strong>：试点不需要完美的工具配置，不需要全员培训，不需要 CI/CD 全集成</li>
+    <li><strong>试点不是 KPI 考核</strong>：试点不要急着给团队定 AI 产出指标，指标会让人作弊</li>
+    <li><strong>试点不是证明老板对或错</strong>：试点结果说 AI 没用的价值，和说 AI 有用的价值一样大</li>
+  </ul>
+
+  <h2 id="phase-1-prepare">阶段一：准备（第 1-2 周）</h2>
+
+  <h3>选试点团队（重要）</h3>
+  <p>试点团队的选择决定了你能不能拿到真实数据：</p>
+  <ul>
+    <li><strong>不要选全明星队</strong>：最强的人不需要 AI 也能产出，他们的数据没有代表性</li>
+    <li><strong>不要选问题团队</strong>：本来就做不好，给 AI 也做不好，结论是 AI 没用——但这是团队问题不是 AI 问题</li>
+    <li><strong>选中间层团队</strong>：有一定判断力、有真实交付压力、愿意尝试新事物的团队</li>
+  </ul>
+
+  <h3>评估团队判断力</h3>
+  <p>这是试点前最重要的一步，但几乎没人做。在引人 AI 前，先评估：</p>
+  <pre><code>{`评估方式：让团队用 AI 做一个他们熟悉的任务（不是真的要做的任务）
+观察指标：
+1. 团队能否在 5 分钟内发现 AI 的明显错误？
+2. 团队能否区分"AI 写得好"和"AI 写得看起来好"？
+3. 团队能否判断 AI 的方案是否符合业务约束？
+
+如果三条都 yes → 判断力基础 OK，可以开始试点
+如果两条以下 yes → 先做 AI 使用培训，再开始试点`}</code></pre>
+
+  <h3>选择第一个任务</h3>
+  <p>选任务的标准见 <a href="/handbook/first-task-sop">第一单 SOP</a>。第一个任务必须成功，所以要保守选择。</p>
+
+  <h3>与管理层对齐预期</h3>
+  <p>在试点开始前，一定要跟管理层对齐：</p>
+  <ul>
+    <li>试点的目标是什么（探索，不是证明）</li>
+    <li>试点的成功标准是什么（要可量化）</li>
+    <li>试点周期是多久（建议 4-6 周）</li>
+    <li>什么情况下提前终止试点</li>
+  </ul>
+
+  <h2 id="phase-2-run">阶段二：运行（第 3-6 周）</h2>
+
+  <h3>建立每周 checkpoint</h3>
+  <p>每周与试点团队做一次 30 分钟 review：</p>
+  <ul>
+    <li>这周 AI 辅助做了哪些任务？完成率怎么样？</li>
+    <li>AI 在哪些地方出问题了？人是怎么发现的？</li>
+    <li>团队对 AI 的信任度有变化吗？</li>
+    <li>有没有遇到 SPEC 解决不了的问题？</li>
+  </ul>
+
+  <h3>记录两类数据</h3>
+
+  <h4>产出数据（定量）</h4>
+  <ul>
+    <li>AI 辅助任务的完成率 vs 纯人工任务的完成率</li>
+    <li>AI 辅助任务的平均时长 vs 基准时长</li>
+    <li>AI 辅助任务引入的 bug 率 vs 基准</li>
+    <li>AI 辅助任务被拦截的错误率（人发现 AI 错了的比例）</li>
+  </ul>
+
+  <h4>质量数据（定性）</h4>
+  <ul>
+    <li>团队的感受和信心变化</li>
+    <li>什么类型的任务 AI 表现好，什么类型表现差</li>
+    <li>团队用了什么 work-around，这些 work-around 说明什么问题</li>
+  </ul>
+
+  <h3>识别失败模式</h3>
+  <p>试点期间最重要的任务是识别 AI 编程在你们团队环境下的<strong>失败模式</strong>：</p>
+  <ul>
+    <li>AI 在什么类型的任务上会自信地完成错误的事情？</li>
+    <li>团队在什么情况下会跳过 review？</li>
+    <li>SPEC 里的什么错误导致了后续的返工？</li>
+    <li>AI 在什么边界条件下会踩坑？</li>
+  </ul>
+
+  <div class="admonition warning">
+    <div class="admonition-title">试点期间最重要的规则</div>
+    <p><strong>不要因为赶工期而跳过复盘和记录。</strong>试点期间积累的数据是后面推广决策的基础。没有数据的试点是浪费时间。</p>
+  </div>
+
+  <h2 id="phase-3-evaluate">阶段三：评估（第 7-8 周）</h2>
+
+  <h3>试点结论框架</h3>
+  <p>试点结束后，给管理层的报告要回答四个问题：</p>
+
+  <table>
+    <thead><tr><th>问题</th><th>判断标准</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>AI 编程在你们的团队环境下是否有效？</td>
+        <td>AI 辅助任务产出质量不比纯人工差，效率有可感知的提升</td>
+      </tr>
+      <tr>
+        <td>有效的前提条件是什么？</td>
+        <td>哪些任务类型、哪些团队特征、哪些工具配置下 AI 有效</td>
+      </tr>
+      <tr>
+        <td>失败模式是什么？如何规避？</td>
+        <td>明确了哪些情况下不能用 AI，用的话需要什么额外保障</td>
+      </tr>
+      <tr>
+        <td>下一步建议是什么？</td>
+        <td>推广范围、团队选择、工具选型、培训重点</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>常见试点结论类型</h3>
+  <ul>
+    <li><strong>全面推广</strong>：试点成功，AI 在多个任务类型上展现价值，失败模式已知且可管控</li>
+    <li><strong>有条件推广</strong>：AI 对特定任务类型有效，推广时限定范围，同时补充培训</li>
+    <li><strong>需要更多试点</strong>：试点数据不充分，需要更长时间或不同团队再试</li>
+    <li><strong>暂缓推广</strong>：试点暴露了团队判断力基础不足，需要先补能力再推广</li>
+  </ul>
+
+  <h2 id="scaling-playbook">从试点到推广</h2>
+  <p>如果试点结论是"有条件推广"或"全面推广"，推广阶段要注意：</p>
+
+  <h3>不要一次性全量推广</h3>
+  <p>先推广到 2-3 个符合试点成功条件的团队，观察 2 周，再扩量。试点团队的经验要形成文档传给后续团队。</p>
+
+  <h3>培训重点是判断力，不是工具</h3>
+  <p>推广时最大的坑是以为"教会人用工具"就能用好 AI。实际培训内容应该是：</p>
+  <ul>
+    <li>如何判断 AI 的输出对不对</li>
+    <li>什么时候该信 AI、什么时候该质疑 AI</li>
+    <li>如何写一个让 AI 不跑偏的 SPEC</li>
+    <li>遇到不确定情况的标准处理流程</li>
+  </ul>
+
+  <h3>工具配置要标准化</h3>
+  <p>试点期间形成的好的工具配置、工作流规范，要在推广前固化下来。不能要求每个团队自己摸索最佳实践。</p>
+
+  <h2 id="checklist">试点负责人 Checklist</h2>
+  <pre><code>{`试点前：
+[ ] 评估试点团队判断力
+[ ] 选定第一个任务（符合 SOP 标准）
+[ ] 与管理层对齐预期和成功标准
+[ ] 建立数据记录机制
+
+试点中：
+[ ] 每周 checkpoint
+[ ] 记录所有 AI 任务（成功和失败）
+[ ] 识别失败模式
+[ ] 收集团队感受数据
+
+试点后：
+[ ] 整理产出数据和质量数据
+[ ] 给出四个核心问题的答案
+[ ] 提出有数据支撑的推广建议`}</code></pre>
+
+  <div class="related-links">
+    <h3>相关章节</h3>
+    <ul>
+      <li><a href="/handbook/first-task-sop">第一单 SOP</a></li>
+      <li><a href="/handbook/ai-as-amplifier">AI 是放大器不是工程师</a></li>
+      <li><a href="/research/infrastructure-impact">基础设施影响</a></li>
+      <li><a href="/handbook/anti-patterns">反模式</a></li>
+      <li><a href="/research/hard-data">硬数据与事故</a></li>
+    </ul>
+  </div>
+</MainLayout>
+
+<style>
+  .related-links {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+  }
+  .related-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+  .related-links li a {
+    font-size: 0.875rem;
+  }
+</style>
+</MainLayout>

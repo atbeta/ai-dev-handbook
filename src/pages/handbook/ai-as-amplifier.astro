@@ -1,0 +1,111 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const title = "AI 是放大器，不是工程师";
+const description = "为什么 AI 编程的核心瓶颈是人的判断力，而不是 AI 的代码能力";
+---
+
+<MainLayout title={title} description={description}>
+  <Sidebar currentPath="/handbook/ai-as-amplifier" slot="sidebar" />
+  <h1>{title}</h1>
+  <div class="meta-line">
+    <span class="tag">心智模型</span>
+    <span class="tag">Why</span>
+  </div>
+
+  <blockquote>
+    <p>AI 是你能力的放大器——放大你做得好的，也一样放大你做得差的。</p>
+  </blockquote>
+
+  <h2 id="the-core-truth">核心真相</h2>
+  <p>AI 编程工具热了两年，每个团队都在用，但大多数团队的使用方式有一个共同的原点错误：</p>
+  <p><strong>把 AI 当成工程师的替代品，而不是工程师的放大器。</strong></p>
+  <p>这个错误来自对 AI 能力的误解，也来自对"经验"本质的误解。</p>
+
+  <h2 id="what-experience-actually-is">经验到底是什么</h2>
+  <p>老工程师的价值不在于记得某个 API 怎么调，而在于：</p>
+  <ul>
+    <li><strong>判断力</strong>：看到一个问题，能快速判断"这个问题我知道怎么修"还是"这个问题要先摸清楚"</li>
+    <li><strong>地图</strong>：在脑子里有这个代码库的结构，知道改哪里会影响到哪里</li>
+    <li><strong>嗅觉</strong>：闻到代码里有不对劲的地方，即使说不出为什么</li>
+    <li><strong>边界感</strong>：知道哪些地方动一根代码就会爆，哪里可以大胆改</li>
+  </ul>
+  <p>这四样东西，AI 目前全部做不到。</p>
+
+  <h2 id="what-ai-amplifies">AI 放大了什么</h2>
+
+  <table>
+    <thead><tr><th>你的能力</th><th>AI 放大后的效果</th><th>没有这个能力时 AI 的表现</th></tr></thead>
+    <tbody>
+      <tr><td>判断力</td><td>快速执行、批量完成已确认的任务</td><td>AI 自行决定做还是不做，做了也不知道对不对</td></tr>
+      <tr><td>地图</td><td>指定范围，AI 在边界内高效工作</td><td>AI 改到不相关模块，引发连锁反应</td></tr>
+      <tr><td>嗅觉</td><td>让 AI 重点查某类风险，AI 放大排查范围</td><td>AI 完全忽略风险，直到 bug 上线</td></tr>
+      <tr><td>边界感</td><td>给 AI 清晰的"不许动"区域，AI 完美遵守</td><td>AI 踩进历史包袱地带，引入更难追踪的问题</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="the-amplifier-formula">放大器公式</h2>
+  <p>产出质量 = AI能力 × 人的判断力</p>
+  <p>这个乘积里，<strong>判断力是前面的系数</strong>。判断力是 0，再强的 AI 产出也是 0。</p>
+
+  <div class="admonition warning">
+    <div class="admonition-title">常见误区</div>
+    <p><strong>"我们团队 AI 用得很熟，为什么产出还是一般？"</strong></p>
+    <p>答案几乎都是：人的判断力没有跟上 AI 的执行速度。AI 每天生成 1000 行代码，但没有人判断这 1000 行里有多少是错的、在边界内的、有价值的。</p>
+  </div>
+
+  <h2 id="what-this-means-in-practice">对实践的直接影响</h2>
+
+  <h3>1. 选人比选模型更重要</h3>
+  <p>一个判断力强但 AI 工具不熟的人，远比一个 AI 工具很溜但判断力弱的人产出高。前者用 AI 放大自己，后者被 AI 放大了自己的混乱。</p>
+
+  <h3>2. 培训的重点是判断力，不是工具</h3>
+  <p>团队 AI 培训的正确内容是：什么时候该用 AI、什么时候不该用、怎么判断 AI 的输出行不行。这些都是判断力训练，不是 prompt 工程训练。</p>
+
+  <h3>3. 引入 AI 前先评估团队判断力</h3>
+  <p>可以先做一个简单的测试：让团队用 AI 做一个他们熟悉的任务，看他们能不能在 5 分钟内发现 AI 的错误。如果发现不了，AI 进来只会更混乱。</p>
+
+  <h2 id="practical-implications">给不同角色的含义</h2>
+
+  <h3>工程师</h3>
+  <p>你的价值不在于写代码，而在于知道写什么、怎么验证、什么时候停手。AI 时代真正稀缺的是工程判断力，而不是语法知识。</p>
+
+  <h3>技术负责人 / 架构师</h3>
+  <p>你的核心职责变成：给 AI 划边界、制定验证标准、在 AI 跑偏时及时拉回来。AI 负责执行，你负责判断。</p>
+
+  <h3>管理者</h3>
+  <p>引人之前先评判断力，扩量之前先建验证机制。没有判断力基础的团队引人 AI，结果是加速产出垃圾，而不是加速产出价值。</p>
+
+  <h2 id="the-bottom-line">底线</h2>
+  <p>AI 编程是高级工具，不是银弹。它能把好工程师变得更高效，也能把差工程师变得更危险。</p>
+  <p>在引人 AI 编程工具之前，先问自己：我的团队有足够的判断力来驾驭它吗？</p>
+
+  <div class="related-links">
+    <h3>相关章节</h3>
+    <ul>
+      <li><a href="/handbook/why">为什么需要这套流程</a> — 建立基础的Why</li>
+      <li><a href="/research/ai-boundaries">AI 能力边界</a> — AI 实际能做到什么</li>
+      <li><a href="/handbook/first-task-sop">第一单 SOP</a> — 从 0 到 1 建立 AI 工作流</li>
+    </ul>
+  </div>
+</MainLayout>
+
+<style>
+  .related-links {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+  }
+  .related-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+  .related-links li a {
+    font-size: 0.875rem;
+  }
+</style>
+</MainLayout>
