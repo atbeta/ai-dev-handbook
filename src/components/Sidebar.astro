@@ -15,6 +15,7 @@ const { currentPath = '/' } = Astro.props;
       <li><a href="/research/hard-data" class={currentPath === '/research/hard-data' ? 'active' : ''}>硬数据与事故</a></li>
       <li><a href="/research/security" class={currentPath === '/research/security' ? 'active' : ''}>安全合规</a></li>
       <li><a href="/research/transformation" class={currentPath === '/research/transformation' ? 'active' : ''}>团队转型</a></li>
+      <li><a href="/research/infrastructure-impact" class={currentPath === '/research/infrastructure-impact' ? 'active' : ''}>基础设施影响</a></li>
     </ul>
   </details>
   <details open>
@@ -32,6 +33,16 @@ const { currentPath = '/' } = Astro.props;
       <li><a href="/handbook/anti-patterns" class={currentPath === '/handbook/anti-patterns' ? 'active' : ''}>反模式</a></li>
       <li><a href="/handbook/lessons" class={currentPath === '/handbook/lessons' ? 'active' : ''}>实战经验教训</a></li>
       <li><a href="/handbook/tools" class={currentPath === '/handbook/tools' ? 'active' : ''}>工具链</a></li>
+    </ul>
+  </details>
+  <details open>
+    <summary>⏰ 节奏与编排</summary>
+    <ul>
+      <li><a href="/handbook/unfamiliar-codebase" class={currentPath === '/handbook/unfamiliar-codebase' ? 'active' : ''}>不熟项目 + AI</a></li>
+      <li><a href="/handbook/parallel-sessions" class={currentPath === '/handbook/parallel-sessions' ? 'active' : ''}>多会话并行</a></li>
+      <li><a href="/handbook/time-management" class={currentPath === '/handbook/time-management' ? 'active' : ''}>时间管理</a></li>
+      <li><a href="/handbook/async-nightly" class={currentPath === '/handbook/async-nightly' ? 'active' : ''}>夜间异步执行</a></li>
+      <li><a href="/handbook/docs-sync-strategy" class={currentPath === '/handbook/docs-sync-strategy' ? 'active' : ''}>文档同步策略</a></li>
     </ul>
   </details>
   <details open>

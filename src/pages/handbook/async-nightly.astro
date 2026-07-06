@@ -1,0 +1,140 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="夜间异步执行" description="什么任务适合夜间派单：清单、模板、早晨接续工作流、失败熔断">
+  <Sidebar currentPath="/handbook/async-nightly" slot="sidebar" />
+  <h1>夜间异步执行</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> <span class="tag">异步</span> <span class="tag">夜间</span></div>
+
+  <blockquote>
+    <p>夜间任务只跑"能验证的"。早上 30 分钟纯评审、不写新代码。</p>
+  </blockquote>
+
+  <h2 id="suitable">什么任务适合夜间跑</h2>
+
+  <table>
+    <thead><tr><th>适合</th><th>不适合</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>写测试、补单测覆盖</td>
+        <td>跨第三方 API 集成</td>
+      </tr>
+      <tr>
+        <td>文档反向生成加 diff</td>
+        <td>架构级重构</td>
+      </tr>
+      <tr>
+        <td>批量重命名、规范化</td>
+        <td>安全敏感变更（密钥、权限）</td>
+      </tr>
+      <tr>
+        <td>静态分析加自动修复 lint</td>
+        <td>涉及外部 PR / 协作</td>
+      </tr>
+      <tr>
+        <td>一次性 spike 验证可行性</td>
+        <td>任何"不确定能不能完成"的</td>
+      </tr>
+      <tr>
+        <td>长篇 README 撰写</td>
+        <td>第一次接触陌生模块的迁移</td>
+      </tr>
+      <tr>
+        <td>反向生成 inventory</td>
+        <td>需要人实时判断的设计决策</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="admonition info">
+    <div class="admonition-title">判断标准</div>
+    <p>任务能否在"无人在场"的情况下完成？如果中途失败，能否自动熔断且不影响主线？如果都能，放心派夜间。如果任何一个答案是 NO——同步流，人在场。</p>
+  </div>
+
+  <h2 id="dispatch-template">晚 11 点派单模板</h2>
+
+  <h3>派单 API 调用</h3>
+  <pre><code>{`POST /api/tasks
+Content-Type: application/json
+
+{
+  "name": "nightly-2026-07-07",
+  "workspace": "/path/to/project",
+  "goal": "...",
+  "use_worktree": true,
+  "branch_prefix": "nightly/2026-07-07",
+  "timeout": "8h",
+  "on_complete": "feishu_notify",
+  "on_failure": "abort_and_notify"
+}`}</code></pre>
+  
+
+  <h3>触发器建议</h3>
+  <ul>
+    <li>派单时间：<strong>23 点</strong>（下班前最后 1 分钟派）</li>
+    <li>超时时间：<strong>8 小时</strong>（23 点 至 07 点，正好覆盖睡眠）</li>
+    <li>通知：飞书 webhook 加 邮件双通道</li>
+    <li>失败策略：自动 abort 加 通知，不留半成品</li>
+  </ul>
+
+  <h2 id="morning-workflow">早晨接续工作流（30 分钟）</h2>
+  <pre><code>{`// 07 点 00 分  起床看任务页加飞书通知摘要
+// 07 点 10 分  对每个任务: git diff worktree → 对照 SPEC.md → 标 PASS/FAIL
+// 07 点 30 分  FAIL 的: 看 TASK_STATE.md 阻塞点 → 决策 (人接手/重派/废弃)
+// 08 点 00 分  PASS 的: PR 评审 → 合并 → 通知
+// 08 点 30 分  开始新一天工作（流 1 同步对话）`}</code></pre>
+
+  
+
+  <h3>PASS / FAIL 判定标准</h3>
+  <table>
+    <thead><tr><th>状态</th><th>标志</th><th>下一步</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PASS</strong></td><td>所有 SPEC 验收条目满足 + 测试全绿 + 无 lint error</td><td>PR 评审 → 合并</td></tr>
+      <tr><td><strong>PARTIAL</strong></td><td>完成 70% 以上但有明确剩余</td><td>看 TASK_STATE 决定续做 / 拆给他人</td></tr>
+      <tr><td><strong>FAIL</strong></td><td>中途放弃 / 跑偏 / 测试失败</td><td>看错误日志，决策重派或人接手</td></tr>
+      <tr><td><strong>ABORT</strong></td><td>超时 / OOM / 死循环</td><td>废弃 worktree，记录事故</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="circuit-breaker">失败熔断纪律</h2>
+
+  <h3>3 种熔断信号</h3>
+  <ol>
+    <li><strong>超时熔断</strong>：超过 8 小时仍在跑 → 自动 abort 加 通知</li>
+    <li><strong>成本熔断</strong>：单任务 token 消耗 100k 以上 → 暂停加 通知人确认</li>
+    <li><strong>错误熔断</strong>：连续 3 次失败 → 自动 abort 加 通知</li>
+  </ol>
+
+  <h3>熔断后的人工介入</h3>
+  <ol>
+    <li>看错误日志（不是看 AI 的"总结"——它会撒谎）</li>
+    <li>看 TASK_STATE.md 阻塞点</li>
+    <li>决策：续做（降目标）/ 重派（换 prompt）/ 人接手 / 废弃</li>
+    <li>记录到 incidents 目录</li>
+  </ol>
+
+  <h2 id="examples">实战案例</h2>
+
+  <h3>案例 1：批量补单测（适合夜间）</h3>
+  <p><strong>派单</strong>："为 src/services/ 下所有 .ts 文件生成对应的 .test.ts，覆盖 happy path 加 2 个边界 case"</p>
+  <p><strong>预期</strong>：4 至 6 小时，覆盖率从 30% 提升到 60% 以上</p>
+  <p><strong>早晨验证</strong>：跑 npm run coverage，看新增覆盖率；随机抽 3 个测试人工确认合理性</p>
+
+  <h3>案例 2：反向生成 API inventory（适合夜间）</h3>
+  <p><strong>派单</strong>："扫描 src/routes/ 下所有 Express router，生成 docs/api-inventory.md，包含 method/path/auth/params/response"</p>
+  <p><strong>预期</strong>：2 至 3 小时，生成完整 inventory</p>
+  <p><strong>早晨验证</strong>：跑 diff 命令，挑 3 个路由人工对照代码确认</p>
+
+  <h3>案例 3：跨支付 SDK 集成（不适合夜间）</h3>
+  <p><strong>原因</strong>：SDK 文档需要查询、版本兼容需要判断、回调逻辑需要联调——失败模式不可预测，必须同步流人在场。</p>
+
+  <div class="admonition tip">
+    <div class="admonition-title">一句话总结</div>
+    <p>夜间任务等于能验证的体力活。早晨 30 分钟纯评审等于把 AI 的产出收编为人类可信任的资产。</p>
+  </div>
+
+  <p style="margin-top:24px"><a href="/handbook/docs-sync-strategy">下一章：文档同步策略 →</a></p>
+</MainLayout>

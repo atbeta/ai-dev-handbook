@@ -1,0 +1,122 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="多 AI 会话并行" description="git worktree 隔离、最佳并行数量、5 角色分工、TPS 配额与多 session 协作纪律">
+  <Sidebar currentPath="/handbook/parallel-sessions" slot="sidebar" />
+  <h1>多 AI 会话并行</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> <span class="tag">编排</span> <span class="tag">worktree</span></div>
+
+  <blockquote>
+    <p>并行不增吞吐量，只增等待——除非 TPS 配额允许。一个 session 串行做完的事，3 个并发可能比它慢 3 倍。</p>
+  </blockquote>
+
+  <h2 id="when-worktree">什么时候需要 git worktree</h2>
+  <p>worktree 的本质是给每个 AI session 一个隔离的工作目录，避免互相覆盖文件。</p>
+
+  <table>
+    <thead><tr><th>任务类型</th><th>要 worktree？</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td>不同模块 / 不同 PR</td><td>必须</td><td>防止文件冲突</td></tr>
+      <tr><td>同一模块的多个方案对比</td><td>必须</td><td>防止互相覆盖</td></tr>
+      <tr><td>同一模块的同一方案探索</td><td>不必</td><td>串行反而省 context</td></tr>
+      <tr><td>一个写加一个审（独立 session）</td><td>只读那个不需要</td><td>只读不写文件</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="parallel-count">最佳并行数量</h2>
+  <p>业界的实测数据（MindStudio、Dan Does Code 2026）：</p>
+
+  <ul>
+    <li><strong>1 至 3 个 session 并行</strong>：体感最舒服，每个都跟得上</li>
+    <li><strong>3 至 5 个</strong>：需要专门的工作流协调器</li>
+    <li><strong>5 个以上</strong>：token 成本爆炸、人类注意力崩溃、PR 评审积压——不要碰</li>
+  </ul>
+
+  <div class="admonition warning">
+    <div class="admonition-title">真正的瓶颈</div>
+    <p>并行数量的瓶颈是公司 AI 的 TPS 配额（见 <a href="/research/infrastructure-impact">基础设施影响</a>），不是 session 本身。</p>
+  </div>
+
+  <h3>TPS 瓶颈实测方法</h3>
+  <pre><code>{`// Step 1: 派 1 个任务，记录完成时间 T1
+// Step 2: 同时派 3 个并发任务，记录完成时间 T3
+// Step 3: 对比
+// 如果 T3 约等于 3 乘 T1 → 瓶颈是 TPS，无法加速
+// 如果 T3 小于 2 乘 T1 → 还有并行空间
+// Step 4: 把数据拿去找 IT 谈配额`}</code></pre>
+  
+
+  <h2 id="five-roles">5 角色分工（再多就是表演）</h2>
+  <table>
+    <thead><tr><th>角色</th><th>干什么</th><th>用什么模型</th><th>数量</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Planner</strong></td><td>写 SPEC.md、拆任务、列验收</td><td>强推理（Opus / GPT-5）</td><td>1 个</td></tr>
+      <tr><td><strong>Executor</strong></td><td>实现、改代码</td><td>性价比（Sonnet / GPT-4.1）</td><td>1 至 3 个 worktree</td></tr>
+      <tr><td><strong>Reviewer</strong></td><td>审 diff、跑测试、对照 SPEC</td><td>同 Executor 或更强</td><td>1 个独立 session</td></tr>
+      <tr><td><strong>Tester</strong></td><td>写/跑验收脚本</td><td>性价比模型</td><td>可合并到 Executor</td></tr>
+      <tr><td><strong>Docs-keeper</strong></td><td>跟代码同步文档</td><td>弱模型即可</td><td>可合并到 Reviewer</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="discipline">关键纪律</h2>
+
+  <h3>身份隔离（硬纪律）</h3>
+  <ul>
+    <li>Planner 和 Executor <strong>不能是同一个 session</strong>（自审自等于一定过）</li>
+    <li>Reviewer 不能跟 Executor 共享上下文（互相污染）</li>
+    <li>Reviewer 要能拒绝合并，必须有否决权</li>
+    <li>每个 Executor session <strong>最长 4 小时</strong>，超时强制新开</li>
+  </ul>
+
+  <h3>超时熔断</h3>
+  <p>4 小时硬上限的理由：</p>
+  <ol>
+    <li>上下文膨胀导致目标漂移（goal drift）</li>
+    <li>token 成本失控</li>
+    <li>Reviewer 无法看完一个超长 PR（一次评审 400 行以上等于走形式）</li>
+    <li>超时强制重启等于强制人介入，等于防止 AI 闷头干到天荒地老</li>
+  </ol>
+
+  <h2 id="harness-integration">接入异步派单工具</h2>
+  <p>手动维护 5 角色很痛苦，建议用任务调度工具做编排。基础调用模板：</p>
+  <pre><code>{`POST /api/tasks
+Content-Type: application/json
+
+{
+  "name": "migrate-billing-v2",
+  "workspace": "/path/to/project",
+  "goal": "迁移计费模块（按 SPEC.md）",
+  "use_worktree": true,
+  "branch_prefix": "ai/migrate-billing",
+  "role": "executor",
+  "timeout": "4h",
+  "on_complete": "feishu_notify"
+}`}</code></pre>
+
+  
+
+  <p>每个 AI 任务一条分支，最后人类评审合并。Reviewer 用独立 session，对照 SPEC 强制 diff。</p>
+
+  <h2 id="isolation-traps">隔离失效的常见坑</h2>
+
+  <h3>坑 1：共享依赖</h3>
+  <p>即使有 worktree，node_modules、.next 目录、数据库 schema 是共享的。多个 session 同时 npm install 会冲突。</p>
+  <p><strong>解决</strong>：每个 worktree 独立装依赖；数据库用 branch schema 或 docker。</p>
+
+  <h3>坑 2：共享端口</h3>
+  <p>多个 Executor 同时启动 dev server 占同一个端口。<br />
+  <strong>解决</strong>：分配端口池（3001 至 3010），每个 session 分配一个。</p>
+
+  <h3>坑 3：共享外部资源</h3>
+  <p>多个 Executor 同时往同一个 S3 桶、Slack channel、邮件服务写。<br />
+  <strong>解决</strong>：每个 session 用独立的 namespace/prefix。</p>
+
+  <div class="admonition tip">
+    <div class="admonition-title">一句话总结</div>
+    <p>worktree 隔离文件，namespace 隔离依赖，端口池隔离服务，Reviewer 隔离质量。漏一个，整套就崩。</p>
+  </div>
+
+  <p style="margin-top:24px"><a href="/handbook/time-management">下一章：时间管理 →</a></p>
+</MainLayout>

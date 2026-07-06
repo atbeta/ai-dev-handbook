@@ -78,6 +78,64 @@ import MainLayout from '../layouts/MainLayout.astro';
           <p>实证数据显示，AI 生成代码的 churn rate 可能达到人工代码的 1.5 倍。Code review 和测试不能在 AI 时代缩水，反而应该加严。</p>
         </div>
       </div>
+      <div class="insight">
+        <span class="insight-num">06</span>
+        <div>
+          <strong>不熟项目时，AI 是侦察兵不是将军。</strong>
+          <p>人必须先建心智地图（2-4 小时），AI 才能当工具。三阶段渐进信任：考古 → 侦察 → 协作。不许跳级，跳级必崩。</p>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-num">07</span>
+        <div>
+          <strong>Files ARE the State：所有上下文压到磁盘。</strong>
+          <p>离开电脑前最后 1 分钟，把所有判断写到 TASK_STATE.md。第二天回来不靠记忆——靠文件接续，省 80% 重新对齐时间。</p>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-num">08</span>
+        <div>
+          <strong>公司 AI 基础设施决定团队上限。</strong>
+          <p>并行数量瓶颈是 TPS 配额，不是 session 本身。同步对话独占 TPS、异步任务高并发、评审必须强模型——分层配额决定试点成败。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>🆕 v1.1 新增章节（2026-07-07）</h2>
+    <p>基于公司试点踩坑，新增 6 章实战内容：</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🏚️ 不熟项目 + AI</h3>
+        <p>接手遗留项目时的三阶段渐进信任、4 轮侦察 prompt、杀手锏 prompt。给"被分配到陌生代码库"的工程师。</p>
+        <a href="/handbook/unfamiliar-codebase">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>🌐 多 AI 会话并行</h3>
+        <p>worktree 隔离决策表、最佳并行数量、5 角色分工、TPS 配额实测方法、3 个常见隔离陷阱。</p>
+        <a href="/handbook/parallel-sessions">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>⏰ 时间管理</h3>
+        <p>3 任务流切流法、长短任务派单原则、Files ARE the State、TASK_STATE.md 模板、5 步交接标准动作。</p>
+        <a href="/handbook/time-management">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>🌙 夜间异步执行</h3>
+        <p>什么任务适合睡醒后收、派单模板、早晨 30 分钟接续工作流、3 种熔断信号。给"用睡时间换产出"的团队。</p>
+        <a href="/handbook/async-nightly">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>📚 文档同步策略</h3>
+        <p>3 层文档（L1 自动生成 / L2 任务 SPEC / L3 架构）、自验证处理流程、同 PR 同步纪律、pre-commit hook。</p>
+        <a href="/handbook/docs-sync-strategy">阅读 →</a>
+      </div>
+      <div class="card">
+        <h3>🖥️ 公司 AI 基础设施影响</h3>
+        <p>U 型注意力曲线、TPS 实测、不同场景的 TPS 要求、给 IT push 的数据、模型够用就好原则。</p>
+        <a href="/research/infrastructure-impact">阅读 →</a>
+      </div>
     </div>
   </section>
 

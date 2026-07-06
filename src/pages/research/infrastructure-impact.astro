@@ -1,0 +1,180 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="公司 AI 基础设施影响" description="模型能力、上下文窗口大小、TPS 延迟、配额策略如何决定员工 AI 编程效率上限">
+  <Sidebar currentPath="/research/infrastructure-impact" slot="sidebar" />
+  <h1>公司 AI 基础设施影响</h1>
+  <div class="meta-line"><span class="tag">深度调研</span> <span class="tag">基础设施</span> <span class="tag">TPS</span></div>
+
+  <blockquote>
+    <p>AI 编程效率的瓶颈往往不在模型能力，而在公司 AI 的 TPS 配额、上下文分配策略和并发限制。这是大多数团队没意识到的隐藏成本。</p>
+  </blockquote>
+
+  <h2 id="three-dimensions">3 个被低估的决定因素</h2>
+
+  <table>
+    <thead><tr><th>维度</th><th>决定什么</th><th>大多数人误解</th></tr></thead>
+    <tbody>
+      <tr><td><strong>模型能力</strong></td><td>单任务质量上限</td><td>以为越强越好，其实"够用就好"</td></tr>
+      <tr><td><strong>上下文大小</strong></td><td>能装多少信息</td><td>以为越大越好，其实有 U 型曲线</td></tr>
+      <tr><td><strong>TPS / 配额</strong></td><td>同时多少人能用、能跑多快</td><td>完全忽视，这是真正的瓶颈</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="context-u-curve">上下文大小：U 型注意力曲线</h2>
+
+  <p>Qodo 2025、DigitalApplied 2026 的实证研究：</p>
+
+  <blockquote>
+    <p>Models attend more reliably to content at the <strong>beginning and end</strong> of context, performance degrades in the middle.</p>
+  </blockquote>
+
+  <h3>直接含义</h3>
+  <ul>
+    <li>公司给你 <strong>1M token 上下文</strong> 不等于 AI 能用好 1M token</li>
+    <li>实际有效区间：前 30% 加 后 20%，中间 50% 注意力衰减</li>
+    <li><strong>大上下文不等于好上下文</strong>，反而增加成本、延迟、幻觉概率</li>
+  </ul>
+
+  <h3>对工作流的影响</h3>
+  <pre><code>{`┌──────────────────────────────────────┐
+│ System Prompt 区（最前）              │
+│  - 任务 SPEC                         │
+│  - Stop Conditions                   │
+│  - 关键约束                          │
+├──────────────────────────────────────┤
+│ 当前文件 / 检索内容（中间）            │
+│  - 注意力衰减区，主动裁剪             │
+├──────────────────────────────────────┤
+│ 验收命令 / 工具说明（最后）           │
+│  - "跑 npm test"                     │
+│  - "输出 diff summary"               │
+└──────────────────────────────────────┘`}</code></pre>
+  
+
+  <div class="admonition tip">
+    <div class="admonition-title">放置策略</div>
+    <p>SPEC 和 Stop Conditions 放<strong>最前面</strong>（system prompt 区），当前文件内容放<strong>中间</strong>（填充区），验收命令放<strong>最末尾</strong>（容易被记住）。中间填充的代码/历史/对话记录可以<strong>主动裁剪</strong>，不要图省事全塞进去。</p>
+  </div>
+
+  <h2 id="tps-impact">TPS（tokens per second）的真实影响</h2>
+
+  <p>OpenMetal 2025 实测数据：</p>
+
+  <table>
+    <thead><tr><th>场景</th><th>TPS 要求</th><th>低于阈值的后果</th></tr></thead>
+    <tbody>
+      <tr><td>Tab 补全（敲一行补一行）</td><td>50 至 100 TPS/人</td><td>50 TPS 以下体验崩塌</td></tr>
+      <tr><td>Inline chat（边写边问）</td><td>30 至 60 TPS</td><td>30 TPS 以下切窗口来回切烦</td></tr>
+      <tr><td>异步长任务（夜间跑）</td><td>5 至 15 TPS 也能忍</td><td>反正不盯</td></tr>
+      <tr><td>多 session 并行 5 个</td><td>共享 TPS</td><td><strong>总 TPS 不变时，并行等于全部变慢</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>公司试点最可能的卡点：TPS</h3>
+
+  <p>如果公司 AI 是中心化部署加 共享 token 配额：</p>
+  <ul>
+    <li><strong>3 个 session 并行 vs 1 个串行</strong>，每个都要等更久</li>
+    <li>并行<strong>不增吞吐量</strong>，只增等待</li>
+  </ul>
+
+  <h3>TPS 瓶颈实测方法</h3>
+  <pre><code>{`// Step 1: 派 1 个任务，记录完成时间 T1
+POST /api/tasks  // payload 含 name 等于 tps-test-1
+
+// Step 2: 同时派 3 个并发任务，记录完成时间 T3
+POST /api/tasks  // payload 含 name 等于 tps-test-2   # 并发
+POST /api/tasks  // payload 含 name 等于 tps-test-3   # 并发
+POST /api/tasks  // payload 含 name 等于 tps-test-4   # 并发
+
+// Step 3: 对比
+// 如果 T3 约等于 3 乘 T1 → 瓶颈是 TPS，无法加速
+// 如果 T3 小于 2 乘 T1 → 还有并行空间
+
+// Step 4: 把数据拿去找 IT 谈配额`}</code></pre>
+  
+
+  <h2 id="quota-strategy">配额策略建议（给公司 IT）</h2>
+
+  <table>
+    <thead><tr><th>任务类型</th><th>优先级</th><th>配额</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>同步对话（人盯的）</td><td>高</td><td><strong>独占 TPS</strong></td><td>体验敏感，30 TPS 以下没法用</td></tr>
+      <tr><td>异步长任务（夜间跑的）</td><td>低</td><td>高并发加 共享</td><td>反正不盯，能跑就行</td></tr>
+      <tr><td>Tab 补全</td><td>最高</td><td>独立通道</td><td>最频繁、最影响体感</td></tr>
+      <tr><td>批量跑（CI / 评估）</td><td>最低</td><td>抢占式</td><td>可以被踢，不影响业务</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>核心原则</strong>：<strong>异步长任务走低优先级加 高并发配额；同步对话走高优先级加 独占 TPS</strong>。避免一锅炖。</p>
+
+  <h2 id="model-tiers">模型能力的"够用就好"原则</h2>
+
+  <p>业界共识（augmentcode、Tessl 复盘）：一刀切只用一个模型等于浪费钱加 试点失败。</p>
+
+  <table>
+    <thead><tr><th>任务</th><th>最低够用模型</th><th>不必上</th></tr></thead>
+    <tbody>
+      <tr><td>Tab 补全</td><td>小模型（Haiku / 4o-mini）</td><td>Opus / GPT-5</td></tr>
+      <tr><td>单文件重构</td><td>Sonnet / GPT-4.1</td><td>Opus</td></tr>
+      <tr><td><strong>SPEC 评审</strong></td><td><strong>必须 Opus / GPT-5</strong></td><td>Sonnet 看不出设计问题</td></tr>
+      <tr><td><strong>多模块架构</strong></td><td><strong>必须 Opus / GPT-5</strong></td><td>弱的会瞎给方案</td></tr>
+      <tr><td>跨文件 migration</td><td>Opus 加 强 retrieval</td><td>没有 retrieval 的 Sonnet 会幻觉爆</td></tr>
+    </tbody>
+  </table>
+
+  <div class="admonition warning">
+    <div class="admonition-title">给领导的关键提醒</div>
+    <p>评审类用弱模型等于审不出问题等于试点失败的最大风险。如果公司为了省钱在评审场景只给 Sonnet/4o-mini，团队会越用越没信心，最后废弃整个 AI 试点。</p>
+  </div>
+
+  <h2 id="push-it">如何向 IT 争取更好的基础设施</h2>
+
+  <h3>1. 拿数据说话</h3>
+  <p>不要直接抱怨"TPS 太慢"，要做 TPS 瓶颈实测：</p>
+  <ul>
+    <li>记录 1 个任务的完成时间</li>
+    <li>记录 3 个并发任务的完成时间</li>
+    <li>对比算加速比</li>
+  </ul>
+
+  <h3>2. 算总账</h3>
+  <p>不要只看 token 成本，要算：</p>
+  <pre><code>{`试点总成本 = token 成本 + 员工等待时间成本 + 返工成本
+           = 每天 X 元 + 每天 Y 元 + 每天 Z 元
+           > 基础设施升级成本（多分配 50% TPS 配额）？
+
+大概率是。所以别省 TPS 的钱。`}</code></pre>
+  
+
+  <h3>3. 分优先级谈</h3>
+  <p>不要一上来就要"全公司 TPS 翻倍"，而是分层：</p>
+  <ul>
+    <li>第一批：同步对话专属 TPS（30 TPS/人）</li>
+    <li>第二批：异步任务高并发配额</li>
+    <li>第三批：批量评估走抢占式</li>
+  </ul>
+
+  <h2 id="metrics">应该监控的指标</h2>
+
+  <table>
+    <thead><tr><th>指标</th><th>为什么重要</th><th>怎么测</th></tr></thead>
+    <tbody>
+      <tr><td><strong>P50 / P95 TPS</strong></td><td>决定体感</td><td>后台埋点统计</td></tr>
+      <tr><td><strong>同步对话平均响应时间</strong></td><td>决定人是否愿意用</td><td>流 1 任务计时</td></tr>
+      <tr><td><strong>异步任务完成时间</strong></td><td>决定夜间任务 ROI</td><td>任务页历史记录</td></tr>
+      <tr><td><strong>并发上限</strong></td><td>决定并行数量</td><td>逐步加压测试</td></tr>
+      <tr><td><strong>上下文使用率</strong></td><td>决定要不要裁剪</td><td>任务结束后看 token 用量</td></tr>
+    </tbody>
+  </table>
+
+  <div class="admonition tip">
+    <div class="admonition-title">一句话总结</div>
+    <p>模型能力决定单任务质量上限，上下文大小决定能不能装下任务，TPS 配额决定团队整体效率。三者都到位才是真到位，缺 TPS 整个团队用不起来。</p>
+  </div>
+
+  <p style="margin-top:24px"><a href="/handbook/unfamiliar-codebase">回到：实践指南 · 不熟项目 + AI 实战 →</a></p>
+</MainLayout>
