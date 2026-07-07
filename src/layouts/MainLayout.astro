@@ -162,68 +162,193 @@ import 'prismjs/themes/prism-tomorrow.css';
     width: 100%;
   }
 
-  /* Sidebar */
+  /* Sidebar — fills viewport, custom thin scrollbar, internal scroll */
   .sidebar {
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
-    padding: 24px 16px 24px 24px;
+    padding: 0 14px 24px 20px;
     border-right: 1px solid var(--c-border);
     position: sticky;
     top: var(--header-height);
     height: calc(100vh - var(--header-height));
     overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--c-bg);
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-border) transparent;
+  }
+  /* WebKit / Chromium */
+  .sidebar::-webkit-scrollbar { width: 6px; height: 6px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+    border-radius: 3px;
+    transition: background 0.15s;
+  }
+  .sidebar:hover::-webkit-scrollbar-thumb { background: var(--c-text-muted); }
+
+  .sidebar-nav {
+    font-size: 0.86rem;
+    padding-top: 16px;
+  }
+
+  /* Sticky search filter */
+  .sidebar-search {
+    display: block;
+    width: 100%;
+    margin: 0 0 12px;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+    color: var(--c-text);
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .sidebar-search::placeholder { color: var(--c-text-muted); }
+  .sidebar-search:focus {
+    border-color: var(--c-accent);
     background: var(--c-bg);
   }
-  .sidebar-nav {
-    font-size: 0.88rem;
+  .sidebar-search::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--c-text-muted);
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 2l8 8M10 2l-8 8' stroke='black' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") center/contain no-repeat;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 2l8 8M10 2l-8 8' stroke='black' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") center/contain no-repeat;
+    cursor: pointer;
   }
-  .sidebar-nav details { margin-bottom: 4px; }
+
+  /* Section details */
+  .sidebar-nav details {
+    margin-bottom: 4px;
+  }
   .sidebar-nav summary {
-    padding: 4px 8px;
-    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 6px;
     cursor: pointer;
     color: var(--c-text);
     font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 0.86rem;
     list-style: none;
+    user-select: none;
+    transition: background 0.12s, color 0.12s;
   }
   .sidebar-nav summary::-webkit-details-marker { display: none; }
-  .sidebar-nav summary::before {
-    content: '▸ ';
-    font-size: 0.7rem;
-    color: var(--c-text-muted);
+  .sidebar-nav summary::marker { display: none; }
+  .summary-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+  .arrow {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    position: relative;
+    flex-shrink: 0;
     transition: transform 0.15s;
   }
-  .sidebar-nav details[open] > summary::before {
-    content: '▾ ';
+  .arrow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 4px solid var(--c-text-muted);
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    transform: translate(-50%, -50%);
   }
-  .sidebar-nav summary:hover {
+  .sidebar-nav details[open] > summary > .summary-left > .arrow {
+    transform: rotate(90deg);
+  }
+  .sidebar-nav summary:hover { background: var(--c-bg-tertiary); }
+  .sidebar-nav summary:focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 1px;
+  }
+  /* Active section heading — always highlighted when current */
+  .sidebar-nav details[data-active="true"] > summary {
+    color: var(--c-accent);
+    background: var(--c-accent-bg);
+  }
+  .sidebar-nav details[data-active="true"] > summary .arrow::before {
+    border-left-color: var(--c-accent);
+  }
+  .count {
+    font-size: 0.7rem;
+    color: var(--c-text-muted);
     background: var(--c-bg-tertiary);
-    border-radius: 4px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    margin-left: 8px;
   }
+  .sidebar-nav details[data-active="true"] > summary > .count {
+    color: var(--c-accent);
+    background: rgba(88, 166, 255, 0.15);
+  }
+
+  /* Subsection labels — small muted uppercase, non-interactive */
+  .subsection-label {
+    font-size: 0.68rem;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 8px 8px 2px 20px;
+    font-weight: 600;
+  }
+
+  /* Link list — tighter density */
   .sidebar-nav ul {
     list-style: none;
-    padding-left: 16px;
-    margin: 2px 0 8px;
+    padding-left: 8px;
+    margin: 0 0 2px;
   }
   .sidebar-nav li a {
     display: block;
-    padding: 3px 8px;
+    padding: 3px 8px 3px 10px;
     border-radius: 4px;
     color: var(--c-text-secondary);
-    font-size: 0.84rem;
-    transition: all 0.1s;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    transition: background 0.1s, color 0.1s, box-shadow 0.1s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .sidebar-nav li a:hover,
+  .sidebar-nav li a:hover {
+    color: var(--c-text);
+    background: var(--c-bg-tertiary);
+    text-decoration: none;
+  }
   .sidebar-nav li a.active {
     color: var(--c-text);
     background: var(--c-accent-bg);
-    text-decoration: none;
-    border-left: 2px solid var(--c-accent);
-    margin-left: -8px;
-    padding-left: 6px;
+    font-weight: 500;
+    /* box-shadow draws the left rail without affecting layout */
+    box-shadow: inset 2px 0 0 var(--c-accent);
+  }
+  .sidebar-nav li a:focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: -2px;
   }
 
   /* Main Content */

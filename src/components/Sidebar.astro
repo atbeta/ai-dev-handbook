@@ -1,77 +1,171 @@
 ---
 const { currentPath = '/' } = Astro.props;
+
+// 1) 决定当前激活的顶层 section（与顶导 调研/实践指南/模板 对齐）
+const activeSection = (() => {
+  if (currentPath.startsWith('/research')) return 'research';
+  if (currentPath.startsWith('/handbook') || currentPath.startsWith('/strategy')) return 'handbook';
+  if (currentPath.startsWith('/templates')) return 'templates';
+  return null;
+})();
+
+const isActive = (section: string) => activeSection === section;
+const isCurrent = (href: string) => currentPath === href;
 ---
 
-<nav class="sidebar-nav" aria-label="侧边栏导航">
-  <details open>
-    <summary>🌍 Why & Mindset</summary>
+<nav class="sidebar-nav" aria-label="侧边栏导航" data-active-section={activeSection ?? ''}>
+  <input
+    class="sidebar-search"
+    type="search"
+    placeholder="🔍 过滤链接…"
+    aria-label="过滤侧边栏链接"
+    autocomplete="off"
+    spellcheck="false"
+  />
+
+  <details data-section="research" data-active={isActive('research')} open={isActive('research')}>
+    <summary>
+      <span class="summary-left">
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-label">🔍 调研</span>
+      </span>
+      <span class="count">11</span>
+    </summary>
+    <div class="subsection-label">基础认知</div>
     <ul>
-      <li><a href="/handbook/why" class={currentPath === '/handbook/why' ? 'active' : ''}>为什么需要这套流程</a></li>
-      <li><a href="/handbook/ai-as-amplifier" class={currentPath === '/handbook/ai-as-amplifier' ? 'active' : ''}>AI 是放大器不是工程师</a></li>
-      <li><a href="/research/landscape" class={currentPath === '/research/landscape' ? 'active' : ''}>行业全景图</a></li>
+      <li><a href="/research/landscape" class={isCurrent('/research/landscape') ? 'active' : ''}>行业全景图</a></li>
+      <li><a href="/research/vibe-vs-spec" class={isCurrent('/research/vibe-vs-spec') ? 'active' : ''}>Vibe vs Spec 辩论</a></li>
+      <li><a href="/research/agent-ecosystem" class={isCurrent('/research/agent-ecosystem') ? 'active' : ''}>Agent 生态</a></li>
+      <li><a href="/research/context-engineering" class={isCurrent('/research/context-engineering') ? 'active' : ''}>上下文工程</a></li>
+      <li><a href="/research/quality-metrics" class={isCurrent('/research/quality-metrics') ? 'active' : ''}>代码质量度量</a></li>
+      <li><a href="/research/ai-boundaries" class={isCurrent('/research/ai-boundaries') ? 'active' : ''}>AI 能力边界</a></li>
+      <li><a href="/research/security" class={isCurrent('/research/security') ? 'active' : ''}>安全合规</a></li>
+      <li><a href="/research/company-cases" class={isCurrent('/research/company-cases') ? 'active' : ''}>大厂案例</a></li>
+      <li><a href="/research/hard-data" class={isCurrent('/research/hard-data') ? 'active' : ''}>硬数据与事故</a></li>
+    </ul>
+    <div class="subsection-label">团队转型</div>
+    <ul>
+      <li><a href="/research/transformation" class={isCurrent('/research/transformation') ? 'active' : ''}>团队转型路线</a></li>
+      <li><a href="/research/infrastructure-impact" class={isCurrent('/research/infrastructure-impact') ? 'active' : ''}>基础设施影响</a></li>
     </ul>
   </details>
-  <details open>
-    <summary>📐 Foundations</summary>
+
+  <details data-section="handbook" data-active={isActive('handbook')} open={isActive('handbook')}>
+    <summary>
+      <span class="summary-left">
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-label">📐 实践指南</span>
+      </span>
+      <span class="count">21</span>
+    </summary>
+    <div class="subsection-label">Why & 定位</div>
     <ul>
-      <li><a href="/research/vibe-vs-spec" class={currentPath === '/research/vibe-vs-spec' ? 'active' : ''}>Vibe vs Spec 辩论</a></li>
-      <li><a href="/research/agent-ecosystem" class={currentPath === '/research/agent-ecosystem' ? 'active' : ''}>Agent 生态</a></li>
-      <li><a href="/research/context-engineering" class={currentPath === '/research/context-engineering' ? 'active' : ''}>上下文工程</a></li>
-      <li><a href="/research/quality-metrics" class={currentPath === '/research/quality-metrics' ? 'active' : ''}>代码质量度量</a></li>
-      <li><a href="/research/ai-boundaries" class={currentPath === '/research/ai-boundaries' ? 'active' : ''}>AI 能力边界</a></li>
-      <li><a href="/research/security" class={currentPath === '/research/security' ? 'active' : ''}>安全合规</a></li>
-      <li><a href="/research/company-cases" class={currentPath === '/research/company-cases' ? 'active' : ''}>大厂案例</a></li>
-      <li><a href="/research/hard-data" class={currentPath === '/research/hard-data' ? 'active' : ''}>硬数据与事故</a></li>
+      <li><a href="/handbook/why" class={isCurrent('/handbook/why') ? 'active' : ''}>为什么需要这套流程</a></li>
+      <li><a href="/handbook/ai-as-amplifier" class={isCurrent('/handbook/ai-as-amplifier') ? 'active' : ''}>AI 是放大器不是工程师</a></li>
+    </ul>
+    <div class="subsection-label">方法论</div>
+    <ul>
+      <li><a href="/handbook/workflow" class={isCurrent('/handbook/workflow') ? 'active' : ''}>6 步工作流</a></li>
+      <li><a href="/handbook/spec-format" class={isCurrent('/handbook/spec-format') ? 'active' : ''}>Spec 字段规范</a></li>
+      <li><a href="/handbook/clarification" class={isCurrent('/handbook/clarification') ? 'active' : ''}>澄清循环</a></li>
+      <li><a href="/handbook/lint-protocol" class={isCurrent('/handbook/lint-protocol') ? 'active' : ''}>AI Lint 协议</a></li>
+      <li><a href="/handbook/spec-to-code" class={isCurrent('/handbook/spec-to-code') ? 'active' : ''}>Spec 到代码</a></li>
+      <li><a href="/handbook/contract-first" class={isCurrent('/handbook/contract-first') ? 'active' : ''}>契约优先分工</a></li>
+      <li><a href="/handbook/constitution" class={isCurrent('/handbook/constitution') ? 'active' : ''}>Constitution 模式</a></li>
+      <li><a href="/handbook/anti-patterns" class={isCurrent('/handbook/anti-patterns') ? 'active' : ''}>反模式</a></li>
+      <li><a href="/handbook/lessons" class={isCurrent('/handbook/lessons') ? 'active' : ''}>实战经验教训</a></li>
+      <li><a href="/handbook/first-task-sop" class={isCurrent('/handbook/first-task-sop') ? 'active' : ''}>第一单 SOP</a></li>
+      <li><a href="/handbook/tools" class={isCurrent('/handbook/tools') ? 'active' : ''}>工具链</a></li>
+    </ul>
+    <div class="subsection-label">场景 & 团队</div>
+    <ul>
+      <li><a href="/handbook/unfamiliar-codebase" class={isCurrent('/handbook/unfamiliar-codebase') ? 'active' : ''}>不熟项目 + AI</a></li>
+      <li><a href="/handbook/parallel-sessions" class={isCurrent('/handbook/parallel-sessions') ? 'active' : ''}>多会话并行</a></li>
+      <li><a href="/handbook/time-management" class={isCurrent('/handbook/time-management') ? 'active' : ''}>时间管理</a></li>
+      <li><a href="/handbook/async-nightly" class={isCurrent('/handbook/async-nightly') ? 'active' : ''}>夜间异步执行</a></li>
+      <li><a href="/handbook/docs-sync-strategy" class={isCurrent('/handbook/docs-sync-strategy') ? 'active' : ''}>文档同步策略</a></li>
+      <li><a href="/handbook/team-roles" class={isCurrent('/handbook/team-roles') ? 'active' : ''}>团队角色</a></li>
+    </ul>
+    <div class="subsection-label">Strategy</div>
+    <ul>
+      <li><a href="/strategy/pilot-playbook" class={isCurrent('/strategy/pilot-playbook') ? 'active' : ''}>试点负责人 Playbook</a></li>
+      <li><a href="/strategy/pilot-lessons" class={isCurrent('/strategy/pilot-lessons') ? 'active' : ''}>试点踩坑实录</a></li>
     </ul>
   </details>
-  <details open>
-    <summary>🌐 Strategy</summary>
+
+  <details data-section="templates" data-active={isActive('templates')} open={isActive('templates')}>
+    <summary>
+      <span class="summary-left">
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-label">📦 模板</span>
+      </span>
+      <span class="count">9</span>
+    </summary>
     <ul>
-      <li><a href="/strategy/pilot-playbook" class={currentPath === '/strategy/pilot-playbook' ? 'active' : ''}>试点负责人 Playbook</a></li>
-      <li><a href="/strategy/pilot-lessons" class={currentPath === '/strategy/pilot-lessons' ? 'active' : ''}>试点踩坑实录</a></li>
-      <li><a href="/research/transformation" class={currentPath === '/research/transformation' ? 'active' : ''}>团队转型路线</a></li>
-      <li><a href="/research/infrastructure-impact" class={currentPath === '/research/infrastructure-impact' ? 'active' : ''}>基础设施影响</a></li>
-    </ul>
-  </details>
-  <details open>
-    <summary>🛠️ Methods</summary>
-    <ul>
-      <li><a href="/handbook/workflow" class={currentPath === '/handbook/workflow' ? 'active' : ''}>6 步工作流</a></li>
-      <li><a href="/handbook/spec-format" class={currentPath === '/handbook/spec-format' ? 'active' : ''}>Spec 字段规范</a></li>
-      <li><a href="/handbook/clarification" class={currentPath === '/handbook/clarification' ? 'active' : ''}>澄清循环</a></li>
-      <li><a href="/handbook/lint-protocol" class={currentPath === '/handbook/lint-protocol' ? 'active' : ''}>AI Lint 协议</a></li>
-      <li><a href="/handbook/spec-to-code" class={currentPath === '/handbook/spec-to-code' ? 'active' : ''}>Spec 到代码</a></li>
-      <li><a href="/handbook/contract-first" class={currentPath === '/handbook/contract-first' ? 'active' : ''}>契约优先分工</a></li>
-      <li><a href="/handbook/constitution" class={currentPath === '/handbook/constitution' ? 'active' : ''}>Constitution 模式</a></li>
-      <li><a href="/handbook/anti-patterns" class={currentPath === '/handbook/anti-patterns' ? 'active' : ''}>反模式</a></li>
-      <li><a href="/handbook/lessons" class={currentPath === '/handbook/lessons' ? 'active' : ''}>实战经验教训</a></li>
-      <li><a href="/handbook/first-task-sop" class={currentPath === '/handbook/first-task-sop' ? 'active' : ''}>第一单 SOP</a></li>
-      <li><a href="/handbook/tools" class={currentPath === '/handbook/tools' ? 'active' : ''}>工具链</a></li>
-    </ul>
-  </details>
-  <details open>
-    <summary>🎯 Scenarios</summary>
-    <ul>
-      <li><a href="/handbook/unfamiliar-codebase" class={currentPath === '/handbook/unfamiliar-codebase' ? 'active' : ''}>不熟项目 + AI</a></li>
-      <li><a href="/handbook/parallel-sessions" class={currentPath === '/handbook/parallel-sessions' ? 'active' : ''}>多会话并行</a></li>
-      <li><a href="/handbook/time-management" class={currentPath === '/handbook/time-management' ? 'active' : ''}>时间管理</a></li>
-      <li><a href="/handbook/async-nightly" class={currentPath === '/handbook/async-nightly' ? 'active' : ''}>夜间异步执行</a></li>
-      <li><a href="/handbook/docs-sync-strategy" class={currentPath === '/handbook/docs-sync-strategy' ? 'active' : ''}>文档同步策略</a></li>
-      <li><a href="/handbook/team-roles" class={currentPath === '/handbook/team-roles' ? 'active' : ''}>团队角色</a></li>
-    </ul>
-  </details>
-  <details open>
-    <summary>📦 Toolkit</summary>
-    <ul>
-      <li><a href="/templates/spec" class={currentPath === '/templates/spec' ? 'active' : ''}>Spec 模板</a></li>
-      <li><a href="/templates/lint-prompts" class={currentPath === '/templates/lint-prompts' ? 'active' : ''}>AI Lint Prompt</a></li>
-      <li><a href="/templates/checklist" class={currentPath === '/templates/checklist' ? 'active' : ''}>流程 Checklist</a></li>
-      <li><a href="/templates/constitution" class={currentPath === '/templates/constitution' ? 'active' : ''}>Constitution 模板</a></li>
-      <li><a href="/templates/contract" class={currentPath === '/templates/contract' ? 'active' : ''}>契约模板</a></li>
-      <li><a href="/templates/task-card" class={currentPath === '/templates/task-card' ? 'active' : ''}>任务卡模板</a></li>
-      <li><a href="/templates/circuit-breaker" class={currentPath === '/templates/circuit-breaker' ? 'active' : ''}>熔断 Checklist</a></li>
-      <li><a href="/templates/metrics" class={currentPath === '/templates/metrics' ? 'active' : ''}>度量模板</a></li>
-      <li><a href="/templates/system-prompt" class={currentPath === '/templates/system-prompt' ? 'active' : ''}>System Prompt 模板</a></li>
+      <li><a href="/templates/spec" class={isCurrent('/templates/spec') ? 'active' : ''}>Spec 模板</a></li>
+      <li><a href="/templates/lint-prompts" class={isCurrent('/templates/lint-prompts') ? 'active' : ''}>AI Lint Prompt</a></li>
+      <li><a href="/templates/checklist" class={isCurrent('/templates/checklist') ? 'active' : ''}>流程 Checklist</a></li>
+      <li><a href="/templates/constitution" class={isCurrent('/templates/constitution') ? 'active' : ''}>Constitution 模板</a></li>
+      <li><a href="/templates/contract" class={isCurrent('/templates/contract') ? 'active' : ''}>契约模板</a></li>
+      <li><a href="/templates/task-card" class={isCurrent('/templates/task-card') ? 'active' : ''}>任务卡模板</a></li>
+      <li><a href="/templates/circuit-breaker" class={isCurrent('/templates/circuit-breaker') ? 'active' : ''}>熔断 Checklist</a></li>
+      <li><a href="/templates/metrics" class={isCurrent('/templates/metrics') ? 'active' : ''}>度量模板</a></li>
+      <li><a href="/templates/system-prompt" class={isCurrent('/templates/system-prompt') ? 'active' : ''}>System Prompt 模板</a></li>
     </ul>
   </details>
 </nav>
+
+<script>
+  // 1) 页面加载时，把当前激活的链接滚到 sidebar 视野中间
+  const activeLink = document.querySelector<HTMLAnchorElement>('.sidebar-nav a.active');
+  if (activeLink) {
+    requestAnimationFrame(() => {
+      activeLink.scrollIntoView({ block: 'center' });
+    });
+  }
+
+  // 2) 记住每个 section 的初始 open 状态（SSR 渲染的默认值），
+  //    用于过滤清空后恢复
+  const initialOpenState = new Map<string, boolean>();
+  document.querySelectorAll<HTMLDetailsElement>('.sidebar-nav details').forEach(d => {
+    initialOpenState.set(d.dataset.section || '', d.open);
+  });
+
+  // 3) 搜索过滤：输入时隐藏不匹配项 + 自动展开含匹配项的 section
+  const search = document.querySelector<HTMLInputElement>('.sidebar-search');
+  if (search) {
+    const applyFilter = () => {
+      const q = search.value.toLowerCase().trim();
+      document.querySelectorAll<HTMLLIElement>('.sidebar-nav li').forEach(li => {
+        const text = (li.textContent || '').toLowerCase();
+        li.hidden = q.length > 0 && !text.includes(q);
+      });
+      document.querySelectorAll<HTMLDetailsElement>('.sidebar-nav details').forEach(d => {
+        // 没有可见项的 subsection-label 隐藏
+        d.querySelectorAll<HTMLElement>('.subsection-label').forEach(label => {
+          const next = label.nextElementSibling as HTMLElement | null;
+          if (next && next.tagName === 'UL') {
+            const hasVisible = Array.from(next.querySelectorAll('li')).some(li => !li.hidden);
+            label.hidden = !hasVisible;
+          }
+        });
+        if (q.length > 0) {
+          // 过滤模式：所有有匹配项的 section 都展开
+          const visibleCount = d.querySelectorAll('li:not([hidden])').length;
+          d.open = visibleCount > 0;
+        } else {
+          // 清空：恢复 SSR 初始状态
+          d.open = initialOpenState.get(d.dataset.section || '') ?? false;
+        }
+      });
+    };
+    search.addEventListener('input', applyFilter);
+    search.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        search.value = '';
+        applyFilter();
+        search.blur();
+      }
+    });
+  }
+</script>
