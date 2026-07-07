@@ -1,0 +1,204 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="内部工具建设" description="公司护城河：OpenCode、Memory、TaskFlow、Observability 自建思路">
+  <Sidebar currentPath="/handbook/internal-tools" slot="sidebar" />
+  <h1>内部工具建设</h1>
+  <div class="meta-line"><span class="tag">工具栈</span> Engineering Efficiency · Layer 4</div>
+
+  <blockquote>
+    <p>外部工具是战术，内部工具是战略。Cursor 谁都能装，OpenCode + AGENTS.md + Spec 模板 + Memory 系统是<strong>别人装不走的</strong>。这就是护城河。</p>
+  </blockquote>
+
+  <h2 id="why-internal">为什么必须自建</h2>
+  <p>外部工具是"通用版"，解决 80% 场景。但：</p>
+  <ul>
+    <li><strong>深度集成</strong>：公司内部系统（CodeGraph、Confluence、内部 CI）外部工具不接</li>
+    <li><strong>安全合规</strong>：金融/医疗/政企场景下，数据不能出网</li>
+    <li><strong>定制需求</strong>：团队的 Spec 模板、Conventions 不是行业标准</li>
+    <li><strong>长期成本</strong>：商业工具按 seat 收费，规模化后自建更便宜</li>
+  </ul>
+  <p>但自建不是"什么都自己写"——是<strong>在通用工具之上加一层</strong>，让团队效率翻倍。</p>
+
+  <h2 id="opencode">OpenCode · 公司版 AI 编码</h2>
+  <p><strong>状态</strong>：🟡 新兴（公司内部）· <strong>ROI</strong>：高</p>
+
+  <h3>和外部工具的关系</h3>
+  <p>OpenCode 不是"另起炉灶"，是在 Claude Code / Cursor 之上加公司定制层：</p>
+  <ul>
+    <li><strong>预置 AGENTS.md 模板</strong>：新项目初始化自动生成符合公司规范的 AGENTS.md</li>
+    <li><strong>预置 MCP servers</strong>：公司内部 GitLab、Confluence、CodeGraph 一键接入</li>
+    <li><strong>统一 Spec 模板</strong>：和 Lint Prompt 协议无缝衔接</li>
+    <li><strong>统一日志/审计</strong>：所有 session 上报到内部 observability</li>
+    <li><strong>安全护栏</strong>：敏感文件不能读写、敏感操作需要 approval</li>
+  </ul>
+
+  <h3>选型：自研 vs Fork 上游</h3>
+  <table>
+    <thead><tr><th>方案</th><th>优点</th><th>缺点</th></tr></thead>
+    <tbody>
+      <tr><td>完全自研</td><td>完全控制</td><td>维护成本爆炸</td></tr>
+      <tr><td>封装 Claude Code API</td><td>用官方升级，跟随 bug fix</td><td>受限于官方 API</td></tr>
+      <tr><td>Fork 上游 + patch</td><td>灵活 + 跟随</td><td>merge conflict 频繁</td></tr>
+      <tr><td>配置文件层（推荐）</td><td>零代码改动</td><td>定制能力受限于工具支持</td></tr>
+    </tbody>
+  </table>
+  <p><strong>推荐</strong>：配置文件层 + 选择性 fork。如果官方不支持的能力是关键路径，再考虑 fork。</p>
+
+  <h2 id="memory-system">Memory 系统</h2>
+  <p><strong>状态</strong>：🟡 新兴（自建方法论）· <strong>ROI</strong>：极高</p>
+
+  <h3>个人 Memory（跨 session）</h3>
+  <p>OpenClaw 模式的 <code>MEMORY.md</code>：</p>
+  <ul>
+    <li><strong>每日 raw log</strong>：<code>memory/YYYY-MM-DD.md</code>，session 末尾自动 append</li>
+    <li><strong>主 MEMORY.md</strong>：长期记忆，跨 session 读取</li>
+    <li><strong>定期 review</strong>：每周把 raw log 合并到 MEMORY.md</li>
+    <li><strong>新 session 加载</strong>：自动读 MEMORY.md 避免重复对齐</li>
+  </ul>
+
+  <h3>团队 Memory（共享判断）</h3>
+  <p>团队需要的不只是个人记忆——是"团队的判断力库"：</p>
+  <table>
+    <thead><tr><th>类别</th><th>内容</th><th>工具</th></tr></thead>
+    <tbody>
+      <tr><td>架构决策（ADR）</td><td>为什么用 X 不用 Y</td><td>Markdown + Git</td></tr>
+      <tr><td>踩坑档案</td><td>上次为什么 prod 挂了、现在怎么避免</td><td>Notion / Confluence</td></tr>
+      <tr><td>风格约定</td><td>错误处理 / 日志格式 / commit 规范</td><td>AGENTS.md + Lint</td></tr>
+      <tr><td>Onboarding</td><td>新人 1 周读什么</td><td>Curated docs</td></tr>
+      <tr><td>事故复盘</td><td>Postmortem 模板</td><td>内部 Wiki</td></tr>
+    </tbody>
+  </table>
+
+  <h3>检索（让 Memory 可用）</h3>
+  <p>写下来没人用 = 没用。关键：</p>
+  <ul>
+    <li><strong>AI 可访问</strong>：MCP server 让 AI 主动 query</li>
+    <li><strong>人类可搜索</strong>：Notion/Confluence + 全文搜索</li>
+    <li><strong>结构化</strong>：统一模板（ADR、Postmortem 模板）</li>
+  </ul>
+
+  <h2 id="task-flow">TaskFlow · 异步任务编排</h2>
+  <p><strong>状态</strong>：🟡 新兴（自建）· <strong>ROI</strong>：高（异步场景）</p>
+
+  <h3>解决什么问题</h3>
+  <p>有些 AI 任务需要 5-30 分钟（多文件重构、跑测试套件、生成 PR），不适合人工坐在屏幕前等。需要：</p>
+  <ul>
+    <li><strong>异步触发</strong>：人工 push 一个 PR → 后台 AI 处理 → 完成通知</li>
+    <li><strong>可恢复</strong>：进程崩了能接着干</li>
+    <li><strong>可观测</strong>：跑到哪了、还要多久、token 用了多少</li>
+    <li><strong>可重试</strong>：失败自动重试，最终失败告警</li>
+  </ul>
+
+  <h3>架构选择</h3>
+  <table>
+    <thead><tr><th>方案</th><th>适用</th><th>代表</th></tr></thead>
+    <tbody>
+      <tr><td>Cron 轮询</td><td>简单定时任务</td><td>系统 cron / GitHub Actions</td></tr>
+      <tr><td>队列系统</td><td>中等规模异步</td><td>Celery、BullMQ、Sidekiq</td></tr>
+      <tr><td>Workflow 编排</td><td>多步骤、可视化</td><td>n8n、Temporal、Prefect</td></tr>
+      <tr><td>完整 harness</td><td>复杂 AI 流水线</td><td>OpenClaw harness、LangGraph</td></tr>
+    </tbody>
+  </table>
+  <p>公司级推荐：n8n（UI 友好）或 OpenClaw harness（极致定制）。</p>
+
+  <h2 id="observability">Observability · 让 AI 可观测</h2>
+  <p><strong>状态</strong>：🟢 主流 · <strong>ROI</strong>：高（成本 + 质量）</p>
+
+  <h3>必看的指标</h3>
+  <table>
+    <thead><tr><th>指标</th><th>为什么</th></tr></thead>
+    <tbody>
+      <tr><td>Token 用量 / 月</td><td>成本控制，按 team/项目分摊</td></tr>
+      <tr><td>Session 成功率</td><td>任务完成度，反映工具/上下文问题</td></tr>
+      <tr><td>平均 session 时长</td><td>效率指标</td></tr>
+      <tr><td>人类干预次数</td><td>自动化程度</td></tr>
+      <tr><td>Token / 完成任务</td><td>效率核心指标</td></tr>
+    </tbody>
+  </table>
+
+  <h3>代表工具</h3>
+  <table>
+    <thead><tr><th>工具</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Langfuse</strong></td><td>开源 + 云，可观测 LLM 调用全链路</td></tr>
+      <tr><td><strong>Arize Phoenix</strong></td><td>开源，主打 evaluation</td></tr>
+      <tr><td><strong>Helicone</strong></td><td>轻量 proxy，成本监控</td></tr>
+      <tr><td><strong>OpenAI / Anthropic Console</strong></td><td>官方基础数据</td></tr>
+      <tr><td><strong>OpenRouter</strong></td><td>多模型路由 + 统一计费</td></tr>
+    </tbody>
+  </table>
+
+  <h3>自建 log 系统</h3>
+  <p>重要的不是工具，是<strong>有数据看</strong>。最低成本：</p>
+  <ol>
+    <li>所有 AI session 输出 JSON log（model / prompt / completion / tokens / latency）</li>
+    <li>log 入库（Postgres / ClickHouse）</li>
+    <li>简单 dashboard（Grafana / Metabase）</li>
+    <li>每月 review，找出"哪些项目/团队 AI 用得好"</li>
+  </ol>
+
+  <h2 id="security">安全与合规</h2>
+
+  <h3>核心原则</h3>
+  <ul>
+    <li><strong>数据不出网</strong>：核心代码用本地模型（Ollama）或自建</li>
+    <li><strong>敏感操作护栏</strong>：rm -rf、force push、main 分支直推需要 approval</li>
+    <li><strong>审计日志</strong>：所有 AI 操作可追溯到人</li>
+    <li><strong>License 合规</strong>：AI 输出代码的 license 标注</li>
+  </ul>
+
+  <h3>MCP 风险</h3>
+  <p>MCP server 能跑任意代码。必须：</p>
+  <ul>
+    <li>只装<strong>可信来源</strong>的 MCP server（官方 &gt; 知名社区 &gt; 个人）</li>
+    <li>权限最小化（不要给不需要的能力）</li>
+    <li>公司内部 MCP server <strong>必须 code review</strong></li>
+    <li>定期 review 升级</li>
+  </ul>
+
+  <h2 id="cost">成本控制</h2>
+
+  <h3>成本结构</h3>
+  <ul>
+    <li><strong>订阅</strong>：Cursor / GitHub Copilot 按 seat</li>
+    <li><strong>API</strong>：Claude / GPT 按 token</li>
+    <li><strong>基础设施</strong>：自建模型 / MCP server 机器</li>
+    <li><strong>人力</strong>：维护 OpenCode / 写 Lint prompt</li>
+  </ul>
+
+  <h3>优化策略</h3>
+  <ol>
+    <li><strong>模型分级</strong>：Lint/Review 用便宜模型（Sonnet），架构决策用贵的（Opus）</li>
+    <li><strong>缓存复用</strong>：同类问题 prompt 模板化</li>
+    <li><strong>小模型前置</strong>：明确任务用 Haiku/GPT-4o-mini</li>
+    <li><strong>批处理</strong>：Lint 评审批量跑（不每个 PR 单独跑）</li>
+    <li><strong>开源替代</strong>：考虑本地 Ollama + Qwen/DeepSeek</li>
+  </ol>
+
+  <h2 id="tracking">持续追踪业界</h2>
+
+  <h3>观察信号</h3>
+  <ul>
+    <li><strong>新协议</strong>：MCP / A2A 之后会是什么？</li>
+    <li><strong>新模型</strong>：小模型越来越强，能替代哪些场景？</li>
+    <li><strong>新工具</strong>：harness / agent framework 还在快速迭代</li>
+  </ul>
+
+  <h3>内部工具建设节奏</h3>
+  <ul>
+    <li><strong>每周</strong>：社区动态 review</li>
+    <li><strong>每月</strong>：现有工具效果评估 + 1-2 个新工具 PoC</li>
+    <li><strong>每季度</strong>：工具栈整体 review，淘汰 / 升级</li>
+    <li><strong>每年</strong>：战略层 review——内部 vs 外部投入比例</li>
+  </ul>
+
+  <div class="admonition info">
+    <div class="admonition-title">📅 维护说明</div>
+    <p>本节内容深度反映公司内部实践。OpenClaw / harness / Memory 系统的具体配置在内部 wiki，本书只讲原则和方法论。</p>
+  </div>
+
+  <p style="margin-top:24px"><a href="/handbook/tool-stack">← 返回工具体系地图</a> · <a href="/handbook/first-task-sop">第一单 SOP →</a></p>
+</MainLayout>

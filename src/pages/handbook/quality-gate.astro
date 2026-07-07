@@ -1,0 +1,174 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="质量门工具" description="AI 时代的质量门：Code Review、Test Gen、Security、Lint Prompt 工具栈">
+  <Sidebar currentPath="/handbook/quality-gate" slot="sidebar" />
+  <h1>质量门工具</h1>
+  <div class="meta-line"><span class="tag">工具栈</span> Quality Gate · Layer 3</div>
+
+  <blockquote>
+    <p>AI 时代最容易犯的错：以为 review 可以"缩水"。事实是反的——AI 让写代码变快，review 反而要<strong>加严</strong>。Churn rate 1.5x 是数据，不是借口。</p>
+  </blockquote>
+
+  <h2 id="principle">质量门的根本原则</h2>
+  <p>Spec 工程化体系里，质量门是 3 道闸门中的最后一道（前两道是 Spec 评审、Design 评审）。在 AI 辅助开发场景下，闸门不仅要保留，还要<strong>自动化</strong>——因为代码量上来了，人工 review 必然漏。</p>
+
+  <h2 id="review">AI Code Review</h2>
+  <p><strong>状态</strong>：🟢 主流 · <strong>ROI</strong>：高</p>
+
+  <h3>代表工具</h3>
+  <table>
+    <thead><tr><th>工具</th><th>形态</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CodeRabbit</strong></td><td>GitHub App</td><td>市场最成熟，PR 评论质量高，免费层够用</td></tr>
+      <tr><td><strong>Sourcery</strong></td><td>GitHub App + IDE</td><td>Python 生态强</td></tr>
+      <tr><td><strong>Qodo</strong></td><td>GitHub App + CLI</td><td>多语言 + 测试生成集成</td></tr>
+      <tr><td><strong>GitHub Copilot Code Review</strong></td><td>内置</td><td>GitHub 生态深度集成</td></tr>
+      <tr><td><strong>CodeAnt AI</strong></td><td>GitHub App</td><td>企业级，质量指标追踪</td></tr>
+    </tbody>
+  </table>
+
+  <h3>怎么用</h3>
+  <ul>
+    <li><strong>PR 提交自动触发</strong>：每个 PR 都先过 AI review，再分配人工 reviewer</li>
+    <li><strong>作为"零号 reviewer"</strong>：AI 先扫一轮常见问题（formatting、明显 bug、缺失测试），人工聚焦架构/业务逻辑</li>
+    <li><strong>不是替代</strong>，是前置过滤</li>
+  </ul>
+
+  <h3>必须配的规则</h3>
+  <ul>
+    <li>所有 PR 必须通过 AI review（无评论 = 配置问题，不是"通过"）</li>
+    <li>AI 评论的"高严重度"必须人工响应（其他可忽略）</li>
+    <li>每周 review AI 评论的"误报率"，调整规则</li>
+  </ul>
+
+  <h2 id="test-gen">AI 测试生成</h2>
+  <p><strong>状态</strong>：🟡 新兴 · <strong>ROI</strong>：高（Spec 倒推）</p>
+
+  <h3>代表工具</h3>
+  <table>
+    <thead><tr><th>工具</th><th>形态</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Qodo Gen</strong></td><td>IDE 插件 + CLI</td><td>行为驱动，覆盖率导向</td></tr>
+      <tr><td><strong>CodiumAI</strong></td><td>IDE 插件</td><td>逐函数生成边界测试</td></tr>
+      <tr><td><strong>Diffblue Cover</strong></td><td>CI 集成（Java）</td><td>企业级</td></tr>
+      <tr><td><strong>自建 + Lint Prompt</strong></td><td>——</td><td>从 Spec 倒推测试（最稳）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Spec 倒推测试（推荐）</h3>
+  <p>工具不靠谱时，用我们自己的 Lint Prompt 协议：</p>
+  <ol>
+    <li>读 Spec 的 Post 列表（每个 Post 一条可断言的需求）</li>
+    <li>对每条 Post，AI 生成对应测试用例</li>
+    <li>跑测试，失败的标记为 "Spec 实现未完成"</li>
+    <li>Spec 覆盖率 = 有测试覆盖的 Post 数 / 总 Post 数</li>
+  </ol>
+  <p>优势：测试直接对应需求，而不是"看起来覆盖了"。</p>
+
+  <h2 id="security">AI 安全扫描</h2>
+  <p><strong>状态</strong>：🟡 新兴 · <strong>ROI</strong>：必做（合规 + 风险）</p>
+
+  <h3>代表工具</h3>
+  <table>
+    <thead><tr><th>工具</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Snyk DeepCode AI</strong></td><td>OWASP Top 10 自动扫描，AI 建议修复</td></tr>
+      <tr><td><strong>Semgrep AI</strong></td><td>开源 + 商业，定制规则强</td></tr>
+      <tr><td><strong>Socket</strong></td><td>依赖供应链安全（防 typosquatting）</td></tr>
+      <tr><td><strong>Aikido Security</strong></td><td>全栈，包括 IaC 和 secrets</td></tr>
+    </tbody>
+  </table>
+
+  <h3>必扫的清单</h3>
+  <ul>
+    <li><strong>Secrets</strong>：API key、token、密码泄漏到代码</li>
+    <li><strong>OWASP Top 10</strong>：注入、XSS、CSRF、SSRF、不安全反序列化等</li>
+    <li><strong>依赖漏洞</strong>：CVE 数据库比对（npm audit / pip audit / cargo audit）</li>
+    <li><strong>License 合规</strong>：GPL 污染、AGPL 误用</li>
+    <li><strong>AI 特有风险</strong>：hardcoded prompt、log 里泄漏 user data</li>
+  </ul>
+
+  <h2 id="lint">AI Lint 协议（自建 · 核心）</h2>
+  <p><strong>状态</strong>：🟢 主流（自建方法论）· <strong>ROI</strong>：极高</p>
+
+  <h3>为什么是"自建"</h3>
+  <p>外部 Lint 工具对 Spec 的理解有限。我们自建的 Lint Prompt 协议是：</p>
+  <ol>
+    <li>每个 Lint 用<strong>全新会话</strong>（防止上下文污染）</li>
+    <li>输入：Spec + 当前 Draft（设计/代码）</li>
+    <li>AI 按 4 段协议评审：<code>契约完整性 / 歧义检测 / 可实现性 / 反模式</code></li>
+    <li>输出结构化反馈：<code>P0 / P1 / P2 / 通过</code></li>
+    <li><code>P0 = 0</code> 才允许 Frozen</li>
+  </ol>
+  <p>详见 <a href="/handbook/lint-protocol">AI Lint 协议</a> 章节。</p>
+
+  <h2 id="ci-integration">CI/CD 集成</h2>
+
+  <h3>推荐流水线</h3>
+  <pre><code>PR 提交
+  ↓
+[0] AI Code Review (CodeRabbit)        // 异步，先扫
+  ↓
+[1] AI Security Scan (Snyk)            // 必跑
+  ↓
+[2] Lint + Type check (语言原生)       // 必跑
+  ↓
+[3] Unit + Integration Test (原生)     // 必跑
+  ↓
+[4] AI Test Gen 补全 (Qodo)            // 建议
+  ↓
+[5] 人工 Review (团队)                 // 必做
+  ↓
+Merge → Deploy Preview (Vercel/Netlify)
+  ↓
+手动验证 → Merge to main → 部署
+</code></pre>
+
+  <h3>必须避免的反模式</h3>
+  <ul>
+    <li>❌ AI review 通过就直接 merge（忽略人工）</li>
+    <li>❌ 把 AI test gen 生成的测试覆盖率当"通过"（可能没断言真业务逻辑）</li>
+    <li>❌ Security scan 当"提示"，不是"门禁"</li>
+    <li>❌ Spec 改了一行，但测试没改（Spec 是 single source of truth）</li>
+  </ul>
+
+  <h2 id="metrics">质量度量</h2>
+  <p>不能度量的东西无法改进。关键指标：</p>
+  <table>
+    <thead><tr><th>指标</th><th>目标</th><th>工具</th></tr></thead>
+    <tbody>
+      <tr><td>AI review 评论率</td><td>&lt; 20% 评论被忽略</td><td>CodeRabbit 后台</td></tr>
+      <tr><td>测试覆盖率</td><td>&gt; 80%（核心模块）</td><td>语言原生 + Qodo</td></tr>
+      <tr><td>Security 漏洞修复时间</td><td>Critical: &lt;24h, High: &lt;7d</td><td>Snyk</td></tr>
+      <tr><td>PR cycle time</td><td>趋势分析</td><td>GitHub API</td></tr>
+      <tr><td>生产事故率（AI 引入）</td><td>趋势下行</td><td>Sentry + 人工归因</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="tracking">持续追踪业界</h2>
+
+  <h3>新工具观察列表</h3>
+  <ul>
+    <li><strong>Greptile</strong>：AI 代码 review，新兴，PR 评论质量有口碑</li>
+    <li><strong>Bito</strong>：IDE 内 AI review，免费层</li>
+    <li><strong>Ellipsis</strong>：测试生成 + review 组合</li>
+    <li><strong>Stenography</strong>：自动生成 changelog + API doc</li>
+  </ul>
+
+  <h3>降级信号</h3>
+  <ul>
+    <li>误报率持续 &gt; 30%</li>
+    <li>开发主动 skip review</li>
+    <li>vendor 停止更新 &gt; 6 个月</li>
+  </ul>
+
+  <div class="admonition info">
+    <div class="admonition-title">📅 维护说明</div>
+    <p>质量门工具栈每季度 review。CI 流水线变更需要团队 review 共识——不是个人决定。</p>
+  </div>
+
+  <p style="margin-top:24px"><a href="/handbook/internal-tools">下一章：内部工具建设 →</a></p>
+</MainLayout>

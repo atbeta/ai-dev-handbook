@@ -71,7 +71,7 @@ const isCurrent = (href: string) => currentPath === href;
         <span class="arrow" aria-hidden="true"></span>
         <span class="summary-label">📐 实践指南</span>
       </span>
-      <span class="count">21</span>
+      <span class="count">25</span>
     </summary>
     <div class="subsection-label">Why 入门</div>
     <ul>
@@ -92,6 +92,13 @@ const isCurrent = (href: string) => currentPath === href;
       <li><a href="/handbook/constitution" class={isCurrent('/handbook/constitution') ? 'active' : ''}>Constitution 模式</a></li>
       <li><a href="/handbook/anti-patterns" class={isCurrent('/handbook/anti-patterns') ? 'active' : ''}>反模式</a></li>
       <li><a href="/handbook/lessons" class={isCurrent('/handbook/lessons') ? 'active' : ''}>实战经验教训</a></li>
+    </ul>
+    <div class="subsection-label">工具栈 · 工具体系</div>
+    <ul>
+      <li><a href="/handbook/tool-stack" class={isCurrent('/handbook/tool-stack') ? 'active' : ''}>工具体系地图</a></li>
+      <li><a href="/handbook/context-engineering" class={isCurrent('/handbook/context-engineering') ? 'active' : ''}>上下文工程</a></li>
+      <li><a href="/handbook/quality-gate" class={isCurrent('/handbook/quality-gate') ? 'active' : ''}>质量门工具</a></li>
+      <li><a href="/handbook/internal-tools" class={isCurrent('/handbook/internal-tools') ? 'active' : ''}>内部工具建设</a></li>
     </ul>
     <div class="subsection-label">启动与工具</div>
     <ul>
