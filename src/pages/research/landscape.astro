@@ -4,6 +4,8 @@ import Sidebar from '../../components/Sidebar.astro';
 ---
 
 <MainLayout title="行业全景图" description="AI 辅助生产级开发的行业全景图：2026 年的核心议题、关键玩家和主要趋势">
+
+<Sidebar currentPath="/research/landscape" slot="sidebar" />
   <h1>行业全景图</h1>
   <div class="meta-line">调研报告 · 2026 年 7 月</div>
 
@@ -104,5 +106,3 @@ import Sidebar from '../../components/Sidebar.astro';
     <li><a href="/research/security">安全合规</a> — 不可回避的红线</li>
   </ol>
 </MainLayout>
-
-<Sidebar currentPath="/research/landscape" slot="sidebar" />
