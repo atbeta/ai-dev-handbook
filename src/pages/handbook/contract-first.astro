@@ -3,17 +3,17 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 ---
 
-<MainLayout title="契约优先分工" description="Contract-First Split Implementation：人机协作的核心模式，AI 失败后的兑底策略">
+<MainLayout title="契约优先分工" description="Contract-First Split Implementation：人机协作的核心模式，以及 AI 失败后的人工接管策略">
   <Sidebar currentPath="/handbook/contract-first" slot="sidebar" />
   <h1>契约优先分工（Contract-First Split Implementation）</h1>
   <div class="meta-line"><span class="tag">实践指南</span> 2026 年业界主流的人机协作模式</div>
 
   <div class="callout info">
-    <strong>一句话总结</strong>：契约（Contract）是边界——双方按契约并行、独立验证、不互相污染。这是 AI 失败后的兑底策略，不是「最佳实践」的炫耀。
+    <strong>一句话总结</strong>：契约（Contract）是边界——双方按契约并行、独立验证、不互相污染。这是 AI 失败后的人工接管策略，不是装饰性的流程术语。
   </div>
 
   <h2 id="origin">起源：从「让 AI 独立完成」到「人机契约分工」</h2>
-  <p>2026 年业界在多个大型 AI 协作项目中反复验证了一个模式：<strong>跨系统 + 长程 + 复杂业务 + 接口差异——这四个特征叠加时，弱模型 100% 失败</strong>。</p>
+  <p>2026 年业界在多个大型 AI 协作项目中反复验证了一个模式：<strong>跨系统 + 长程 + 复杂业务 + 接口差异——这四个特征叠加时，受限模型的失败风险极高</strong>。</p>
   <p>解决方案不是「换更强的模型」——而是<strong>改变分工方式</strong>。</p>
 
   <h2 id="workflow">分工流程</h2>
@@ -63,7 +63,7 @@ import Sidebar from '../../components/Sidebar.astro';
     <li><strong>接口/数据有差异</strong>——不是简单「抄函数」</li>
   </ol>
   <div class="callout danger">
-    <strong>核心判断</strong>：任何一个不致命，<strong>4 个叠加 = 当前弱模型能力边界，100% 失败</strong>。2 个以上叠加时就该切到契约分工模式。
+    <strong>核心判断</strong>：任何一个特征单独出现都未必致命，但 4 个叠加通常已经超过受限模型的可靠能力边界。2 个以上叠加时，就应该切到契约分工模式。
   </div>
 
   <h2 id="principles">核心原则</h2>
@@ -71,7 +71,7 @@ import Sidebar from '../../components/Sidebar.astro';
     <li><strong>契约是边界</strong>——人和 AI 按契约独立工作，不互相污染</li>
     <li><strong>人接核心，不可让渡</strong>——核心算法、状态机、业务规则必须人做</li>
     <li><strong>AI 接前后契约</strong>——适配、测试桩、对接代码等「契约明确的部分」交给 AI</li>
-    <li><strong>兑底频率 = AI 失败频率</strong>——人接核心不是「分工模式好」，是「AI 失败的兑底」</li>
+    <li><strong>人工接管频率 = AI 边界评估质量</strong>——人接核心不是「分工模式好」，而是对 AI 失败风险的兜底机制</li>
     <li><strong>契约必须可验收</strong>——没有验收标准的契约不是契约，是散文</li>
   </ol>
 

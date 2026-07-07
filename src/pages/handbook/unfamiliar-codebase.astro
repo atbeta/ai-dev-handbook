@@ -3,28 +3,28 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 ---
 
-<MainLayout title="不熟项目 + AI 实战" description="人类对遗留项目不熟悉时，如何用三阶段渐进信任驾驭 AI 完成迁移和重构">
+<MainLayout title="陌生代码库协作" description="接手遗留项目或陌生代码库时，如何用三阶段渐进信任引入 AI 辅助迁移和重构">
   <Sidebar currentPath="/handbook/unfamiliar-codebase" slot="sidebar" />
-  <h1>不熟项目 + AI 实战</h1>
+  <h1>陌生代码库协作</h1>
   <div class="meta-line"><span class="tag">实践指南</span> <span class="tag">遗留项目</span> <span class="tag">迁移</span></div>
 
   <blockquote>
-    <p>人必须先建立心智地图，AI 才能当工具。否则 AI 是放大器，放大的是你的无知。</p>
+    <p>人必须先建立心智地图，AI 才能成为可靠工具。否则 AI 会放大项目理解不足带来的错误判断。</p>
   </blockquote>
 
   <h2 id="core-tension">核心矛盾</h2>
-  <p>公司试点里最致命也最高频的场景：人没有业务心智地图，AI 上下文有限还自信，业务深度耦合且有第三方依赖——三者叠加必然是返工和误导。</p>
+  <p>公司试点里最常见的高风险场景：人没有业务心智地图，AI 上下文有限且容易过度自信，业务又深度耦合并包含第三方依赖——三者叠加会显著提高返工和误判概率。</p>
 
   <table>
     <thead><tr><th>角色</th><th>弱点</th></th></tr></thead>
     <tbody>
-      <tr><td>人</td><td>不熟项目、无法判断 AI 对错</td></tr>
+      <tr><td>人</td><td>尚未理解项目结构，难以判断 AI 输出是否正确</td></tr>
       <tr><td>AI</td><td>上下文有限、幻觉、自信心比准确率高</td></tr>
       <tr><td>业务</td><td>深度耦合、第三方依赖、历史包袱</td></tr>
     </tbody>
   </table>
 
-  <h2 id="three-stages">三阶段渐进信任（不许跳级）</h2>
+  <h2 id="three-stages">三阶段渐进信任</h2>
 
   <table>
     <thead><tr><th>阶段</th><th>你做什么</th><th>AI 能做什么</th><th>任务规模</th><th>期限</th></tr></thead>
@@ -37,7 +37,7 @@ import Sidebar from '../../components/Sidebar.astro';
 
   <div class="admonition warning">
     <div class="admonition-title">硬纪律</div>
-    <p>不许跳过阶段 1。第 1 天就让 AI 改 migration 的团队，第 3 天都会发现改了 5 个不该动的模块。</p>
+    <p>不要跳过阶段 1。第一天就让 AI 修改 migration 的团队，通常会在后续发现它触碰了多个不该修改的模块。</p>
   </div>
 
   <h2 id="stage-1">阶段 1：考古（你亲自动手）</h2>
@@ -48,7 +48,7 @@ import Sidebar from '../../components/Sidebar.astro';
     <li><strong>入口三件套</strong>：主入口文件、配置文件、README/ARCHITECTURE</li>
     <li><strong>目录结构</strong>：跑 tree 命令看两层目录</li>
     <li><strong>画心智地图</strong>：谁调用谁、数据流向、哪些是边界模块（接第三方/外部 API）</li>
-    <li><strong>记下 5 个最不懂的点</strong>，下一步让 AI 回答</li>
+    <li><strong>记录 5 个最不确定的问题</strong>，下一步让 AI 基于证据回答</li>
   </ol>
 
   <h2 id="stage-2">阶段 2：侦察（4 轮只读 prompt）</h2>
@@ -63,7 +63,7 @@ import Sidebar from '../../components/Sidebar.astro';
 
   <h3>第 2 轮：陷阱清单</h3>
   <pre><code>{`不许修改代码。
-基于上面的事实，列出五个最容易踩坑的"边界"：
+基于上面的事实，列出五个最容易出错的"边界"：
 - 看起来丑但不能动的地方（历史包袱）
 - 看起来漂亮但有副作用的地方
 - 跨第三方调用点
@@ -105,8 +105,8 @@ import Sidebar from '../../components/Sidebar.astro';
     <li><strong>每日学习闭环</strong>：下班前 10 分钟写每日 learnings 笔记</li>
   </ol>
 
-  <h2 id="killer-prompt">杀手锏：让 AI 当学生，你当老师</h2>
-  <p>很多团队让 AI 当老师（"教我懂这个项目"），方向反了。正确的是让 AI 答你的题：</p>
+  <h2 id="killer-prompt">高质量提问模式：让 AI 回答你的测验</h2>
+  <p>很多团队让 AI 扮演老师（"教我懂这个项目"），这会放大它的猜测。更稳的方式是让 AI 回答你设计好的问题：</p>
   <pre><code>{`我刚接手这个项目，请你当学生。
 我要测验你三件事（不许猜，要给文件加行号证据）：
 1. 这个项目最不为人知的"隐含契约"是什么？
@@ -118,18 +118,18 @@ import Sidebar from '../../components/Sidebar.astro';
 
   <p><strong>为什么有效</strong>：AI 被迫"答对"，就得真的读代码、找证据。这是它最高质量的输出场景。</p>
 
-  <h2 id="role-split">角色定位（最后一遍强调）</h2>
+  <h2 id="role-split">角色边界</h2>
   <table>
     <thead><tr><th>角色</th><th>干什么</th><th>不能干什么</th></tr></thead>
     <tbody>
-      <tr><td><strong>人</strong></td><td>考古队长加决策者</td><td>不能甩给 AI</td></tr>
-      <tr><td><strong>AI</strong></td><td>考古队员加资料整理员</td><td>不能做决策，尤其不能决定"做不到就停下来"以外的事</td></tr>
+      <tr><td><strong>人</strong></td><td>代码考古负责人和最终决策者</td><td>不能把方向判断交给 AI</td></tr>
+      <tr><td><strong>AI</strong></td><td>代码侦察员和资料整理员</td><td>不能替代人做架构、范围和上线判断</td></tr>
     </tbody>
   </table>
 
   <div class="admonition tip">
     <div class="admonition-title">一句话总结</div>
-    <p>不熟项目时，AI 是你的侦察兵不是将军。AI 跑得快但不知道往哪跑，你跑得慢但知道目标在哪——别把将军的活交给侦察兵。</p>
+    <p>面对陌生代码库时，AI 适合做代码侦察和资料整理，不适合代替人做方向判断。先由人建立心智地图，再让 AI 在明确边界内协作。</p>
   </div>
 
   <p style="margin-top:24px"><a href="/handbook/parallel-sessions">下一章：多 AI 会话并行 →</a></p>

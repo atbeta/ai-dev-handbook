@@ -2,7 +2,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 
-const title = "试点踩坑实录";
+const title = "试点复盘案例";
 const description = "公司 AI 试点项目的真实失败案例、归因分析、可复用教训";
 ---
 
@@ -188,7 +188,7 @@ const description = "公司 AI 试点项目的真实失败案例、归因分析�
     <li><strong>AI 完成后必须有人独立验证</strong>——不能让 AI 自己判断 done，必须有 SPEC 对照检查</li>
     <li><strong>渐进信任而非一次性信任</strong>——先小任务，建立信任后再扩量，不要一上来就给大任务</li>
     <li><strong>失败后立即暂停</strong>——发现 AI 在边界外时，立刻停手并分析，不要让 AI 继续在错误方向构建</li>
-    <li><strong>判断力是核心</strong>——团队判断力跟不上 AI 速度时，AI 进来只会更快地制造垃圾</li>
+    <li><strong>判断力是核心</strong>——团队判断力跟不上 AI 速度时，AI 会更快地放大低质量产出</li>
     <li><strong>试点需要明确范围</strong>——试点阶段限定任务类型，不许跨边界扩量</li>
   </ol>
 

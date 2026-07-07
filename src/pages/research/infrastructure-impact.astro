@@ -121,14 +121,14 @@ POST /api/tasks  // payload 含 name 等于 tps-test-4   # 并发
       <tr><td>Tab 补全</td><td>小模型（Haiku / 4o-mini）</td><td>Opus / GPT-5</td></tr>
       <tr><td>单文件重构</td><td>Sonnet / GPT-4.1</td><td>Opus</td></tr>
       <tr><td><strong>SPEC 评审</strong></td><td><strong>必须 Opus / GPT-5</strong></td><td>Sonnet 看不出设计问题</td></tr>
-      <tr><td><strong>多模块架构</strong></td><td><strong>必须 Opus / GPT-5</strong></td><td>弱的会瞎给方案</td></tr>
-      <tr><td>跨文件 migration</td><td>Opus 加 强 retrieval</td><td>没有 retrieval 的 Sonnet 会幻觉爆</td></tr>
+      <tr><td><strong>多模块架构</strong></td><td><strong>必须 Opus / GPT-5</strong></td><td>弱模型容易给出不可靠方案</td></tr>
+      <tr><td>跨文件 migration</td><td>Opus 加 强 retrieval</td><td>没有 retrieval 的 Sonnet 幻觉风险高</td></tr>
     </tbody>
   </table>
 
   <div class="admonition warning">
     <div class="admonition-title">给领导的关键提醒</div>
-    <p>评审类用弱模型等于审不出问题等于试点失败的最大风险。如果公司为了省钱在评审场景只给 Sonnet/4o-mini，团队会越用越没信心，最后废弃整个 AI 试点。</p>
+    <p>评审类任务使用弱模型，是试点失败的高风险因素。如果公司为了节省成本在评审场景只给 Sonnet/4o-mini，团队会逐步失去信心，最终放弃 AI 试点。</p>
   </div>
 
   <h2 id="push-it">如何向 IT 争取更好的基础设施</h2>
@@ -147,7 +147,7 @@ POST /api/tasks  // payload 含 name 等于 tps-test-4   # 并发
            = 每天 X 元 + 每天 Y 元 + 每天 Z 元
            > 基础设施升级成本（多分配 50% TPS 配额）？
 
-大概率是。所以别省 TPS 的钱。`}</code></pre>
+大概率是。因此不要只从 token 成本判断 TPS 配额。`}</code></pre>
   
 
   <h3>3. 分优先级谈</h3>
@@ -176,5 +176,5 @@ POST /api/tasks  // payload 含 name 等于 tps-test-4   # 并发
     <p>模型能力决定单任务质量上限，上下文大小决定能不能装下任务，TPS 配额决定团队整体效率。三者都到位才是真到位，缺 TPS 整个团队用不起来。</p>
   </div>
 
-  <p style="margin-top:24px"><a href="/handbook/unfamiliar-codebase">回到：实践指南 · 不熟项目 + AI 实战 →</a></p>
+  <p style="margin-top:24px"><a href="/handbook/unfamiliar-codebase">回到：实践指南 · 陌生代码库协作 →</a></p>
 </MainLayout>

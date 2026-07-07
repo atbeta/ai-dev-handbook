@@ -65,7 +65,7 @@ import Sidebar from '../../components/Sidebar.astro';
     <thead><tr><th>类别</th><th>内容</th><th>工具</th></tr></thead>
     <tbody>
       <tr><td>架构决策（ADR）</td><td>为什么用 X 不用 Y</td><td>Markdown + Git</td></tr>
-      <tr><td>踩坑档案</td><td>上次为什么 prod 挂了、现在怎么避免</td><td>Notion / Confluence</td></tr>
+      <tr><td>经验档案</td><td>生产故障原因、影响和预防措施</td><td>Notion / Confluence</td></tr>
       <tr><td>风格约定</td><td>错误处理 / 日志格式 / commit 规范</td><td>AGENTS.md + Lint</td></tr>
       <tr><td>Onboarding</td><td>新人 1 周读什么</td><td>Curated docs</td></tr>
       <tr><td>事故复盘</td><td>Postmortem 模板</td><td>内部 Wiki</td></tr>
@@ -73,7 +73,7 @@ import Sidebar from '../../components/Sidebar.astro';
   </table>
 
   <h3>检索（让 Memory 可用）</h3>
-  <p>写下来没人用 = 没用。关键：</p>
+  <p>写下来但无法检索，就无法形成团队资产。关键：</p>
   <ul>
     <li><strong>AI 可访问</strong>：MCP server 让 AI 主动 query</li>
     <li><strong>人类可搜索</strong>：Notion/Confluence + 全文搜索</li>
