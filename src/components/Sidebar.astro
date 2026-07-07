@@ -31,19 +31,34 @@ const isCurrent = (href: string) => currentPath === href;
       </span>
       <span class="count">11</span>
     </summary>
-    <div class="subsection-label">基础认知</div>
+    <div class="subsection-label">全局</div>
     <ul>
       <li><a href="/research/landscape" class={isCurrent('/research/landscape') ? 'active' : ''}>行业全景图</a></li>
+    </ul>
+    <div class="subsection-label">核心辩论</div>
+    <ul>
       <li><a href="/research/vibe-vs-spec" class={isCurrent('/research/vibe-vs-spec') ? 'active' : ''}>Vibe vs Spec 辩论</a></li>
-      <li><a href="/research/agent-ecosystem" class={isCurrent('/research/agent-ecosystem') ? 'active' : ''}>Agent 生态</a></li>
+    </ul>
+    <div class="subsection-label">工具生态</div>
+    <ul>
+      <li><a href="/research/agent-ecosystem" class={isCurrent('/research/agent-ecosystem') ? 'active' : ''}>Coding Agent 生态</a></li>
+    </ul>
+    <div class="subsection-label">关键技能</div>
+    <ul>
       <li><a href="/research/context-engineering" class={isCurrent('/research/context-engineering') ? 'active' : ''}>上下文工程</a></li>
       <li><a href="/research/quality-metrics" class={isCurrent('/research/quality-metrics') ? 'active' : ''}>代码质量度量</a></li>
+    </ul>
+    <div class="subsection-label">边界与风险</div>
+    <ul>
       <li><a href="/research/ai-boundaries" class={isCurrent('/research/ai-boundaries') ? 'active' : ''}>AI 能力边界</a></li>
       <li><a href="/research/security" class={isCurrent('/research/security') ? 'active' : ''}>安全合规</a></li>
-      <li><a href="/research/company-cases" class={isCurrent('/research/company-cases') ? 'active' : ''}>大厂案例</a></li>
       <li><a href="/research/hard-data" class={isCurrent('/research/hard-data') ? 'active' : ''}>硬数据与事故</a></li>
     </ul>
-    <div class="subsection-label">团队转型</div>
+    <div class="subsection-label">实践参照</div>
+    <ul>
+      <li><a href="/research/company-cases" class={isCurrent('/research/company-cases') ? 'active' : ''}>大厂案例</a></li>
+    </ul>
+    <div class="subsection-label">团队落地</div>
     <ul>
       <li><a href="/research/transformation" class={isCurrent('/research/transformation') ? 'active' : ''}>团队转型路线</a></li>
       <li><a href="/research/infrastructure-impact" class={isCurrent('/research/infrastructure-impact') ? 'active' : ''}>基础设施影响</a></li>
@@ -58,26 +73,32 @@ const isCurrent = (href: string) => currentPath === href;
       </span>
       <span class="count">21</span>
     </summary>
-    <div class="subsection-label">Why & 定位</div>
+    <div class="subsection-label">Why 入门</div>
     <ul>
       <li><a href="/handbook/why" class={isCurrent('/handbook/why') ? 'active' : ''}>为什么需要这套流程</a></li>
       <li><a href="/handbook/ai-as-amplifier" class={isCurrent('/handbook/ai-as-amplifier') ? 'active' : ''}>AI 是放大器不是工程师</a></li>
     </ul>
-    <div class="subsection-label">方法论</div>
+    <div class="subsection-label">核心工作流</div>
     <ul>
       <li><a href="/handbook/workflow" class={isCurrent('/handbook/workflow') ? 'active' : ''}>6 步工作流</a></li>
       <li><a href="/handbook/spec-format" class={isCurrent('/handbook/spec-format') ? 'active' : ''}>Spec 字段规范</a></li>
       <li><a href="/handbook/clarification" class={isCurrent('/handbook/clarification') ? 'active' : ''}>澄清循环</a></li>
       <li><a href="/handbook/lint-protocol" class={isCurrent('/handbook/lint-protocol') ? 'active' : ''}>AI Lint 协议</a></li>
       <li><a href="/handbook/spec-to-code" class={isCurrent('/handbook/spec-to-code') ? 'active' : ''}>Spec 到代码</a></li>
+    </ul>
+    <div class="subsection-label">进阶模式</div>
+    <ul>
       <li><a href="/handbook/contract-first" class={isCurrent('/handbook/contract-first') ? 'active' : ''}>契约优先分工</a></li>
       <li><a href="/handbook/constitution" class={isCurrent('/handbook/constitution') ? 'active' : ''}>Constitution 模式</a></li>
       <li><a href="/handbook/anti-patterns" class={isCurrent('/handbook/anti-patterns') ? 'active' : ''}>反模式</a></li>
       <li><a href="/handbook/lessons" class={isCurrent('/handbook/lessons') ? 'active' : ''}>实战经验教训</a></li>
+    </ul>
+    <div class="subsection-label">启动与工具</div>
+    <ul>
       <li><a href="/handbook/first-task-sop" class={isCurrent('/handbook/first-task-sop') ? 'active' : ''}>第一单 SOP</a></li>
       <li><a href="/handbook/tools" class={isCurrent('/handbook/tools') ? 'active' : ''}>工具链</a></li>
     </ul>
-    <div class="subsection-label">场景 & 团队</div>
+    <div class="subsection-label">实战场景</div>
     <ul>
       <li><a href="/handbook/unfamiliar-codebase" class={isCurrent('/handbook/unfamiliar-codebase') ? 'active' : ''}>不熟项目 + AI</a></li>
       <li><a href="/handbook/parallel-sessions" class={isCurrent('/handbook/parallel-sessions') ? 'active' : ''}>多会话并行</a></li>
@@ -86,7 +107,7 @@ const isCurrent = (href: string) => currentPath === href;
       <li><a href="/handbook/docs-sync-strategy" class={isCurrent('/handbook/docs-sync-strategy') ? 'active' : ''}>文档同步策略</a></li>
       <li><a href="/handbook/team-roles" class={isCurrent('/handbook/team-roles') ? 'active' : ''}>团队角色</a></li>
     </ul>
-    <div class="subsection-label">Strategy</div>
+    <div class="subsection-label">组织推广</div>
     <ul>
       <li><a href="/strategy/pilot-playbook" class={isCurrent('/strategy/pilot-playbook') ? 'active' : ''}>试点负责人 Playbook</a></li>
       <li><a href="/strategy/pilot-lessons" class={isCurrent('/strategy/pilot-lessons') ? 'active' : ''}>试点踩坑实录</a></li>
@@ -101,16 +122,23 @@ const isCurrent = (href: string) => currentPath === href;
       </span>
       <span class="count">9</span>
     </summary>
+    <div class="subsection-label">立项与契约</div>
     <ul>
       <li><a href="/templates/spec" class={isCurrent('/templates/spec') ? 'active' : ''}>Spec 模板</a></li>
-      <li><a href="/templates/lint-prompts" class={isCurrent('/templates/lint-prompts') ? 'active' : ''}>AI Lint Prompt</a></li>
-      <li><a href="/templates/checklist" class={isCurrent('/templates/checklist') ? 'active' : ''}>流程 Checklist</a></li>
       <li><a href="/templates/constitution" class={isCurrent('/templates/constitution') ? 'active' : ''}>Constitution 模板</a></li>
       <li><a href="/templates/contract" class={isCurrent('/templates/contract') ? 'active' : ''}>契约模板</a></li>
-      <li><a href="/templates/task-card" class={isCurrent('/templates/task-card') ? 'active' : ''}>任务卡模板</a></li>
-      <li><a href="/templates/circuit-breaker" class={isCurrent('/templates/circuit-breaker') ? 'active' : ''}>熔断 Checklist</a></li>
-      <li><a href="/templates/metrics" class={isCurrent('/templates/metrics') ? 'active' : ''}>度量模板</a></li>
       <li><a href="/templates/system-prompt" class={isCurrent('/templates/system-prompt') ? 'active' : ''}>System Prompt 模板</a></li>
+    </ul>
+    <div class="subsection-label">执行与检查</div>
+    <ul>
+      <li><a href="/templates/lint-prompts" class={isCurrent('/templates/lint-prompts') ? 'active' : ''}>AI Lint Prompt</a></li>
+      <li><a href="/templates/task-card" class={isCurrent('/templates/task-card') ? 'active' : ''}>任务卡模板</a></li>
+      <li><a href="/templates/checklist" class={isCurrent('/templates/checklist') ? 'active' : ''}>流程 Checklist</a></li>
+      <li><a href="/templates/circuit-breaker" class={isCurrent('/templates/circuit-breaker') ? 'active' : ''}>熔断 Checklist</a></li>
+    </ul>
+    <div class="subsection-label">度量与改进</div>
+    <ul>
+      <li><a href="/templates/metrics" class={isCurrent('/templates/metrics') ? 'active' : ''}>度量模板</a></li>
     </ul>
   </details>
 </nav>
