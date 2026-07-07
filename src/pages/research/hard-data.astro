@@ -9,11 +9,12 @@ import Sidebar from '../../components/Sidebar.astro';
   <div class="meta-line"><span class="tag">调研</span> 数据来源：MIT、CodeRabbit、Stack Overflow、GitClear 等 2025-2026 公开报告</div>
 
   <div class="callout danger">
-    <strong>核心发现</strong>：AI 辅助编码在 Demo 阶段表现惊艳，但在生产级项目中目前面临严峻的质量挑战。以下数据来自多家独立机构的量化分析。
+    <strong>核心发现</strong>：AI 辅助编码在 Demo 阶段表现惊艳，但在生产级项目中仍面临质量、治理和工作流嵌入挑战。以下数据来自公开报告、厂商分析和媒体报道，阅读时要注意各自样本范围。
   </div>
 
   <h2 id="mit">MIT 2025 报告：95% 企业 AI 试点失败</h2>
   <p><strong>来源</strong>：MIT <em>The GenAI Divide: State of AI in Business 2025</em>（2025-08 发布，Fortune / Salesforce / VentureBeat 等 9+ 媒体引用）</p>
+  <p><strong>适用范围</strong>：该报告讨论的是企业 GenAI 试点整体，不是 AI 编程专项报告。这里引用它，是为了说明“AI 工具如果不能嵌入既有工作流，就很难产生可衡量价值”。</p>
   
   <table>
     <thead><tr><th>指标</th><th>数据</th></tr></thead>
@@ -35,7 +36,7 @@ import Sidebar from '../../components/Sidebar.astro';
   </blockquote>
 
   <div class="insight">
-    <strong>启示</strong>：「跑起来」不等于「产生价值」。95% 的失败率说明当前 AI 辅助开发的工程化落地远比 Demo 演示复杂。
+    <strong>启示</strong>：「跑起来」不等于「产生价值」。这类企业级失败数据提醒我们，AI 辅助开发也不能停留在 Demo 和个人效率层面，必须进入工程流程、质量门和组织治理。
   </div>
 
   <h2 id="coderabbit">CodeRabbit 报告：AI 代码问题数 1.7x</h2>
@@ -91,7 +92,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <h3>事故概要</h3>
   <ul>
     <li><strong>时间</strong>：2025 年 7 月</li>
-    <li><strong>发生了什么</strong>：Replit Agent 在执行数据库迁移任务时，错误地删除了整个生产数据库</li>
+    <li><strong>发生了什么</strong>：据公开报道，Replit Agent 在执行数据库迁移任务时触发了破坏性数据库操作</li>
     <li><strong>破坏性操作</strong>：DROP TABLE / DELETE 无 WHERE 子句</li>
     <li><strong>根因</strong>：Agent 缺乏对破坏性操作的二次确认机制、缺乏迁移前的备份保护、缺乏干跑（dry-run）检查</li>
   </ul>
@@ -124,7 +125,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <table>
     <thead><tr><th>来源</th><th>核心发现</th><th>严重程度</th></tr></thead>
     <tbody>
-      <tr><td>MIT 2025</td><td>95% 企业 AI 试点失败</td><td>🔴 极高</td></tr>
+      <tr><td>MIT 2025</td><td>95% 企业 GenAI 试点未交付可衡量价值</td><td>🔴 极高</td></tr>
       <tr><td>CodeRabbit</td><td>AI 代码问题 1.7x，安全漏洞 2.74x</td><td>🔴 高</td></tr>
       <tr><td>Stack Overflow</td><td>信任度 40% → 29%，66% 调试超预期</td><td>🟡 中高</td></tr>
       <tr><td>GitClear</td><td>代码重复率 +8x，技术债爆炸</td><td>🔴 高</td></tr>

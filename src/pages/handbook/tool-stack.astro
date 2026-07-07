@@ -13,7 +13,7 @@ import Sidebar from '../../components/Sidebar.astro';
   </blockquote>
 
   <h2 id="why">为什么讲"工具体系"而不是"工具推荐"</h2>
-  <p>工具推荐只能回答"用什么"。工具体系要回答"为什么这样组合、缺哪一层会怎样、多久要重新评估"。AI 辅助开发的工具迭代极快——Cursor 1 年前还不存在，Devin、Kiro、Cody Amp 是过去 6 个月的事。</p>
+  <p>工具推荐只能回答"用什么"。工具体系要回答"为什么这样组合、缺哪一层会怎样、多久要重新评估"。AI 辅助开发的工具迭代极快——从 IDE Agent 到云端自治、从 MCP 到企业内部平台，能力边界和最佳实践都在快速变化。</p>
   <p>所以这个章节的设计原则是：</p>
   <ul>
     <li><strong>框架先行</strong>，工具填空位。先建 4 层心智模型，再往里放具体工具。</li>
@@ -31,7 +31,7 @@ import Sidebar from '../../components/Sidebar.astro';
     <tbody>
       <tr><td>项目说明书</td><td>AGENTS.md、Repo Map、CLAUDE.md、Cursor Rules</td><td>🟢 主流</td></tr>
       <tr><td>代码图谱</td><td>CodeGraph、GitNexus、CodeGraphContext、Sourcegraph Cody/Amp</td><td>🟡 新兴</td></tr>
-      <tr><td>协议</td><td>MCP（Anthropic）、A2A（Google）</td><td>🟢 主流 / 🟡 新兴</td></tr>
+      <tr><td>协议</td><td>MCP（Anthropic）、A2A（Google）</td><td>🟢 主流 / 🟡 值得观察</td></tr>
       <tr><td>规则/约束</td><td>Tessl、Packmind、Ruler、Constitution 模板</td><td>🟡 新兴</td></tr>
       <tr><td>检索/记忆</td><td>mem0、Qdrant、LangGraph Memory</td><td>🟡 新兴</td></tr>
     </tbody>
@@ -46,7 +46,7 @@ import Sidebar from '../../components/Sidebar.astro';
       <tr><td>IDE 集成</td><td>Cursor、Windsurf、Zed AI、GitHub Copilot、Kiro</td><td>🟢 主流</td></tr>
       <tr><td>终端 Agent</td><td>Claude Code、Codex CLI、Gemini CLI、Aider、Cline</td><td>🟢 主流</td></tr>
       <tr><td>云端自治</td><td>Devin、Factory、Cosine、OpenHands</td><td>🟡 新兴（争议大）</td></tr>
-      <tr><td>内部定制</td><td>OpenCode（公司版）、自建 harness</td><td>🟡 新兴</td></tr>
+      <tr><td>内部定制</td><td>OpenCode（公司版/内部项目）、自建 harness</td><td>🟡 新兴（自建）</td></tr>
     </tbody>
   </table>
 
@@ -68,7 +68,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <table>
     <thead><tr><th>类别</th><th>代表工具</th><th>状态</th></tr></thead>
     <tbody>
-      <tr><td>异步任务编排</td><td>OpenClaw、TaskFlow、n8n harness</td><td>🟡 新兴（自建）</td></tr>
+      <tr><td>异步任务编排</td><td>OpenClaw（内部项目）、TaskFlow（自建）、n8n harness</td><td>🟡 新兴（自建）</td></tr>
       <tr><td>Memory 系统</td><td>AGENTS.md + MEMORY.md + 日报（自建）、mem0</td><td>🟡 新兴</td></tr>
       <tr><td>Observability</td><td>Langfuse、Arize Phoenix、Helicone</td><td>🟢 主流</td></tr>
       <tr><td>成本计量</td><td>OpenAI Usage、Anthropic Console、OpenRouter</td><td>🟢 主流</td></tr>
@@ -118,7 +118,7 @@ import Sidebar from '../../components/Sidebar.astro';
   </ol>
 
   <h2 id="tracking">持续追踪业界（必读）</h2>
-  <p>工具迭代速度极快——Cursor 一年前还不存在，Devin/Kiro/Cody Amp 都是过去 6 个月的事。本节内容每月 review，每季度大更新。</p>
+  <p>工具迭代速度极快——IDE Agent、终端 Agent、云端自治 Agent 和协议生态都在快速变化。本节内容每月 review，每季度大更新。</p>
 
   <h3>追踪源</h3>
   <ul>
@@ -149,7 +149,7 @@ import Sidebar from '../../components/Sidebar.astro';
 
   <div class="admonition info">
     <div class="admonition-title">📅 维护说明</div>
-    <p>本节内容 <strong>每月 review 一次</strong>，每季度大更新。最新更新日期见 <a href="/changelog">Changelog</a>。如发现过时信息，请开 issue 或 PR 到 <a href="https://github.com/atbeta/ai-dev-handbook">GitHub</a>。</p>
+    <p>本节内容 <strong>每月 review 一次</strong>，每季度大更新。最新更新可先参考 <a href="https://github.com/atbeta/ai-dev-handbook/commits/main">仓库提交历史</a>；如发现过时信息，请开 issue 或 PR 到 <a href="https://github.com/atbeta/ai-dev-handbook">GitHub</a>。</p>
   </div>
 
   <p style="margin-top:24px"><a href="/handbook/context-engineering">下一章：上下文工程工具 →</a></p>

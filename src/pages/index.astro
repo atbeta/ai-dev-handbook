@@ -55,12 +55,11 @@ import MainLayout from '../layouts/MainLayout.astro';
         <span class="term-cmd">./start.sh</span>
       </div>
       <div class="term-output">
-        <div class="term-log">[<span class="log-ok">✓</span>] foundations/    loaded (8 papers, 4 cases)</div>
-        <div class="term-log">[<span class="log-ok">✓</span>] methods/        loaded (11 protocols, 13 fields)</div>
-        <div class="term-log">[<span class="log-ok">✓</span>] scenarios/      loaded (6 real-world cases)</div>
-        <div class="term-log">[<span class="log-ok">✓</span>] toolkit/        loaded (9 templates)</div>
-        <div class="term-log">[<span class="log-warn">!</span>] strategy/      loaded (4 playbooks + 3 lessons)</div>
-        <div class="term-log term-em">[<span class="log-ok">→</span>] ready. navigate: <a href="#pyramid">see pyramid</a> · <a href="#paths">see paths</a></div>
+        <div class="term-log">[<span class="log-ok">✓</span>] research/       loaded (industry signals + cases)</div>
+        <div class="term-log">[<span class="log-ok">✓</span>] handbook/       loaded (methods + scenarios)</div>
+        <div class="term-log">[<span class="log-ok">✓</span>] strategy/       loaded (pilot playbook + lessons)</div>
+        <div class="term-log">[<span class="log-ok">✓</span>] templates/      loaded (9 reusable templates)</div>
+        <div class="term-log term-em">[<span class="log-ok">→</span>] ready. navigate: <a href="#paths">see reading paths</a></div>
       </div>
     </div>
   </section>
@@ -91,11 +90,11 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="insight-card">
         <div class="ic-header">
           <span class="ic-num">03</span>
-          <span class="ic-tag">data</span>
+          <span class="ic-tag">practice</span>
         </div>
         <div class="ic-body">
-          <strong>写 Spec 占总时间的 30-50%。</strong>
-          <p>Spec 写得好的项目，返工率降低 70%+，移植成功率提升 3-5 倍。</p>
+          <strong>生产级任务要把大量时间花在 Spec 上。</strong>
+          <p>复杂业务和迁移任务里，前期澄清、示例和验收条件通常决定后续返工率；比例应按团队数据持续校准。</p>
         </div>
       </div>
       <div class="insight-card">
@@ -104,18 +103,18 @@ import MainLayout from '../layouts/MainLayout.astro';
           <span class="ic-tag">core</span>
         </div>
         <div class="ic-body">
-          <strong>2026 核心竞争力：上下文工程。</strong>
+          <strong>上下文工程正在成为关键能力。</strong>
           <p>给 AI 提供什么上下文（AGENTS.md、Repo Map、MCP），比 prompt 本身更能决定代码质量。</p>
         </div>
       </div>
       <div class="insight-card">
         <div class="ic-header">
           <span class="ic-num">05</span>
-          <span class="ic-tag">data</span>
+          <span class="ic-tag">signal</span>
         </div>
         <div class="ic-body">
-          <strong>AI 代码长期维护成本被低估。</strong>
-          <p>实证：AI 代码 churn rate 达人工代码的 1.5 倍。Code review 在 AI 时代不是缩水，而是加严。</p>
+          <strong>AI 代码长期维护成本容易被低估。</strong>
+          <p>代码 churn、重复率、review 拦截率都应纳入质量门监控。AI 让写代码变快，review 不应缩水。</p>
         </div>
       </div>
       <div class="insight-card">
@@ -135,7 +134,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         </div>
         <div class="ic-body">
           <strong>Files ARE the State。</strong>
-          <p>离开电脑前最后 1 分钟，所有判断写到 TASK_STATE.md。第二天靠文件接续，省 80% 重新对齐时间。</p>
+          <p>离开电脑前最后 1 分钟，把判断写到 TASK_STATE.md。第二天靠文件接续，减少重新对齐成本。</p>
         </div>
       </div>
       <div class="insight-card">
@@ -158,15 +157,15 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="path">
         <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=pilot-lead</div>
         <div class="path-flow">
-          <a href="/strategy/pilot-playbook">pilot-playbook</a>
+          <a href="/strategy/pilot-playbook">试点负责人 Playbook</a>
           <span class="arr">→</span>
-          <a href="/research/hard-data">hard-data</a>
+          <a href="/research/hard-data">硬数据与事故</a>
           <span class="arr">→</span>
-          <a href="/handbook/ai-as-amplifier">ai-as-amplifier</a>
+          <a href="/handbook/ai-as-amplifier">AI 是放大器</a>
           <span class="arr">→</span>
-          <a href="/handbook/first-task-sop">first-task-sop</a>
+          <a href="/handbook/first-task-sop">第一单 SOP</a>
           <span class="arr">→</span>
-          <a href="/handbook/anti-patterns">anti-patterns</a>
+          <a href="/handbook/anti-patterns">反模式</a>
         </div>
         <div class="path-tag"># 试点负责人</div>
       </div>
@@ -174,15 +173,15 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="path">
         <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=engineer</div>
         <div class="path-flow">
-          <a href="/handbook/ai-as-amplifier">ai-as-amplifier</a>
+          <a href="/handbook/ai-as-amplifier">AI 是放大器</a>
           <span class="arr">→</span>
-          <a href="/research/ai-boundaries">ai-boundaries</a>
+          <a href="/research/ai-boundaries">AI 能力边界</a>
           <span class="arr">→</span>
-          <a href="/handbook/first-task-sop">first-task-sop</a>
+          <a href="/handbook/first-task-sop">第一单 SOP</a>
           <span class="arr">→</span>
-          <a href="/handbook/spec-format">spec-format</a>
+          <a href="/handbook/spec-format">Spec 字段规范</a>
           <span class="arr">→</span>
-          <a href="/handbook/anti-patterns">anti-patterns</a>
+          <a href="/handbook/anti-patterns">反模式</a>
         </div>
         <div class="path-tag"># 工程师（刚接触 AI 编程）</div>
       </div>
@@ -190,15 +189,15 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="path">
         <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=tech-lead</div>
         <div class="path-flow">
-          <a href="/research/landscape">landscape</a>
+          <a href="/research/landscape">行业全景图</a>
           <span class="arr">→</span>
-          <a href="/research/vibe-vs-spec">vibe-vs-spec</a>
+          <a href="/research/vibe-vs-spec">Vibe vs Spec</a>
           <span class="arr">→</span>
-          <a href="/strategy/pilot-playbook">pilot-playbook</a>
+          <a href="/strategy/pilot-playbook">试点 Playbook</a>
           <span class="arr">→</span>
-          <a href="/research/transformation">transformation</a>
+          <a href="/research/transformation">团队转型路线图</a>
           <span class="arr">→</span>
-          <a href="/handbook/constitution">constitution</a>
+          <a href="/handbook/constitution">Constitution 模式</a>
         </div>
         <div class="path-tag"># 技术负责人 / 架构师</div>
       </div>
@@ -206,15 +205,15 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="path">
         <div class="path-prompt"><span class="term-prompt">$</span> ./read --role=migrator</div>
         <div class="path-flow">
-          <a href="/handbook/unfamiliar-codebase">unfamiliar-codebase</a>
+          <a href="/handbook/unfamiliar-codebase">不熟项目实战</a>
           <span class="arr">→</span>
-          <a href="/research/ai-boundaries">ai-boundaries</a>
+          <a href="/research/ai-boundaries">AI 能力边界</a>
           <span class="arr">→</span>
-          <a href="/handbook/parallel-sessions">parallel-sessions</a>
+          <a href="/handbook/parallel-sessions">多 AI 会话并行</a>
           <span class="arr">→</span>
-          <a href="/handbook/async-nightly">async-nightly</a>
+          <a href="/handbook/async-nightly">夜间异步执行</a>
           <span class="arr">→</span>
-          <a href="/handbook/docs-sync-strategy">docs-sync-strategy</a>
+          <a href="/handbook/docs-sync-strategy">文档同步策略</a>
         </div>
         <div class="path-tag"># 不熟项目，需要迁移/重构</div>
       </div>
@@ -229,7 +228,7 @@ import MainLayout from '../layouts/MainLayout.astro';
       <a href="/handbook/why" class="btn-secondary">看实践指南 →</a>
       <a href="https://github.com/atbeta/ai-dev-handbook" class="btn-ghost">GitHub →</a>
     </div>
-    <p class="cta-foot">v2.5 · 47 pages · updated 2026-07-08 · 内容来自真实项目 + 行业调研 + 实证数据</p>
+    <p class="cta-foot">v2.5 · 47 pages · updated 2026-07-08 · 内容来自真实项目 + 行业调研 + 风险信号</p>
   </section>
 </MainLayout>
 

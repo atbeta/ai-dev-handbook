@@ -30,7 +30,7 @@ import Sidebar from '../../components/Sidebar.astro';
         <td>终端 Agent</td>
         <td>超长上下文理解、自主文件编辑、Shell 集成、MCP 工具链</td>
         <td>大项目时上下文管理困难、有时过度自信做出破坏性修改</td>
-        <td>~49% (GPT-5.2)</td>
+        <td>取决于后端模型与评测口径</td>
       </tr>
       <tr>
         <td><strong>Cursor Agent</strong></td>
@@ -51,24 +51,28 @@ import Sidebar from '../../components/Sidebar.astro';
         <td>云端自治</td>
         <td>完整 dev 环境、自带浏览器、PR-driven 工作流</td>
         <td>成本高、反馈周期长、环境限制多</td>
-        <td>~14% (自报)</td>
+        <td>历史自报数据，需核对版本</td>
       </tr>
       <tr>
         <td><strong>OpenHands</strong></td>
         <td>云端自治(开源)</td>
         <td>完全开源、Docker 沙箱、插件体系</td>
         <td>社区驱动、质量不稳定、需要自己搭 infra</td>
-        <td>~26% (SWE-agent)</td>
+        <td>随基准版本波动</td>
       </tr>
       <tr>
         <td><strong>Gemini CLI</strong></td>
         <td>终端 Agent</td>
         <td>Google 生态集成、多模态理解、免费额度</td>
         <td>对非 GCP 项目支持较弱、上下文窗口限制</td>
-        <td>~30%</td>
+        <td>随模型版本波动</td>
       </tr>
     </tbody>
   </table>
+  <div class="admonition warning">
+    <div class="admonition-title">评测口径</div>
+    <p>SWE-bench 分数会随 Verified / Multilingual 子集、模型版本、是否使用工具链和评测日期变化。选型时不要只看单个分数，应同时看任务类型、上下文管理、审查成本和失败模式。</p>
+  </div>
 
   <h2 id="architecture-patterns">Agent 架构模式</h2>
   <h3>模式 1：Plan-Execute（规划-执行）</h3>
@@ -93,7 +97,7 @@ import Sidebar from '../../components/Sidebar.astro';
   </ul>
 
   <h2 id="mcp">MCP（Model Context Protocol）—— Agent 的工具标准</h2>
-  <p>Anthropic 2024 年底提出的 MCP 协议已成为 Agent 工具接入的事实标准。Shopify、Cloudflare、Vercel 等平台都已发布 MCP Server。</p>
+  <p>Anthropic 2024 年底提出的 MCP 协议，已经成为 Agent 工具接入领域采用度很高的开放协议之一。Shopify、Cloudflare、Vercel 等平台都已发布 MCP Server。</p>
   <blockquote>
     <p>MCP 之于 Agent，就像 USB 之于外设——让 Agent 能「即插即用」地接入各种工具。</p>
   </blockquote>
@@ -115,7 +119,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <h2 id="lessons">从 Agent 使用中学到的 5 个教训</h2>
   <ol>
     <li><strong>Agent 需要护栏，不是「放养」。</strong> 给它明确的边界——可以改哪些文件、不能碰哪些目录、需要人工确认的操作类型。</li>
-    <li><strong>AGENTS.md 是 Agent 的「入职手册」。</strong> 在项目根目录创建 AGENTS.md，写清楚项目结构、编码规范、命名约定、测试策略。Agent 会读它。</li>
+    <li><strong>AGENTS.md 是 Agent 的「入职手册」。</strong> 在项目根目录创建 AGENTS.md，写清楚项目结构、编码规范、命名约定、测试策略。多数 Agent 型工具会读取类似项目说明文件，但具体行为因产品而异。</li>
     <li><strong>Agent 对大项目的理解有递减效应。</strong> 超过 5 万行代码的项目，不要让 Agent 一次性理解全部——拆分任务、提供聚焦上下文。</li>
     <li><strong>Agent 写的代码必须经过 review。</strong> 不需要比人写的代码更宽松。有时候甚至应该更严——Agent 容易生成「看起来合理但逻辑有偏差」的代码。</li>
     <li><strong>经验越丰富的开发者从 Agent 中获益越多。</strong> METR 研究（2025 年中）发现，初级开发者用 AI 后可能更慢——因为他们不知道 AI 错在哪。</li>

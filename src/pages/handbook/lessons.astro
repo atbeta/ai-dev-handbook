@@ -3,14 +3,15 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 ---
 
-<MainLayout title="实战经验教训" description="来自真实企业级 AI 协作项目的复盘：7 个坑 → 8 条原则，用代价换来的经验">
+<MainLayout title="项目交付教训" description="来自真实企业级 AI 协作项目的复盘：7 个坑 → 8 条原则，用代价换来的经验">
   <Sidebar currentPath="/handbook/lessons" slot="sidebar" />
-  <h1>实战经验教训</h1>
+  <h1>项目交付教训</h1>
   <div class="meta-line"><span class="tag">实践指南</span> 弱模型 × 大体量 AI 协作开发复盘</div>
 
   <div class="callout info">
     <strong>来源</strong>：一个真实的企业级 AI 协作项目——SE 一次性大需求 → 多端系统（Vue + Java），使用 GLM-4.7 / DeepSeek-4 Flash（量化，1–5 tps，128K 上下文）。<strong>项目体感：早期爽 → 中期慢 → 后期磨。</strong>
   </div>
+  <p>本页关注单个生产级项目的交付复盘；如果你关心“团队试点怎么失败、如何推广”，见 <a href="/strategy/pilot-lessons">试点踩坑实录</a>。</p>
 
   <h2 id="seven-pitfalls">7 个坑（按杀伤力排序）</h2>
   <table>

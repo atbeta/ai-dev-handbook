@@ -51,6 +51,7 @@ const { title, description, showSidebar = true, showToc = true, class: className
         <nav class="main-nav" aria-label="主导航">
           <a href="/research/landscape" class={Astro.url.pathname.startsWith('/research') ? 'active' : ''}>调研</a>
           <a href="/handbook/why" class={Astro.url.pathname.startsWith('/handbook') ? 'active' : ''}>实践指南</a>
+          <a href="/strategy/pilot-playbook" class={Astro.url.pathname.startsWith('/strategy') ? 'active' : ''}>组织推广</a>
           <a href="/templates/spec" class={Astro.url.pathname.startsWith('/templates') ? 'active' : ''}>模板</a>
           <a href="/about" class={Astro.url.pathname === '/about' ? 'active' : ''}>关于</a>
           
@@ -90,7 +91,7 @@ const { title, description, showSidebar = true, showToc = true, class: className
     <footer class="site-footer">
       <div class="container">
         <p>AI Dev Handbook — 让 AI 辅助开发走上工程化轨道</p>
-        <p class="footer-meta">v1.0 · 2026-07 · <a href="https://github.com/atbeta/ai-dev-handbook">GitHub</a></p>
+        <p class="footer-meta">v2.5 · 2026-07 · <a href="https://github.com/atbeta/ai-dev-handbook">GitHub</a></p>
       </div>
     </footer>
   </body>
@@ -151,7 +152,7 @@ const { title, description, showSidebar = true, showToc = true, class: className
     --shadow-md: 0 3px 6px rgba(1, 4, 9, 0.8), 0 1px 2px rgba(1, 4, 9, 0.8);
     
     --bg-grid: linear-gradient(to right, rgba(31, 35, 40, 0.03) 1px, transparent 1px),
-               linear-gradient(to bottom, rgba(31, 35, 40, 0.03) 1px, transparent 1px); 1px, transparent 1px);
+               linear-gradient(to bottom, rgba(31, 35, 40, 0.03) 1px, transparent 1px);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

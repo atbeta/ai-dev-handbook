@@ -1,10 +1,11 @@
 ---
 const { currentPath = '/' } = Astro.props;
 
-// 1) 决定当前激活的顶层 section（与顶导 调研/实践指南/模板 对齐）
+// 1) 决定当前激活的顶层 section（与顶导 调研/实践指南/组织推广/模板 对齐）
 const activeSection = (() => {
   if (currentPath.startsWith('/research')) return 'research';
-  if (currentPath.startsWith('/handbook') || currentPath.startsWith('/strategy')) return 'handbook';
+  if (currentPath.startsWith('/handbook')) return 'handbook';
+  if (currentPath.startsWith('/strategy')) return 'strategy';
   if (currentPath.startsWith('/templates')) return 'templates';
   return null;
 })();
@@ -45,22 +46,22 @@ const isCurrent = (href: string) => currentPath === href;
     </ul>
     <div class="subsection-label">关键技能</div>
     <ul>
-      <li><a href="/research/context-engineering" class={isCurrent('/research/context-engineering') ? 'active' : ''}>上下文工程</a></li>
-      <li><a href="/research/quality-metrics" class={isCurrent('/research/quality-metrics') ? 'active' : ''}>代码质量度量</a></li>
+      <li><a href="/research/context-engineering" class={isCurrent('/research/context-engineering') ? 'active' : ''}>上下文工程（行业视角）</a></li>
+      <li><a href="/research/quality-metrics" class={isCurrent('/research/quality-metrics') ? 'active' : ''}>AI 代码质量度量</a></li>
     </ul>
     <div class="subsection-label">边界与风险</div>
     <ul>
       <li><a href="/research/ai-boundaries" class={isCurrent('/research/ai-boundaries') ? 'active' : ''}>AI 能力边界</a></li>
-      <li><a href="/research/security" class={isCurrent('/research/security') ? 'active' : ''}>安全合规</a></li>
+      <li><a href="/research/security" class={isCurrent('/research/security') ? 'active' : ''}>安全与合规</a></li>
       <li><a href="/research/hard-data" class={isCurrent('/research/hard-data') ? 'active' : ''}>硬数据与事故</a></li>
     </ul>
     <div class="subsection-label">实践参照</div>
     <ul>
       <li><a href="/research/company-cases" class={isCurrent('/research/company-cases') ? 'active' : ''}>大厂案例</a></li>
     </ul>
-    <div class="subsection-label">团队落地</div>
+    <div class="subsection-label">组织与基础设施</div>
     <ul>
-      <li><a href="/research/transformation" class={isCurrent('/research/transformation') ? 'active' : ''}>团队转型路线</a></li>
+      <li><a href="/research/transformation" class={isCurrent('/research/transformation') ? 'active' : ''}>团队转型路线图</a></li>
       <li><a href="/research/infrastructure-impact" class={isCurrent('/research/infrastructure-impact') ? 'active' : ''}>基础设施影响</a></li>
     </ul>
   </details>
@@ -73,12 +74,13 @@ const isCurrent = (href: string) => currentPath === href;
         <span class="summary-label">实践指南</span>
       </span>
     </summary>
-    <div class="subsection-label">Why 入门</div>
+    <div class="subsection-label">入门</div>
     <ul>
       <li><a href="/handbook/why" class={isCurrent('/handbook/why') ? 'active' : ''}>为什么需要这套流程</a></li>
       <li><a href="/handbook/ai-as-amplifier" class={isCurrent('/handbook/ai-as-amplifier') ? 'active' : ''}>AI 是放大器不是工程师</a></li>
+      <li><a href="/handbook/first-task-sop" class={isCurrent('/handbook/first-task-sop') ? 'active' : ''}>第一单 SOP</a></li>
     </ul>
-    <div class="subsection-label">核心工作流</div>
+    <div class="subsection-label">Spec 工程化</div>
     <ul>
       <li><a href="/handbook/workflow" class={isCurrent('/handbook/workflow') ? 'active' : ''}>6 步工作流</a></li>
       <li><a href="/handbook/spec-format" class={isCurrent('/handbook/spec-format') ? 'active' : ''}>Spec 字段规范</a></li>
@@ -86,38 +88,45 @@ const isCurrent = (href: string) => currentPath === href;
       <li><a href="/handbook/lint-protocol" class={isCurrent('/handbook/lint-protocol') ? 'active' : ''}>AI Lint 协议</a></li>
       <li><a href="/handbook/spec-to-code" class={isCurrent('/handbook/spec-to-code') ? 'active' : ''}>Spec 到代码</a></li>
     </ul>
-    <div class="subsection-label">进阶模式</div>
+    <div class="subsection-label">协作模式</div>
     <ul>
       <li><a href="/handbook/contract-first" class={isCurrent('/handbook/contract-first') ? 'active' : ''}>契约优先分工</a></li>
       <li><a href="/handbook/constitution" class={isCurrent('/handbook/constitution') ? 'active' : ''}>Constitution 模式</a></li>
-      <li><a href="/handbook/anti-patterns" class={isCurrent('/handbook/anti-patterns') ? 'active' : ''}>反模式</a></li>
-      <li><a href="/handbook/lessons" class={isCurrent('/handbook/lessons') ? 'active' : ''}>实战经验教训</a></li>
+      <li><a href="/handbook/team-roles" class={isCurrent('/handbook/team-roles') ? 'active' : ''}>团队角色与协作</a></li>
+      <li><a href="/handbook/anti-patterns" class={isCurrent('/handbook/anti-patterns') ? 'active' : ''}>反模式与失败模式</a></li>
+      <li><a href="/handbook/lessons" class={isCurrent('/handbook/lessons') ? 'active' : ''}>项目交付教训</a></li>
     </ul>
-    <div class="subsection-label">工具栈 · 工具体系</div>
+    <div class="subsection-label">工具体系</div>
     <ul>
       <li><a href="/handbook/tool-stack" class={isCurrent('/handbook/tool-stack') ? 'active' : ''}>工具体系地图</a></li>
-      <li><a href="/handbook/context-engineering" class={isCurrent('/handbook/context-engineering') ? 'active' : ''}>上下文工程</a></li>
+      <li><a href="/handbook/context-engineering" class={isCurrent('/handbook/context-engineering') ? 'active' : ''}>上下文工程（工具实践）</a></li>
       <li><a href="/handbook/quality-gate" class={isCurrent('/handbook/quality-gate') ? 'active' : ''}>质量门工具</a></li>
       <li><a href="/handbook/internal-tools" class={isCurrent('/handbook/internal-tools') ? 'active' : ''}>内部工具建设</a></li>
-    </ul>
-    <div class="subsection-label">启动与工具</div>
-    <ul>
-      <li><a href="/handbook/first-task-sop" class={isCurrent('/handbook/first-task-sop') ? 'active' : ''}>第一单 SOP</a></li>
-      <li><a href="/handbook/tools" class={isCurrent('/handbook/tools') ? 'active' : ''}>工具链</a></li>
+      <li><a href="/handbook/tools" class={isCurrent('/handbook/tools') ? 'active' : ''}>工具选型清单</a></li>
     </ul>
     <div class="subsection-label">实战场景</div>
     <ul>
-      <li><a href="/handbook/unfamiliar-codebase" class={isCurrent('/handbook/unfamiliar-codebase') ? 'active' : ''}>不熟项目 + AI</a></li>
-      <li><a href="/handbook/parallel-sessions" class={isCurrent('/handbook/parallel-sessions') ? 'active' : ''}>多会话并行</a></li>
+      <li><a href="/handbook/unfamiliar-codebase" class={isCurrent('/handbook/unfamiliar-codebase') ? 'active' : ''}>不熟项目 + AI 实战</a></li>
+      <li><a href="/handbook/parallel-sessions" class={isCurrent('/handbook/parallel-sessions') ? 'active' : ''}>多 AI 会话并行</a></li>
       <li><a href="/handbook/time-management" class={isCurrent('/handbook/time-management') ? 'active' : ''}>时间管理</a></li>
       <li><a href="/handbook/async-nightly" class={isCurrent('/handbook/async-nightly') ? 'active' : ''}>夜间异步执行</a></li>
       <li><a href="/handbook/docs-sync-strategy" class={isCurrent('/handbook/docs-sync-strategy') ? 'active' : ''}>文档同步策略</a></li>
-      <li><a href="/handbook/team-roles" class={isCurrent('/handbook/team-roles') ? 'active' : ''}>团队角色</a></li>
     </ul>
-    <div class="subsection-label">组织推广</div>
+  </details>
+
+  <details data-section="strategy" data-active={isActive('strategy')} open={isActive('strategy')}>
+    <summary>
+      <span class="summary-left">
+        <span class="arrow" aria-hidden="true"></span>
+        <svg class="summary-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span class="summary-label">组织推广</span>
+      </span>
+    </summary>
+    <div class="subsection-label">试点与推广</div>
     <ul>
-      <li><a href="/strategy/pilot-playbook" class={isCurrent('/strategy/pilot-playbook') ? 'active' : ''}>试点负责人 Playbook</a></li>
+      <li><a href="/strategy/pilot-playbook" class={isCurrent('/strategy/pilot-playbook') ? 'active' : ''}>AI 试点负责人 Playbook</a></li>
       <li><a href="/strategy/pilot-lessons" class={isCurrent('/strategy/pilot-lessons') ? 'active' : ''}>试点踩坑实录</a></li>
+      <li><a href="/research/transformation" class={isCurrent('/research/transformation') ? 'active' : ''}>团队转型路线图</a></li>
     </ul>
   </details>
 

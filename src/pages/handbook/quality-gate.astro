@@ -9,7 +9,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <div class="meta-line"><span class="tag">工具栈</span> Quality Gate · Layer 3</div>
 
   <blockquote>
-    <p>AI 时代最容易犯的错：以为 review 可以"缩水"。事实是反的——AI 让写代码变快，review 反而要<strong>加严</strong>。Churn rate 1.5x 是数据，不是借口。</p>
+    <p>AI 时代最容易犯的错：以为 review 可以"缩水"。事实是反的——AI 让写代码变快，review 反而要<strong>加严</strong>。Churn rate、返工率和事故归因是质量门的预警信号，不是放松审查的借口。</p>
   </blockquote>
 
   <h2 id="principle">质量门的根本原则</h2>
@@ -22,7 +22,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <table>
     <thead><tr><th>工具</th><th>形态</th><th>特点</th></tr></thead>
     <tbody>
-      <tr><td><strong>CodeRabbit</strong></td><td>GitHub App</td><td>市场最成熟，PR 评论质量高，免费层够用</td></tr>
+      <tr><td><strong>CodeRabbit</strong></td><td>GitHub App</td><td>采用度较高，PR 评论质量口碑较好，免费层够用</td></tr>
       <tr><td><strong>Sourcery</strong></td><td>GitHub App + IDE</td><td>Python 生态强</td></tr>
       <tr><td><strong>Qodo</strong></td><td>GitHub App + CLI</td><td>多语言 + 测试生成集成</td></tr>
       <tr><td><strong>GitHub Copilot Code Review</strong></td><td>内置</td><td>GitHub 生态深度集成</td></tr>
@@ -52,7 +52,7 @@ import Sidebar from '../../components/Sidebar.astro';
     <thead><tr><th>工具</th><th>形态</th><th>特点</th></tr></thead>
     <tbody>
       <tr><td><strong>Qodo Gen</strong></td><td>IDE 插件 + CLI</td><td>行为驱动，覆盖率导向</td></tr>
-      <tr><td><strong>CodiumAI</strong></td><td>IDE 插件</td><td>逐函数生成边界测试</td></tr>
+      <tr><td><strong>Qodo / CodiumAI</strong></td><td>IDE 插件</td><td>逐函数生成边界测试，注意产品命名和版本变化</td></tr>
       <tr><td><strong>Diffblue Cover</strong></td><td>CI 集成（Java）</td><td>企业级</td></tr>
       <tr><td><strong>自建 + Lint Prompt</strong></td><td>——</td><td>从 Spec 倒推测试（最稳）</td></tr>
     </tbody>
@@ -75,7 +75,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <table>
     <thead><tr><th>工具</th><th>特点</th></tr></thead>
     <tbody>
-      <tr><td><strong>Snyk DeepCode AI</strong></td><td>OWASP Top 10 自动扫描，AI 建议修复</td></tr>
+      <tr><td><strong>Snyk / DeepCode 能力</strong></td><td>OWASP Top 10 自动扫描，AI 建议修复（以当前产品命名为准）</td></tr>
       <tr><td><strong>Semgrep AI</strong></td><td>开源 + 商业，定制规则强</td></tr>
       <tr><td><strong>Socket</strong></td><td>依赖供应链安全（防 typosquatting）</td></tr>
       <tr><td><strong>Aikido Security</strong></td><td>全栈，包括 IaC 和 secrets</td></tr>
@@ -99,7 +99,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <ol>
     <li>每个 Lint 用<strong>全新会话</strong>（防止上下文污染）</li>
     <li>输入：Spec + 当前 Draft（设计/代码）</li>
-    <li>AI 按 4 段协议评审：<code>契约完整性 / 歧义检测 / 可实现性 / 反模式</code></li>
+    <li>AI 按 4 段协议评审：<code>歧义扫描 / 缺失扫描 / 冲突扫描 / 可执行性扫描</code></li>
     <li>输出结构化反馈：<code>P0 / P1 / P2 / 通过</code></li>
     <li><code>P0 = 0</code> 才允许 Frozen</li>
   </ol>

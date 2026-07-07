@@ -3,16 +3,17 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 ---
 
-<MainLayout title="上下文工程" description="2026 年最实用的 AI 辅助开发技能：如何给 AI 提供高效上下文 - AGENTS.md、Repo Map、MCP 工具接入">
+<MainLayout title="上下文工程（行业视角）" description="AI 辅助开发中的上下文工程：如何给 AI 提供高效上下文 - AGENTS.md、Repo Map、MCP 工具接入">
   <Sidebar currentPath="/research/context-engineering" slot="sidebar" />
-  <h1>上下文工程 (Context Engineering)</h1>
+  <h1>上下文工程（行业视角）</h1>
   <div class="meta-line"><span class="tag">核心技能</span> 2026 年 7 月</div>
 
   <h2 id="what">什么是上下文工程？</h2>
   <blockquote>
     <p>上下文工程是系统性地设计、管理和优化提供给 AI 的上下文信息，以最大化其编程产出质量的实践。</p>
   </blockquote>
-  <p>2026 年，上下文工程被认为是最被低估的 AI 开发技能。Packmind 的研究发现：<strong>优化上下文比优化 prompt 对代码质量的提升大 2-3 倍</strong>。</p>
+  <p>2026 年，上下文工程成为 AI 开发讨论中的高频主题。许多实践观察都指向同一个结论：比起继续打磨单条 prompt，系统性地管理项目结构、约定、任务输入和工具上下文，往往更能稳定提升 AI 产出质量。</p>
+  <p>本页偏行业视角；具体工具落地见 <a href="/handbook/context-engineering">上下文工程（工具实践）</a>。</p>
 
   <h2 id="pyramid">上下文金字塔</h2>
   <table>
@@ -27,7 +28,7 @@ import Sidebar from '../../components/Sidebar.astro';
   </table>
 
   <h2 id="agents-md">AGENTS.md：项目的「AI 入职手册」</h2>
-  <p>AGENTS.md 是上下文工程的核心文件。它位于项目根目录，任何 AI 编码工具（Claude Code、Cursor、Codex）会自动读取。</p>
+  <p>AGENTS.md 是上下文工程的核心文件之一。它通常位于项目根目录，用来给 Agent 型工具提供项目结构、约定和约束；不同工具的读取规则并不完全相同。</p>
 
   <h3>一份好的 AGENTS.md 应该包含</h3>
   <pre><code># AGENTS.md
@@ -84,7 +85,7 @@ import Sidebar from '../../components/Sidebar.astro';
 
   <h2 id="principles">上下文工程的 5 条原则</h2>
   <ol>
-    <li><strong>最小必要原则。</strong> 不是越多越好。Packmind 2026 研究：提供太多上下文反而降低准确性。</li>
+    <li><strong>最小必要原则。</strong> 不是越多越好。上下文过多会稀释注意力，反而降低准确性。</li>
     <li><strong>分层原则。</strong> 全局约定放 AGENTS.md，任务特定信息放 Spec 文档。</li>
     <li><strong>事实性原则。</strong> 写「是什么」不写「应该是什么」。AI 把前者当约束，把后者当建议。</li>
     <li><strong>版本同步原则。</strong> 代码变了，AGENTS.md 和 Repo Map 也要更新。过期上下文比没上下文更危险。</li>
