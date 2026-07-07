@@ -102,9 +102,11 @@ const { title, description, showSidebar = true, showToc = true, class: className
     /* Light Mode */
     --c-bg: #ffffff;
     --c-bg-secondary: #f6f8fa;
+    --c-header-bg: rgba(246, 248, 250, 0.8);
     --c-bg-tertiary: #f3f4f6;
     --c-border: #d0d7de;
     --c-border-strong: #afb8c1;
+    --c-divider: rgba(31, 35, 40, 0.08);
     --c-text: #1f2328;
     --c-text-secondary: #656d76;
     --c-text-muted: #8c959f;
@@ -134,9 +136,11 @@ const { title, description, showSidebar = true, showToc = true, class: className
     /* Dark Mode */
     --c-bg: #0d1117;
     --c-bg-secondary: #161b22;
+    --c-header-bg: rgba(22, 27, 34, 0.8);
     --c-bg-tertiary: #1c2128;
     --c-border: #30363d;
     --c-border-strong: #484f58;
+    --c-divider: rgba(240, 246, 252, 0.08);
     --c-text: #e6edf3;
     --c-text-secondary: #8b949e;
     --c-text-muted: #6e7681;
@@ -187,18 +191,14 @@ const { title, description, showSidebar = true, showToc = true, class: className
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(var(--c-bg-secondary), 0.8);
-    border-bottom: 1px solid var(--c-border);
+    background: var(--c-header-bg);
+    border-bottom: 1px solid var(--c-divider);
     height: var(--header-height);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: var(--shadow-sm);
   }
   
-  /* Fallback for bg transparency */
-  html.dark .site-header { background: rgba(22, 27, 34, 0.8); }
-  html:not(.dark) .site-header { background: rgba(246, 248, 250, 0.8); }
-
   .site-header .container {
     max-width: var(--max-width);
     margin: 0 auto;
@@ -275,7 +275,7 @@ const { title, description, showSidebar = true, showToc = true, class: className
     margin: 0 auto;
     width: 100%;
     background: var(--c-bg);
-    box-shadow: 0 0 0 1px var(--c-border);
+    box-shadow: none;
   }
 
   /* Sidebar */
@@ -283,23 +283,16 @@ const { title, description, showSidebar = true, showToc = true, class: className
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
     padding: 0 14px 24px 20px;
-    border-right: 1px solid var(--c-border);
+    border-right: 1px solid var(--c-divider);
     position: sticky;
     top: var(--header-height);
     height: calc(100vh - var(--header-height));
     overflow-y: auto;
     overflow-x: hidden;
     background: var(--c-bg);
-    scrollbar-width: thin;
-    scrollbar-color: var(--c-border) transparent;
+    scrollbar-width: none;
   }
-  .sidebar::-webkit-scrollbar { width: 6px; height: 6px; }
-  .sidebar::-webkit-scrollbar-track { background: transparent; }
-  .sidebar::-webkit-scrollbar-thumb {
-    background: var(--c-border);
-    border-radius: 3px;
-  }
-  .sidebar:hover::-webkit-scrollbar-thumb { background: var(--c-text-muted); }
+  .sidebar::-webkit-scrollbar { width: 0; height: 0; }
 
   .sidebar-nav {
     font-size: 0.86rem;
@@ -460,7 +453,7 @@ const { title, description, showSidebar = true, showToc = true, class: className
     margin-top: 48px;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-divider);
   }
   .content h3 {
     font-size: 1.25rem;
@@ -600,15 +593,17 @@ const { title, description, showSidebar = true, showToc = true, class: className
   .toc-sidebar {
     width: var(--toc-width);
     min-width: var(--toc-width);
-    padding: 32px 24px 32px 16px;
+    padding: 32px 18px 32px 18px;
     position: sticky;
     top: var(--header-height);
     height: calc(100vh - var(--header-height));
     overflow-y: auto;
-    border-left: 1px solid var(--c-border);
+    border-left: 1px solid var(--c-divider);
     font-size: 0.82rem;
     background: var(--c-bg);
+    scrollbar-width: none;
   }
+  .toc-sidebar::-webkit-scrollbar { width: 0; height: 0; }
   .toc-title {
     font-weight: 600;
     margin-bottom: 12px;
@@ -619,10 +614,9 @@ const { title, description, showSidebar = true, showToc = true, class: className
   }
   .toc-list a {
     display: block;
-    padding: 4px 8px;
+    padding: 5px 10px;
     border-radius: 4px;
     color: var(--c-text-secondary);
-    border-left: 2px solid transparent;
     transition: all 0.15s;
     margin-bottom: 2px;
   }
@@ -630,7 +624,6 @@ const { title, description, showSidebar = true, showToc = true, class: className
   .toc-list a.active {
     color: var(--c-text);
     background: var(--c-bg-tertiary);
-    border-left-color: var(--c-accent);
     text-decoration: none;
   }
 
