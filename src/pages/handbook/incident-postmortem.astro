@@ -1,0 +1,155 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="事故复盘与 AI 协作" description="生产事故响应、根因分析与复盘文档——AI 可辅助整理，但不能替代判断与问责">
+  <Sidebar currentPath="/handbook/incident-postmortem" slot="sidebar" />
+  <h1>事故复盘与 AI 协作</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> <span class="tag">运维</span> <span class="tag">复盘</span></div>
+
+  <blockquote>
+    <p>事故复盘的目标不是找替罪羊，而是让同类失败不再发生。AI 能快速整理时间线和日志，但根因判断、责任归属和改进优先级，必须有人承担。</p>
+  </blockquote>
+
+  <div class="callout info">
+    <strong>四问速览</strong>
+    <ul>
+      <li><strong>工程环节</strong>：发布与运维 · 事故响应与持续改进</li>
+      <li><strong>AI 增强</strong>：日志聚合、时间线草稿、相似事故检索、改进项归类、文档初稿</li>
+      <li><strong>人类必须</strong>：事故指挥、止损决策、根因裁定、改进项优先级、对外沟通</li>
+      <li><strong>质量门</strong>：复盘文档经参与方确认；改进项有 owner + 截止日期；AI 归因须人工验证</li>
+    </ul>
+  </div>
+
+  <h2 id="scope">事故 vs 项目教训：边界说明</h2>
+  <table>
+    <thead><tr><th>页面</th><th>关注点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>本页</strong></td><td>生产运行时事故——上线后、用户或业务已受影响</td></tr>
+      <tr><td><a href="/handbook/lessons">项目交付教训</a></td><td>单个生产级项目的交付过程复盘</td></tr>
+      <tr><td><a href="/strategy/pilot-lessons">试点复盘案例</a></td><td>团队 AI 试点推广中的组织层复盘</td></tr>
+      <tr><td><a href="/research/hard-data">硬数据与事故</a></td><td>行业公开事故与数据（外部参照）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="response">事故响应阶段</h2>
+  <pre class="ascii-flow">{`检测  →  止血  →  恢复  →  复盘`}</pre>
+
+  <table>
+    <thead><tr><th>阶段</th><th>人类职责</th><th>AI 可辅助</th></tr></thead>
+    <tbody>
+      <tr><td><strong>检测</strong></td><td>确认严重性、启动 Oncall</td><td>告警聚合、异常模式提示</td></tr>
+      <tr><td><strong>止血</strong></td><td>回滚 / 降级 / 限流决策</td><td>执行步骤提醒（不自动执行）</td></tr>
+      <tr><td><strong>恢复</strong></td><td>验证服务恢复、对外通报</td><td>生成状态页更新草稿</td></tr>
+      <tr><td><strong>复盘</strong></td><td>主持复盘会、裁定根因</td><td>整理时间线、日志摘要</td></tr>
+    </tbody>
+  </table>
+  <p>止血阶段直接衔接 <a href="/handbook/release-rollback">发布与回滚预案</a>。事故期间遵守 <a href="/handbook/team-roles">团队角色</a> 红线：<strong>禁止 AI 自动执行生产变更</strong>。</p>
+
+  <h2 id="ai-usage">AI 在事故中的正确用法</h2>
+  <h3>适合</h3>
+  <ul>
+    <li>从分散日志拼接时间线草稿</li>
+    <li>检索历史相似 incident、相关 PR 或 Spec</li>
+    <li>起草 postmortem 文档结构</li>
+    <li>将会议记录结构化为 action items</li>
+  </ul>
+  <h3>不适合</h3>
+  <ul>
+    <li>自动判定根因（易产生幻觉、误导追责方向）</li>
+    <li>代替人工阅读关键日志与监控曲线</li>
+    <li>生成对外公告未经审核即发布</li>
+  </ul>
+  <p>上下文工程要点：向 AI 提供<strong>已验证</strong>的日志片段与时间戳，而非让其自行「猜测」全量现场。</p>
+
+  <h2 id="ai-anti-patterns">AI 在事故中的错误用法</h2>
+  <table>
+    <thead><tr><th>反模式</th><th>防范措施</th></tr></thead>
+    <tbody>
+      <tr><td>让 AI 写根因结论，人类只签字</td><td>根因须由参与工程师陈述 + 证据支撑，AI 文稿仅作整理</td></tr>
+      <tr><td>AI 生成的「修复 PR」未经 review 直接合并</td><td>事故 hotfix 适用更严 review，不适用「赶时间跳过」</td></tr>
+      <tr><td>复盘文档由 AI 凭空生成，参与人未确认</td><td>复盘会结束前，各方确认时间线与改进项</td></tr>
+      <tr><td>把行业个案当「小概率」而不改流程</td><td>参照 <a href="/research/hard-data">硬数据与事故</a>，更新 Checklist 与质量门</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="postmortem-template">复盘文档结构</h2>
+  <p>以下模板可直接复制使用。稳定后可考虑抽到独立模板页。</p>
+  <pre><code>{`# Postmortem · [事故标题] · [日期]
+
+## 摘要（一段话，非技术可读）
+## 影响（用户 / 时长 / 范围）
+## 时间线（精确到分钟，注明时区）
+## 根因（区分「直接原因」与「系统性原因」）
+## 为何未提前发现（监控 / 测试 / 评审缺口）
+## AI 参与情况（哪些环节用了 AI，是否构成因素）
+## 改进项（owner + 截止日期 + 验证方式）
+## 附录（关键日志、链接）`}</code></pre>
+
+  <p><strong>AI 辅助标注</strong>：摘要草稿、时间线整理、改进项归类适合 AI 起草；根因裁定、影响评估、对外口径必须由人撰写并确认。</p>
+
+  <h2 id="ai-incidents">AI 相关事故的专项分析</h2>
+  <p>以下为<strong>常见模式</strong>，非行业统计结论：</p>
+  <table>
+    <thead><tr><th>类型</th><th>识别信号</th><th>复盘时要问的 3 个问题</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>AI 生成代码引入缺陷</td>
+        <td>变更含大段 AI 产出、review 时间短</td>
+        <td>高风险路径是否逐行 review？质量门是否被跳过？</td>
+      </tr>
+      <tr>
+        <td>AI 误操作（删库、错误配置）</td>
+        <td>Agent 具备写权限、无人工确认环节</td>
+        <td>权限边界是否合理？参照 Replit 类案例是否已设防？</td>
+      </tr>
+      <tr>
+        <td>过度信任 AI review</td>
+        <td>「AI 已看过」作为放行理由</td>
+        <td>Reviewer 是否独立验证？业务验收是否执行？</td>
+      </tr>
+      <tr>
+        <td>夜间异步产物未充分验收即发布</td>
+        <td>变更来自 <a href="/handbook/async-nightly">夜间异步</a> 队列</td>
+        <td>是否绕过发布 Checklist？谁签字放行？</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="blameless">复盘会议纪律</h2>
+  <ul>
+    <li><strong>Blameless</strong>：聚焦系统与流程缺陷，而非个人追责——个人责任由管理层在流程外处理</li>
+    <li><strong>参与角色</strong>：Incident Commander、相关 Engineer、Release Manager；视情况邀请 PM</li>
+    <li><strong>AI 可辅助</strong>：会前材料、会中记录；<strong>不可替代</strong>主持人和根因裁定</li>
+    <li><strong>改进项</strong>：必须可验证，禁止「加强意识」「多注意」类空项</li>
+  </ul>
+
+  <h2 id="to-process">从事故到流程改进</h2>
+  <p>改进项应回流到可执行资产，而非停留在 Wiki：</p>
+  <ul>
+    <li>Spec / Checklist 更新 → <a href="/templates/checklist">流程 Checklist</a></li>
+    <li>质量门调整 → <a href="/handbook/quality-gate">质量门工具</a></li>
+    <li>发布纪律 → <a href="/handbook/release-rollback">发布与回滚预案</a></li>
+    <li>试点推广教训 → <a href="/strategy/pilot-lessons">试点复盘案例</a></li>
+    <li>内部 Wiki 模板 → <a href="/handbook/internal-tools">内部工具建设</a></li>
+  </ul>
+
+  <h2 id="metrics">度量</h2>
+  <p>以下为<strong>团队待校准</strong>指标：</p>
+  <ul>
+    <li>MTTR（平均恢复时间）</li>
+    <li>同类事故复发率</li>
+    <li>事故归因中 AI 相关占比（须有人工标注口径）</li>
+    <li>改进项在截止日期内的完成率</li>
+  </ul>
+
+  <h2 id="related">相关章节</h2>
+  <ul>
+    <li><a href="/handbook/release-rollback">发布与回滚预案</a></li>
+    <li><a href="/research/hard-data">硬数据与事故</a></li>
+    <li><a href="/handbook/lessons">项目交付教训</a></li>
+    <li><a href="/handbook/anti-patterns">反模式与失败模式</a></li>
+    <li><a href="/handbook/async-nightly">夜间异步执行</a></li>
+  </ul>
+</MainLayout>

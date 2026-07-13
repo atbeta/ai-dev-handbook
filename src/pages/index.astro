@@ -14,9 +14,9 @@ import MainLayout from '../layouts/MainLayout.astro';
     <span class="sb-item sb-dot sb-green"></span>
     <span class="sb-item">~/projects/ai-dev-handbook</span>
     <span class="sb-item sb-sep">·</span>
-    <span class="sb-item">v2.7</span>
+    <span class="sb-item">v2.8</span>
     <span class="sb-item sb-sep">·</span>
-    <span class="sb-item">51 pages</span>
+    <span class="sb-item">53 pages</span>
     <span class="sb-item sb-sep">·</span>
     <span class="sb-item">last commit: 2026-07-14</span>
   </div>
@@ -41,7 +41,7 @@ import MainLayout from '../layouts/MainLayout.astro';
  / ___ \| |  | |_| | |__ \ /    
 /_/   \_\___||____/|____| \_/   
                                 
-      Dev Handbook · v2.7 · 51 pages
+      Dev Handbook · v2.8 · 53 pages
 `}</pre>
       <div class="term-line">
         <span class="term-prompt">$</span>
@@ -59,13 +59,142 @@ import MainLayout from '../layouts/MainLayout.astro';
         <div class="term-log">[<span class="log-ok">✓</span>] handbook/       loaded (methods + scenarios)</div>
         <div class="term-log">[<span class="log-ok">✓</span>] strategy/       loaded (pilot playbook + lessons)</div>
         <div class="term-log">[<span class="log-ok">✓</span>] templates/      loaded (9 reusable templates)</div>
-        <div class="term-log term-em">[<span class="log-ok">→</span>] ready. navigate: <a href="#paths">see reading paths</a></div>
+        <div class="term-log term-em">[<span class="log-ok">→</span>] ready. navigate: <a href="#pipeline">delivery pipeline</a></div>
       </div>
     </div>
   </section>
-  <!-- Core insights as numbered log lines -->
+
+  <!-- Production delivery pipeline: the spine of the whole site -->
+  <section class="section" id="pipeline">
+    <h2 class="sec-h2"><span class="sec-bracket">[</span> delivery-pipeline --stages=7 <span class="sec-bracket">]</span></h2>
+    <p class="pipeline-lead">
+      一个目标：<strong>用 AI 辅助把生产级项目做出来、交付上线、长期维护</strong>。
+      下面这条主线把全站内容串成一条从需求到运维的交付链路——人负责判断与验收，AI 负责放大执行。带
+      <span class="stage-todo">待补</span> 的环节是已规划、内容尚未补齐的部分。
+    </p>
+    <div class="pipeline">
+      <div class="stage">
+        <div class="stage-head">
+          <span class="stage-num">01</span>
+          <div class="stage-title">
+            <strong>判断与边界</strong>
+            <span class="stage-sub">先想清楚哪些该交给 AI、哪些必须人来扛</span>
+          </div>
+        </div>
+        <div class="stage-links">
+          <a href="/research/landscape">行业全景图</a>
+          <a href="/research/ai-boundaries">AI 能力边界</a>
+          <a href="/research/vibe-vs-spec">Vibe vs Spec</a>
+          <a href="/research/hard-data">硬数据与事故</a>
+          <a href="/research/full-stack-trend-2026">全栈化趋势</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head">
+          <span class="stage-num">02</span>
+          <div class="stage-title">
+            <strong>Spec 工程化</strong>
+            <span class="stage-sub">把模糊需求写成可验证的合同，供给正确上下文</span>
+          </div>
+        </div>
+        <div class="stage-links">
+          <a href="/handbook/why">为什么需要这套流程</a>
+          <a href="/handbook/workflow">6 步工作流</a>
+          <a href="/handbook/spec-format">Spec 字段规范</a>
+          <a href="/handbook/clarification">澄清循环</a>
+          <a href="/handbook/lint-protocol">AI Lint 协议</a>
+          <a href="/handbook/context-engineering">上下文工程</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head">
+          <span class="stage-num">03</span>
+          <div class="stage-title">
+            <strong>协作与分工</strong>
+            <span class="stage-sub">定义人机边界、契约与多角色协作方式</span>
+          </div>
+        </div>
+        <div class="stage-links">
+          <a href="/handbook/contract-first">契约优先分工</a>
+          <a href="/handbook/constitution">Constitution 模式</a>
+          <a href="/handbook/team-roles">团队角色与协作</a>
+          <a href="/handbook/why-spec-driven-dev">Spec-Driven-Dev 定位</a>
+          <a href="/research/openspec-in-production">OpenSpec 生产调优</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head">
+          <span class="stage-num">04</span>
+          <div class="stage-title">
+            <strong>场景执行</strong>
+            <span class="stage-sub">在真实项目里落地：第一单、陌生代码库、并行与异步</span>
+          </div>
+        </div>
+        <div class="stage-links">
+          <a href="/handbook/first-task-sop">第一单 SOP</a>
+          <a href="/handbook/unfamiliar-codebase">陌生代码库协作</a>
+          <a href="/handbook/parallel-sessions">多 AI 会话并行</a>
+          <a href="/handbook/async-nightly">夜间异步执行</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head">
+          <span class="stage-num">05</span>
+          <div class="stage-title">
+            <strong>质量门与验收</strong>
+            <span class="stage-sub">交付前的硬约束：质量门、反模式、失败复盘</span>
+          </div>
+        </div>
+        <div class="stage-links">
+          <a href="/handbook/quality-gate">质量门工具</a>
+          <a href="/handbook/anti-patterns">反模式与失败模式</a>
+          <a href="/handbook/lessons">项目交付教训</a>
+          <a href="/templates/checklist">流程 Checklist</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head">
+          <span class="stage-num">06</span>
+          <div class="stage-title">
+            <strong>发布与运维</strong>
+            <span class="stage-sub">上线、回滚、事故复盘与文档同步——生产级的后半程</span>
+          </div>
+        </div>
+        <div class="stage-links">
+          <a href="/handbook/docs-sync-strategy">文档同步策略</a>
+          <a href="/handbook/release-rollback">发布与回滚预案</a>
+          <a href="/handbook/incident-postmortem">事故复盘与 AI 协作</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-head">
+          <span class="stage-num">07</span>
+          <div class="stage-title">
+            <strong>组织推广与持续追踪</strong>
+            <span class="stage-sub">从试点到长期机制，并持续追踪工具与行业变化</span>
+          </div>
+        </div>
+        <div class="stage-links">
+          <a href="/strategy/pilot-playbook">试点负责人 Playbook</a>
+          <a href="/strategy/pilot-lessons">试点复盘案例</a>
+          <a href="/handbook/full-stack-team-model">全员全栈团队模式</a>
+          <a href="/research/transformation">团队转型路线图</a>
+          <a href="/handbook/tool-stack">工具体系地图</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core beliefs behind the pipeline -->
   <section class="section">
-    <h2 class="sec-h2"><span class="sec-bracket">[</span> insights --top=8 <span class="sec-bracket">]</span></h2>
+    <h2 class="sec-h2"><span class="sec-bracket">[</span> core-beliefs --top=8 <span class="sec-bracket">]</span></h2>
+    <p class="pipeline-lead">支撑上面这条主线的 8 条核心判断——它们解释了每个环节「为什么必须这么做」。</p>
     <div class="insights-grid">
       <div class="insight-card">
         <div class="ic-header">
@@ -228,7 +357,7 @@ import MainLayout from '../layouts/MainLayout.astro';
       <a href="/handbook/why" class="btn-secondary">看实践指南 →</a>
       <a href="https://github.com/atbeta/ai-dev-handbook" class="btn-ghost">GitHub →</a>
     </div>
-    <p class="cta-foot">v2.7 · 51 pages · updated 2026-07-14 · 内容来自真实项目 + 行业调研 + 风险信号</p>
+    <p class="cta-foot">v2.8 · 53 pages · updated 2026-07-14 · 内容来自真实项目 + 行业调研 + 风险信号</p>
   </section>
 </MainLayout>
 
@@ -331,6 +460,78 @@ import MainLayout from '../layouts/MainLayout.astro';
     gap: 8px;
   }
   .sec-bracket { color: var(--c-accent); font-weight: 300; }
+
+  /* ========== Delivery pipeline ========== */
+  .pipeline-lead {
+    font-size: 0.95rem;
+    color: var(--c-text-secondary);
+    line-height: 1.7;
+    margin: -8px 0 24px;
+    max-width: 780px;
+  }
+  .pipeline-lead .stage-todo { margin: 0 2px; }
+  .pipeline { display: flex; flex-direction: column; gap: 12px; }
+  .stage {
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+  }
+  .stage:hover {
+    border-color: var(--c-border-strong);
+    box-shadow: var(--shadow-md);
+  }
+  .stage-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .stage-num {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--c-accent);
+    background: var(--c-accent-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .stage-title { display: flex; flex-direction: column; gap: 2px; }
+  .stage-title strong { font-size: 1.02rem; color: var(--c-text); }
+  .stage-sub { font-size: 0.82rem; color: var(--c-text-muted); }
+  .stage-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    padding-left: 2px;
+  }
+  .stage-links a {
+    color: var(--c-accent);
+    text-decoration: none;
+    padding: 3px 8px;
+    background: var(--c-accent-bg);
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .stage-links a:hover {
+    background: var(--c-accent);
+    color: var(--c-bg);
+  }
+  .stage-todo {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: var(--c-text-muted);
+    background: var(--c-bg-tertiary);
+    border: 1px dashed var(--c-border);
+  }
 
   /* ========== Insights grid ========== */
   .insights-grid {

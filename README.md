@@ -25,6 +25,22 @@ AI Dev Handbook 是一份面向生产级软件开发的 AI 辅助工程化指南
 
 > AI 是放大器，不是工程师。放大清晰的工程过程会提高质量，放大模糊的流程只会更快地产生返工。Spec、上下文和质量门，是 AI 辅助生产级开发的三根主梁。
 
+## 生产交付主线
+
+上面的六段主线是内容组织维度。在首页，它被表达为一条更贴近实际交付的「生产交付主线」，把全站页面串成从需求到运维的七个阶段。新增内容应优先能挂到其中某个阶段；缺口用「待补」标记，而不是留白或硬凑。
+
+```text
+01 判断与边界   -> landscape / ai-boundaries / vibe-vs-spec / hard-data / full-stack-trend-2026
+02 Spec 工程化  -> why / workflow / spec-format / clarification / lint-protocol / context-engineering
+03 协作与分工   -> contract-first / constitution / team-roles / why-spec-driven-dev / openspec-in-production
+04 场景执行     -> first-task-sop / unfamiliar-codebase / parallel-sessions / async-nightly
+05 质量门与验收 -> quality-gate / anti-patterns / lessons / templates/checklist
+06 发布与运维   -> docs-sync-strategy / release-rollback / incident-postmortem
+07 组织推广追踪 -> pilot-playbook / pilot-lessons / full-stack-team-model / transformation / tool-stack
+```
+
+当前阶段 06（发布、回滚、事故复盘）已补齐基础 SOP；后续可按团队实践深化模板与度量口径。
+
 ## 内容地图
 
 ```text

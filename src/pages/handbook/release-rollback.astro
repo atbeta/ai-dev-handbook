@@ -1,0 +1,170 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="发布与回滚预案" description="AI 辅助变更的上线前检查、发布决策与回滚纪律——生产级交付的后半程 SOP">
+  <Sidebar currentPath="/handbook/release-rollback" slot="sidebar" />
+  <h1>发布与回滚预案</h1>
+  <div class="meta-line"><span class="tag">实践指南</span> <span class="tag">SOP</span> <span class="tag">发布运维</span></div>
+
+  <blockquote>
+    <p>代码合并 ≠ 可上线。AI 让变更更快产出，也让「未经充分验证就发布」的风险被放大。发布决策和回滚执行，必须留在人类职责内。</p>
+  </blockquote>
+
+  <div class="callout info">
+    <strong>四问速览</strong>
+    <ul>
+      <li><strong>工程环节</strong>：发布与运维 · 变更上线</li>
+      <li><strong>AI 增强</strong>：生成 release notes、变更影响摘要、回滚步骤草稿、配置 diff 说明</li>
+      <li><strong>人类必须</strong>：Go/No-Go 决策、生产权限、回滚触发、对外沟通</li>
+      <li><strong>质量门</strong>：发布 Checklist 全绿 + Release Manager 签字 + 回滚预案可执行</li>
+    </ul>
+  </div>
+
+  <h2 id="why">为什么 AI 时代更要强调发布纪律</h2>
+  <p>AI 放大的是执行速度，不是验证完备度。CI 全绿只说明自动化检查通过，不代表业务影响已被充分评估。</p>
+  <p>与 <a href="/handbook/team-roles">团队角色</a> 的三条红线一致：<strong>AI 不许决定「可上线」</strong>，Release Manager 必须是人。与 <a href="/handbook/first-task-sop">第一单 SOP</a> 中「可回滚」的选型标准相同——发布环节是同一原则在交付终点的落实。</p>
+
+  <h3>常见反模式</h3>
+  <ul>
+    <li>把「CI 绿了」等同于「可上线」</li>
+    <li>大批量 AI 生成变更合并后，没有逐条评估影响面</li>
+    <li>从未演练过的回滚预案，事故时才发现无法执行</li>
+    <li>夜间异步产物未经白天验收，直接排入发布窗口</li>
+  </ul>
+
+  <h2 id="readiness">发布就绪的定义</h2>
+  <p>发布就绪分三层，任一层未满足则禁止上线：</p>
+  <table>
+    <thead><tr><th>层级</th><th>检查项</th><th>谁验</th></tr></thead>
+    <tbody>
+      <tr><td><strong>代码就绪</strong></td><td>测试、lint、安全扫描、Spec 同步</td><td>CI + Reviewer</td></tr>
+      <tr><td><strong>变更就绪</strong></td><td>影响面、依赖、数据迁移、Feature Flag</td><td>Engineer + Release Manager</td></tr>
+      <tr><td><strong>运维就绪</strong></td><td>监控、告警、runbook、回滚路径</td><td>Release Manager / Oncall</td></tr>
+    </tbody>
+  </table>
+  <p><a href="/handbook/quality-gate">质量门</a>是发布前的硬约束，不是可选项。<a href="/handbook/docs-sync-strategy">文档同步策略</a>要求 L1 自动生成文档不得漂移，L2 任务级 Spec 须与本次变更同 PR 更新。</p>
+
+  <h2 id="pre-release-checklist">发布前 Checklist</h2>
+  <p>以下清单聚焦「合并后 → 上线前」。完整工作流打卡见 <a href="/templates/checklist">流程 Checklist</a>。</p>
+
+  <h3>Spec 与契约</h3>
+  <ul>
+    <li>☐ Frozen Spec 与本次变更范围一致</li>
+    <li>☐ 验收标准可逐条验证</li>
+    <li>☐ 契约 / 接口变更已通知依赖方</li>
+  </ul>
+
+  <h3>测试与验证</h3>
+  <ul>
+    <li>☐ 单元测试与集成测试通过</li>
+    <li>☐ 关键业务路径已手工验证</li>
+    <li>☐ 数据迁移脚本已在预发环境演练</li>
+  </ul>
+
+  <h3>可观测性</h3>
+  <ul>
+    <li>☐ 新 metrics / 日志 / trace 已配置</li>
+    <li>☐ 告警阈值已设定并通知 Oncall</li>
+    <li>☐ 发布窗口内有人值守观察</li>
+  </ul>
+
+  <h3>安全与合规</h3>
+  <ul>
+    <li>☐ 权限变更、密钥轮换已评审</li>
+    <li>☐ 审计要求已满足</li>
+  </ul>
+
+  <h3>AI 变更专项</h3>
+  <ul>
+    <li>☐ 变更含 AI 生成代码时，高风险路径已人工逐行 review</li>
+    <li>☐ 夜间异步产物（见 <a href="/handbook/async-nightly">夜间异步执行</a>）已单独验收，未绕过上述检查</li>
+  </ul>
+
+  <div class="admonition danger">
+    <div class="admonition-title">质量门</div>
+    <p>任一项「阻塞级」未通过 → 禁止发布。Release Manager 对 Go/No-Go 负最终责任。</p>
+  </div>
+
+  <h2 id="strategies">发布策略选型</h2>
+  <p>策略选择取决于变更风险与回滚成本，不由 AI 自动决定：</p>
+  <table>
+    <thead><tr><th>策略</th><th>适用场景</th><th>回滚特点</th></tr></thead>
+    <tbody>
+      <tr><td>直接发布</td><td>低风险、可快速 revert 的变更</td><td>依赖代码回滚，速度快</td></tr>
+      <tr><td>蓝绿 / 金丝雀</td><td>核心路径、用户面大的变更</td><td>流量切换，需基础设施支持</td></tr>
+      <tr><td>Feature Flag</td><td>功能可先暗发、后放量</td><td>关闭开关即可止血，不改代码</td></tr>
+    </tbody>
+  </table>
+  <p>AI 可辅助：根据 PR diff 推荐策略并列出风险点——<strong>人类拍板</strong>。Ops 思维与可观测性要求见 <a href="/handbook/full-stack-team-model">全员全栈团队模式</a> §4.3。本页不展开具体云平台或 K8s 操作教程。</p>
+
+  <h2 id="rollback">回滚预案</h2>
+  <p>每次非 trivial 变更应附带可执行的回滚预案。与 <a href="/handbook/spec-to-code">Spec 到代码</a>「每片可独立回滚」原则一致。</p>
+
+  <h3>回滚三要素</h3>
+  <ul>
+    <li><strong>触发条件</strong>：什么指标或现象下必须回滚</li>
+    <li><strong>执行步骤</strong>：谁、按什么顺序、做什么</li>
+    <li><strong>验证标准</strong>：回滚后如何确认服务已恢复</li>
+  </ul>
+
+  <h3>回滚预案模板</h3>
+  <pre><code>{`## 回滚预案 · [变更 ID]
+
+- 触发条件：（错误率 > X / 核心功能不可用 / …）
+- 回滚方式：（代码 revert / DB 迁移逆向 / Flag 关闭 / …）
+- 执行人：（必须是人，写明角色）
+- 预计耗时：
+- 回滚后验证：（3–5 条可观测检查）
+- 无法回滚时的降级方案：`}</code></pre>
+
+  <p>AI 可根据 PR diff 起草回滚步骤，<strong>人类必须验证在预发或演练环境中可执行</strong>。反模式：把 <code>git revert</code> 当作唯一手段，却未考虑数据迁移或外部依赖。</p>
+
+  <h2 id="ai-boundary">发布中的 AI 协作边界</h2>
+  <table>
+    <thead><tr><th>允许</th><th>禁止</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>生成 release notes、变更日志、对内通知草稿</td>
+        <td>自动触发生产部署</td>
+      </tr>
+      <tr>
+        <td>汇总多 PR 的影响面说明</td>
+        <td>自动决定灰度比例或放量节奏</td>
+      </tr>
+      <tr>
+        <td>对照 Spec 检查遗漏项</td>
+        <td>无人值守发布、绕过 Checklist</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="post-release">发布后的 24 小时</h2>
+  <ul>
+    <li><strong>观察窗口</strong>：错误率、延迟、核心业务指标——与发布前基线对比</li>
+    <li><strong>文档同步</strong>：按 <a href="/handbook/docs-sync-strategy">文档同步策略</a> 更新 L2/L3 文档</li>
+    <li><strong>小问题 hotfix vs 回滚</strong>：影响面扩大或根因不明 → 优先回滚；孤立、可隔离的小缺陷 → 可评估 hotfix</li>
+    <li><strong>若构成事故</strong>：转入 <a href="/handbook/incident-postmortem">事故复盘与 AI 协作</a> 流程</li>
+  </ul>
+
+  <h2 id="metrics">度量与改进</h2>
+  <p>以下为<strong>团队经验值 / 待校准阈值</strong>，不宜直接写成行业事实：</p>
+  <ul>
+    <li>发布成功率（按发布窗口统计）</li>
+    <li>回滚次数与回滚耗时</li>
+    <li>MTTR（从发现问题到恢复）</li>
+    <li>AI 变更占比 vs 事故归因中 AI 相关比例</li>
+  </ul>
+  <p>度量模板见 <a href="/templates/metrics">度量模板</a>；质量信号定义见 <a href="/research/quality-metrics">AI 代码质量度量</a>。</p>
+
+  <h2 id="related">相关章节</h2>
+  <ul>
+    <li><a href="/handbook/team-roles">团队角色与协作</a></li>
+    <li><a href="/handbook/quality-gate">质量门工具</a></li>
+    <li><a href="/handbook/docs-sync-strategy">文档同步策略</a></li>
+    <li><a href="/handbook/incident-postmortem">事故复盘与 AI 协作</a></li>
+    <li><a href="/handbook/lessons">项目交付教训</a></li>
+    <li><a href="/research/hard-data">硬数据与事故</a></li>
+  </ul>
+</MainLayout>
