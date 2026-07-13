@@ -1,0 +1,193 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="为什么需要 spec-driven-dev" description="spec-driven-dev 与 OpenSpec、Spec Kit 的区别：流程层而非工具层；为企业评审会议而设计；不是替代 SDD 工具，而是企业流程到 SDD 生态的桥梁">
+  <Sidebar currentPath="/handbook/why-spec-driven-dev" slot="sidebar" />
+  <h1>为什么需要 spec-driven-dev</h1>
+  <div class="meta-line">
+    <span class="tag">工具定位</span>
+    <span class="tag">Why</span>
+  </div>
+
+  <blockquote>
+    <p>我们不是另一个 SDD 工具。<strong>我们是流程层</strong>——把企业的评审会议、串讲、反串讲、并行追踪编码到 AI agent 里，输出兼容 OpenSpec 生态。</p>
+  </blockquote>
+
+  <h2 id="positioning">一句话定位</h2>
+  <p>市面上的 SDD 工具（OpenSpec / Spec Kit / BMAD / Kiro）都解决了"如何把 spec 写好"的问题。<strong>spec-driven-dev 解决的是"如何让企业既有的评审流程跑在 SDD 之上"</strong>——也就是说，我们不替代它们，我们作为它们在企业里的入口层。</p>
+
+  <h2 id="stack-layers">AI 辅助研发栈的分层</h2>
+  <p>把整个栈拆开看，每一层各有专注。spec-driven-dev 占的是<strong>流程层</strong>——这一层之前是空的。</p>
+
+  <table>
+    <thead><tr><th>层</th><th>代表工具</th><th>关注点</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>哲学层</strong></td>
+        <td>OpenSpec / Spec Kit / BMAD / Kiro</td>
+        <td>SSOT、Delta、RFC 2119、Scenarios 四件套的共识</td>
+      </tr>
+      <tr>
+        <td><strong>工具层</strong></td>
+        <td>OpenSpec CLI / Spec Kit CLI</td>
+        <td>文档格式校验、archive、跨版本追溯</td>
+      </tr>
+      <tr>
+        <td><strong>流程层（我们）</strong></td>
+        <td><strong>spec-driven-dev</strong></td>
+        <td>把企业评审会议 / 串讲 / 反串讲 / 三件套 gate 编码到 AI agent</td>
+      </tr>
+      <tr>
+        <td><strong>Agent 编排层</strong></td>
+        <td>oh-my-opencode / Claude Code</td>
+        <td>subagent / MCP / 工具栈</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="why-existing-falls-short">为什么现成的 SDD 工具在企业里落地难</h2>
+  <p>OpenSpec 等工具的设计前提是 <strong>"fluid ordering"</strong>：spec 改起来很轻，按需增量、按需 archive。这对个人项目和实验项目完美，但对<strong>有评审会议文化的企业</strong>来说有几个不对的地方：</p>
+
+  <ul>
+    <li><strong>没有显式 gate</strong>：企业里有需求串讲、设计评审、测试评审，每次评审都有会议纪要 / 决议 / 行动项。OpenSpec 的 <code>validate</code> 是语法校验，不是评审会议协议。</li>
+    <li><strong>没编码并行</strong>：企业里"特性设计 ⫽ 测试设计"是常事，但 OpenSpec 把每个 change proposal 当作独立文件夹，<strong>没有显式的"等两边都完成才进下一阶段"语义</strong>。</li>
+    <li><strong>仪式感一刀切</strong>：每个 change 都跑同样的流程，"半天能搞定的小权限调整"也得跑全套，<strong>劝退的根源</strong>。</li>
+    <li><strong>AI 评审意见可能杜撰</strong>：把"AI 合评审意见"这件事做得不留痕，会让企业担心 AI 凭空生成 reviewer 发言。</li>
+  </ul>
+
+  <h2 id="what-we-do-uniquely">我们做了什么独有的</h2>
+
+  <h3 id="tier-system">1. 三档 Tier 系统（Lite / Standard / Full）</h3>
+  <p>不同规模的 feature 走不同深度的流程——这是其他 SDD 工具都没讲的：</p>
+
+  <table>
+    <thead><tr><th>Tier</th><th>适用</th><th>Stage 数</th><th>Gate 数</th><th>仪式时间</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Lite</strong></td><td>半天小工具、内部权限、UI 修复</td><td>3</td><td>1</td><td>~45 min + 实跑</td></tr>
+      <tr><td><strong>Standard</strong></td><td>1-2 周中型业务功能</td><td>9 + 并行</td><td>3</td><td>~3 小时 + 实跑</td></tr>
+      <tr><td><strong>Full</strong></td><td>跨团队 / 合规关键 / 需要 ADR</td><td>Standard + ADR/C4</td><td>Standard</td><td>Standard + 跨团队</td></tr>
+    </tbody>
+  </table>
+
+  <p>底层逻辑：<strong>feature 规模决定仪式深度，不是模板决定写什么</strong>。这是对"AI 是放大器"理论的工程化——放大清晰的工程过程会提高质量，放大模糊的流程只会更快产生返工。</p>
+
+  <h3 id="three-piece-review">2. 三件套评审协议 + 反杜撰铁律</h3>
+  <p>评审会议开法是结构化的：</p>
+
+  <ol>
+    <li><strong>议程</strong>（参与人 + 时长 + 重点议题）—— 人写</li>
+    <li><strong>checklist</strong>（业务/技术/测试/合规四维度自检）—— 人写</li>
+    <li><strong>会注</strong>（会议原始记录）—— 人写</li>
+    <li>AI 综合上述输入 → 生成 <strong>resolution.md</strong>（决议 + 行动项）</li>
+  </ol>
+
+  <p><strong>铁律：AI 严禁杜撰 reviewer 意见</strong>。如果某 reviewer 没提供具体意见，resolution 里只能用 <code>[待补充：需 XX 提供意见]</code> 占位，绝不假装提了。这条铁律是反幻觉的工程化——比 OpenSpec 的 <code>validate</code> 更进一步，对的是<strong>会议协议的可信度</strong>，不是文档格式。</p>
+
+  <h3 id="parallel-stages">3. 显式并行分支追踪（state.md 单文件）</h3>
+  <p>企业流程的并行很常见：</p>
+
+  <ul>
+    <li>特性设计 ⫽ 测试设计（同一阶段两个 owner 各做各的）</li>
+    <li>设计评审 ⫽ 测试评审（评审会议节奏可并行）</li>
+  </ul>
+
+  <p>我们的 <code>state.md</code> 单文件承载机读 YAML frontmatter + 人读 markdown body：</p>
+
+  <pre><code class="language-yaml">---
+slug: auth-refactor
+tier: standard
+status: in_progress
+current_stage: 03-feature-design
+parallel_active: [03, 05]
+stages:
+  - id: 01-requirements-analysis
+    status: completed
+  - id: 03-feature-design
+    status: in_progress
+    parallel_with: [05]
+  - id: 05-test-design
+    status: in_progress
+    parallel_with: [03]
+---</code></pre>
+
+  <p>机器读 frontmatter 用于编排（"等 03 和 05 都 done 才进 04"），人读 body 用于状态汇报。<strong>OpenSpec 用 <code>.openspec/</code> 目录 + CLI，我们用单文件——agent orchestrator 友好</strong>。</p>
+
+  <h3 id="openspec-bridge">4. OpenSpec 兼容（非竞争）</h3>
+  <p>我们的 stage 9 验收通过后，<strong>自动把 spec 切片到 <code>.openspec/specs/&amp;lt;slug&amp;gt;/spec.md</code></strong>——格式完全符合 OpenSpec markdown 规范。外部协作者可以用：</p>
+
+  <pre><code class="language-bash">openspec list
+openspec show &lt;feature&gt;
+openspec validate &lt;feature&gt; --strict</code></pre>
+
+  <p><strong>我们的成果是他们生态的输入</strong>。这是合作的姿态，不是替代。</p>
+
+  <h2 id="when-to-use">什么时候该用我们</h2>
+
+  <h3 id="use-this">✅ 用我们的场景</h3>
+  <ul>
+    <li>你的企业有评审会议 / 串讲 / 反串讲文化——我们需要它</li>
+    <li>团队对"AI 生成的评审意见是否可信"有顾虑——三件套反杜撰协议直接解决</li>
+    <li>feature 大小差异大（半天小工具 ~ 跨季度大项目）—— Tier 系统解决</li>
+    <li>想让外部协作者 / 外包用 OpenSpec CLI 读你的 spec——stage 9 自动切片</li>
+    <li>你用 OpenClaw / Cursor / Claude Code 之类的 agent，需要 agent 作为流程编排者而不是 CLI 用户</li>
+  </ul>
+
+  <h3 id="dont-use-this">❌ 不适合用我们的场景</h3>
+  <ul>
+    <li>Solo / 副项目 / 实验 → 直接 OpenSpec / Spec Kit</li>
+    <li>没有评审会议文化的团队 → 我们的 9 stage 是 over-engineering</li>
+    <li>想要成熟 CLI / 跨版本 archive / 多语言生态 → OpenSpec 更稳</li>
+    <li>团队不在 OpenClaw / 类似 agent 生态里 → 我们是 skill，不是独立工具</li>
+  </ul>
+
+  <h2 id="comparison-table">对比矩阵</h2>
+  <table>
+    <thead>
+      <tr><th>维度</th><th>OpenSpec</th><th>Spec Kit</th><th>BMAD</th><th>spec-driven-dev</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>SDD 哲学四件套</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+      <tr><td>Requirement + Scenario 文档格式</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+      <tr><td>CLI / 校验 / archive</td><td>✅ 强</td><td>✅</td><td>❌</td><td>❌（不重做）</td></tr>
+      <tr><td>多 Agent 角色（analyst/PM/dev/qa...）</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td></tr>
+      <tr><td><strong>9 stage + 3 gate 企业流程编码</strong></td><td>❌</td><td>❌（prescribed phases）</td><td>❌</td><td><strong>✅</strong></td></tr>
+      <tr><td><strong>三件套评审协议 + 反杜撰</strong></td><td>❌</td><td>❌</td><td>❌</td><td><strong>✅</strong></td></tr>
+      <tr><td><strong>Tier 系统（feature 规模决定仪式）</strong></td><td>❌</td><td>❌</td><td>❌</td><td><strong>✅</strong></td></tr>
+      <tr><td><strong>并行分支状态追踪</strong></td><td>❌（间接）</td><td>❌</td><td>❌</td><td><strong>✅ state.md</strong></td></tr>
+      <tr><td><strong>OpenSpec 兼容 publish</strong></td><td>N/A</td><td>❌</td><td>❌</td><td><strong>✅</strong></td></tr>
+      <tr><td>成熟度 / 社区</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐（v3.0）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="honest-weaknesses">我们没做什么（坦白）</h2>
+  <ul>
+    <li><strong>CLI 工具</strong>——OpenSpec 最强。我们不重做。</li>
+    <li><strong>跨版本 archive / 长期追溯</strong>——OpenSpec 最成熟。</li>
+    <li><strong>大社区 / 多语言支持</strong>——我们刚上线 v3.0。</li>
+    <li><strong>非 OpenClaw 生态</strong>——我们是 skill bundle，不独立运行。</li>
+  </ul>
+
+  <h2 id="migration">如何从 OpenSpec / Spec Kit 迁移过来</h2>
+  <ol>
+    <li>把你现有的 spec.md 复制到 <code>features/&amp;lt;slug&amp;gt;/requirements-v0.1.md</code></li>
+    <li>初始化 <code>state.md</code>（参考 <a href="https://github.com/atbeta/spec-driven-dev/blob/main/examples/state-standard.example.md">examples/state-standard.example.md</a>）</li>
+    <li>tier 字段根据 feature 规模填 lite / standard / full</li>
+    <li>进 stage 1，让 agent 引导填接下来的 stage</li>
+    <li>stage 9 通过后，成果切片回 <code>.openspec/specs/&amp;lt;slug&amp;gt;/</code>，外部协作者无缝衔接</li>
+  </ol>
+
+  <h2 id="related">相关阅读</h2>
+  <ul>
+    <li><a href="/handbook/why">为什么需要这套流程</a> — AI 放大器心智模型</li>
+    <li><a href="/handbook/workflow">6 步工作流</a> — 模糊需求 → Frozen Spec</li>
+    <li><a href="/handbook/spec-format">Spec 字段规范</a> — 13 字段格式（中文工业流程）</li>
+    <li><a href="/handbook/quality-gate">质量门工具</a> — 3 道闸门心智模型</li>
+    <li><a href="/research/openspec-in-production">OpenSpec 在生产中的调教</a> — 如何把 OpenSpec 配置成你企业需要的形态</li>
+    <li><a href="/research/agent-ecosystem">Coding Agent 生态全景</a> — 上下游工具图谱</li>
+  </ul>
+
+  <h2 id="repo">项目仓库</h2>
+  <p><a href="https://github.com/atbeta/spec-driven-dev">github.com/atbeta/spec-driven-dev</a> —— MIT 协议，欢迎 issue / PR。</p>
+</MainLayout>
