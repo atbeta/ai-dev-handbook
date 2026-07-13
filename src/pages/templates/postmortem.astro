@@ -1,0 +1,93 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="事故复盘模板" description="可直接复制的 Postmortem 模板——时间线、根因、AI 参与情况与可验证改进项">
+  <Sidebar currentPath="/templates/postmortem" slot="sidebar" />
+  <h1>事故复盘模板</h1>
+  <div class="meta-line"><span class="tag">模板</span> Blameless · 目标是同类失败不再发生</div>
+
+  <p>→ 方法与纪律见 <a href="/handbook/incident-postmortem">事故复盘与 AI 协作</a>；发布前的防线见 <a href="/handbook/release-rollback">发布与回滚预案</a>。</p>
+
+  <div class="callout info">
+    <strong>使用说明</strong>
+    <ul>
+      <li>整份文档目标是<strong>可复制、可归档、可回查</strong>，不是问责记录。</li>
+      <li>标注 <code>[AI 可起草]</code> 的段落适合让 AI 整理初稿；其余段落必须由人撰写并确认。</li>
+      <li>「改进项」缺 owner 或截止日期视为未完成，不得合入归档。</li>
+    </ul>
+  </div>
+
+  <h2 id="template">复盘文档模板</h2>
+<pre><code>{`# Postmortem · [事故标题] · [YYYY-MM-DD]
+
+> 状态：草稿 / 待确认 / 已归档
+> 严重级别：SEV1 / SEV2 / SEV3
+> Incident Commander：[姓名]
+> 参与人：[Engineer / Release Manager / PM ...]
+
+## 1. 摘要  [AI 可起草]
+用一段非技术读者也能看懂的话，说明发生了什么、影响多大、已恢复。
+
+## 2. 影响
+- 受影响用户 / 系统：
+- 持续时长：[开始] ~ [恢复]
+- 业务影响：（订单 / 收入 / SLA / 数据一致性 ...）
+
+## 3. 时间线（注明时区）  [AI 可起草]
+| 时间 | 事件 | 来源（日志 / 告警 / 人工） |
+|------|------|---------------------------|
+| 00:00 | 变更上线 |  |
+| 00:00 | 告警触发 |  |
+| 00:00 | 开始止血 |  |
+| 00:00 | 服务恢复 |  |
+
+## 4. 根因
+- 直接原因：（触发故障的那一步）
+- 系统性原因：（为什么这个问题有机会发生 / 流程缺口）
+
+## 5. 为何未提前发现
+- 监控缺口：
+- 测试缺口：
+- 评审 / 质量门缺口：
+
+## 6. AI 参与情况
+- 本次变更是否含 AI 生成代码：是 / 否
+- AI 是否参与事故处理：（日志整理 / 检索 / 无）
+- AI 是否构成事故因素：（如是，说明是「生成缺陷 / 误操作 / 过度信任 review」哪一类）
+
+## 7. 改进项
+| # | 改进项 | 类型（Spec / 质量门 / 发布 / 监控） | Owner | 截止日期 | 验证方式 |
+|---|--------|-------------------------------------|-------|----------|----------|
+| 1 |        |                                     |       |          |          |
+
+## 8. 附录
+- 关键日志片段：
+- 相关 PR / Commit：
+- 相关既往事故：`}</code></pre>
+
+  <h2 id="review-checklist">复盘会前检查</h2>
+<pre><code>[ ] 时间线已整理（AI 初稿 + 人工校对）
+[ ] 关键日志已由人工阅读，不只依赖 AI 摘要
+[ ] 根因区分了「直接原因」与「系统性原因」
+[ ] AI 参与情况已如实记录
+[ ] 每条改进项都有 owner + 截止日期 + 验证方式
+[ ] 无「加强意识 / 多注意」类不可验证空项
+[ ] 参与方已确认时间线与改进项</code></pre>
+
+  <h2 id="improvement-routing">改进项回流去向</h2>
+  <table>
+    <thead><tr><th>改进类型</th><th>回流到</th></tr></thead>
+    <tbody>
+      <tr><td>Spec / 验收清单</td><td><a href="/templates/checklist">流程 Checklist</a></td></tr>
+      <tr><td>质量门阈值</td><td><a href="/handbook/quality-gate">质量门工具</a></td></tr>
+      <tr><td>发布 / 回滚纪律</td><td><a href="/handbook/release-rollback">发布与回滚预案</a></td></tr>
+      <tr><td>度量口径</td><td><a href="/templates/metrics">度量模板</a></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout success">
+    <strong>心态提示</strong>：Blameless 不是「不追责」，而是把追责留给管理层在流程外处理，让复盘会专注于系统与流程缺陷。只有这样，参与者才愿意如实还原现场。
+  </div>
+</MainLayout>
