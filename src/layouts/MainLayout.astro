@@ -1,7 +1,13 @@
 ---
 import 'prismjs/themes/prism-tomorrow.css';
+import { getGuide, getNeighbors } from '../data/reading-guide';
 
 const { title, description, showSidebar = true, showToc = true, class: className } = Astro.props;
+
+const pathname = Astro.url.pathname;
+const guide = getGuide(pathname);
+const { prev, next, current } = getNeighbors(pathname);
+const hasChapterNav = Boolean(prev || next);
 ---
 
 <!DOCTYPE html>
@@ -75,7 +81,46 @@ const { title, description, showSidebar = true, showToc = true, class: className
       )}
       <main class="main-content">
         <article class="content">
+          {guide && (
+            <aside class="page-guide" aria-label="本页导读">
+              <span class="pg-badge">本页导读</span>
+              <dl class="pg-grid">
+                <div class="pg-row">
+                  <dt>适合谁读</dt>
+                  <dd>{guide.audience}</dd>
+                </div>
+                <div class="pg-row">
+                  <dt>读完能做什么</dt>
+                  <dd>{guide.outcome}</dd>
+                </div>
+                {current && next && (
+                  <div class="pg-row">
+                    <dt>下一步</dt>
+                    <dd><a href={next.path}>{next.label}</a></dd>
+                  </div>
+                )}
+              </dl>
+            </aside>
+          )}
           <slot />
+          {hasChapterNav && (
+            <nav class="chapter-nav" aria-label="上一章 / 下一章">
+              {prev ? (
+                <a class="chapter-link chapter-prev" href={prev.path}>
+                  <span class="cn-dir">← 上一章</span>
+                  <span class="cn-label">{prev.label}</span>
+                  <span class="cn-stage">{prev.stage}</span>
+                </a>
+              ) : <span class="chapter-link chapter-empty" aria-hidden="true"></span>}
+              {next ? (
+                <a class="chapter-link chapter-next" href={next.path}>
+                  <span class="cn-dir">下一章 →</span>
+                  <span class="cn-label">{next.label}</span>
+                  <span class="cn-stage">{next.stage}</span>
+                </a>
+              ) : <span class="chapter-link chapter-empty" aria-hidden="true"></span>}
+            </nav>
+          )}
         </article>
       </main>
       {Astro.props.showToc !== false && (
@@ -463,6 +508,96 @@ const { title, description, showSidebar = true, showToc = true, class: className
   }
   .page-wrapper.index-layout .content {
     max-width: 100%;
+  }
+
+  /* ===== Page guide card (本页导读) ===== */
+  .page-guide {
+    margin-bottom: 28px;
+    padding: 14px 16px;
+    border: 1px solid var(--c-border);
+    border-left: 3px solid var(--c-accent);
+    border-radius: 8px;
+    background: var(--c-bg-secondary);
+  }
+  .pg-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 8px;
+  }
+  .pg-grid { margin: 0; }
+  .pg-row {
+    display: flex;
+    gap: 12px;
+    padding: 3px 0;
+  }
+  .pg-row dt {
+    flex: 0 0 84px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--c-text-muted);
+  }
+  .pg-row dd {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--c-text-secondary);
+    line-height: 1.5;
+  }
+  .pg-row dd a { color: var(--c-accent); text-decoration: none; }
+  .pg-row dd a:hover { text-decoration: underline; }
+
+  /* ===== Chapter nav (上一章 / 下一章) ===== */
+  .chapter-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--c-divider);
+  }
+  .chapter-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    text-decoration: none;
+    background: var(--c-bg-secondary);
+    transition: all 0.2s ease;
+  }
+  a.chapter-link:hover {
+    border-color: var(--c-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .chapter-next { text-align: right; }
+  .chapter-empty {
+    border: none;
+    background: transparent;
+    pointer-events: none;
+  }
+  .cn-dir {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--c-text-muted);
+  }
+  .cn-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--c-accent);
+  }
+  .cn-stage {
+    font-size: 0.75rem;
+    color: var(--c-text-muted);
+  }
+  @media (max-width: 600px) {
+    .chapter-nav { grid-template-columns: 1fr; }
+    .chapter-next { text-align: left; }
+    .chapter-empty { display: none; }
   }
 
   /* Typography */
