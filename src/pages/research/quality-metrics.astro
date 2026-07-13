@@ -1,6 +1,7 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
+import StatBar from '../../components/StatBar.astro';
 ---
 
 <MainLayout title="AI 代码质量度量" description="AI 生成代码的质量如何度量？从 SWE-bench、churn rate、bug 率和开发者信任度建立团队指标">
@@ -12,14 +13,24 @@ import Sidebar from '../../components/Sidebar.astro';
   <p>传统指标（测试覆盖率、lint 通过率）在 AI 时代严重不够用。因为 AI 可以「过测试」但行为错，AI 代码可以「看起来漂亮」但逻辑有漏洞。</p>
 
   <h2 id="benchmarks">基准测试：从 HumanEval 到 SWE-bench</h2>
+  <StatBar
+    caption="顶级模型得分对比（2026，口径随评测变化）"
+    items={[
+      { label: 'HumanEval', value: 92, display: '90%+', note: '独立函数生成 · 已饱和', tier: 'sat' },
+      { label: 'MBPP', value: 85, display: '85%+', note: 'Python 基础编程 · 近饱和', tier: 'sat' },
+      { label: 'SWE-bench Verified', value: 45, display: '~45%', note: '真实 GitHub Issue 修复', tier: 'high', highlight: true },
+      { label: 'SWE-bench Multilingual', value: 30, display: '~30%', note: '多语言 Issue 修复', tier: 'high' },
+      { label: 'AgentBench', value: 30, display: '~30%', note: '多步骤 Agent 任务', tier: 'high' },
+    ]}
+  />
   <table>
-    <thead><tr><th>基准</th><th>测试内容</th><th>难度</th><th>顶级模型得分 (2026)</th></tr></thead>
+    <thead><tr><th>基准</th><th>测试内容</th><th>难度</th></tr></thead>
     <tbody>
-      <tr><td>HumanEval</td><td>独立函数生成</td><td>低</td><td>90%+（已饱和）</td></tr>
-      <tr><td>MBPP</td><td>Python 基础编程</td><td>低</td><td>85%+（近饱和）</td></tr>
-      <tr><td>SWE-bench Verified</td><td>真实 GitHub Issue 修复</td><td><strong>高</strong></td><td>头部模型约 40-50%（随日期和口径变化）</td></tr>
-      <tr><td>SWE-bench Multilingual</td><td>多语言 Issue 修复</td><td>很高</td><td>~30%</td></tr>
-      <tr><td>AgentBench</td><td>多步骤 Agent 任务</td><td>很高</td><td>~25-35%</td></tr>
+      <tr><td>HumanEval</td><td>独立函数生成</td><td>低</td></tr>
+      <tr><td>MBPP</td><td>Python 基础编程</td><td>低</td></tr>
+      <tr><td>SWE-bench Verified</td><td>真实 GitHub Issue 修复</td><td><strong>高</strong></td></tr>
+      <tr><td>SWE-bench Multilingual</td><td>多语言 Issue 修复</td><td>很高</td></tr>
+      <tr><td>AgentBench</td><td>多步骤 Agent 任务</td><td>很高</td></tr>
     </tbody>
   </table>
   <div class="admonition warning">
@@ -34,6 +45,19 @@ import Sidebar from '../../components/Sidebar.astro';
     <p>如果 AI 生成代码的 churn rate（提交后 3 周内被修改的比例）持续显著高于人工代码基准，说明 AI 代码占比、Spec 质量或 review 强度需要重新校准。</p>
   </blockquote>
   <p>可先用 <code>1.3x</code> 作为保守观察线、<code>1.5x</code> 作为预警线，再按团队历史数据调整。</p>
+  <StatBar
+    caption="Churn Rate 阈值参考（团队待校准，非行业事实）"
+    max={1.6}
+    unit="×"
+    items={[
+      { label: '人工代码基准', value: 1.0, display: '1.0×', tier: 'low' },
+      { label: 'AI 代码示例（超观察线）', value: 1.45, display: '1.45×', tier: 'mid', highlight: true },
+    ]}
+    thresholds={[
+      { value: 1.3, label: '观察线 1.3×', kind: 'observe' },
+      { value: 1.5, label: '预警线 1.5×', kind: 'warn' },
+    ]}
+  />
 
   <h3>2. 开发者信任度下降趋势</h3>
   <p>公开开发者调查反复显示：AI 工具普及率上升，并不自动等于开发者对输出准确性更信任。</p>

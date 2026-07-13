@@ -1,6 +1,7 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
+import FlowSteps from '../../components/FlowSteps.astro';
 ---
 
 <MainLayout title="6 步转换工作流" description="拿到模糊需求到 Frozen Spec 的完整 6 步工作流">
@@ -9,12 +10,18 @@ import Sidebar from '../../components/Sidebar.astro';
   <div class="meta-line"><span class="tag">实践指南</span> 模糊需求 → Frozen Spec</div>
 
   <h2 id="overview">整体节奏</h2>
-  <pre><code>Step 1. 收集原始素材        ← 别加工，先收齐
-Step 2. 逐句断句            ← 把叙述切成原子命题
-Step 3. 按模板填空          ← 用 13 字段套
-Step 4. AI 反向核对         ← 防止 spec 与原始需求脱节
-Step 5. AI 4 段 Lint + 裁决 ← 防止 spec 自身有瑕疵
-Step 6. 冻结签字            ← 进入设计阶段</code></pre>
+  <FlowSteps
+    layout="vertical"
+    caption="模糊需求 → Frozen Spec"
+    steps={[
+      { title: '收集原始素材', sub: '别加工，先收齐', tag: 'input' },
+      { title: '逐句断句', sub: '把叙述切成原子命题' },
+      { title: '按模板填空', sub: '用 13 字段套' },
+      { title: 'AI 反向核对', sub: '防止 spec 与原始需求脱节' },
+      { title: 'AI 4 段 Lint + 裁决', sub: '防止 spec 自身有瑕疵' },
+      { title: '冻结签字', sub: '进入设计阶段', tag: 'gate' },
+    ]}
+  />
 
   <h2 id="step1">Step 1: 收集原始素材</h2>
   <p>必须收集：原始需求描述、涉及的源项目代码/文档、相关方名单、已知依赖系统、现有 REQ、法规/合规要求、时间/预算约束、「绝对不能做」清单。</p>
