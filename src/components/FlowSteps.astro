@@ -19,18 +19,19 @@ const { steps, layout = 'horizontal', caption } = Astro.props;
   <ol class="flow-list">
     {steps.map((step, i) => (
       <li class="flow-item">
+        <div class="flow-rail" aria-hidden="true">
+          <span class="flow-node">{String(i + 1).padStart(2, '0')}</span>
+        </div>
         <div class="flow-card">
-          <span class="flow-num">{String(i + 1).padStart(2, '0')}</span>
           <div class="flow-body">
+            <span class="flow-hnum" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <strong class="flow-title">{step.title}</strong>
             {step.sub && <span class="flow-sub">{step.sub}</span>}
-            {step.tag && <span class="flow-tag">{step.tag}</span>}
           </div>
+          {step.tag && <span class="flow-tag">{step.tag}</span>}
         </div>
-        {i < steps.length - 1 && (
-          <span class="flow-arrow" aria-hidden="true">
-            {layout === 'vertical' ? '↓' : '→'}
-          </span>
+        {layout === 'horizontal' && i < steps.length - 1 && (
+          <span class="flow-arrow" aria-hidden="true">→</span>
         )}
       </li>
     ))}
@@ -47,7 +48,7 @@ const { steps, layout = 'horizontal', caption } = Astro.props;
     font-family: var(--font-mono);
     font-size: 0.78rem;
     color: var(--c-text-muted);
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .flow-caption::before { content: '# '; color: var(--c-accent); }
@@ -56,125 +57,167 @@ const { steps, layout = 'horizontal', caption } = Astro.props;
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px 0;
   }
 
+  /* ===== Vertical: timeline with connecting spine ===== */
   .flow-vertical .flow-list {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-  }
-
-  .flow-item {
     display: flex;
-    align-items: center;
-    flex: 0 1 auto;
+    flex-direction: column;
   }
   .flow-vertical .flow-item {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 14px;
+  }
+  .flow-vertical .flow-item:last-child { padding-bottom: 0; }
+
+  .flow-vertical .flow-rail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  /* connecting line from this node down to the next */
+  .flow-vertical .flow-item:not(:last-child) .flow-rail::after {
+    content: '';
+    position: absolute;
+    top: 36px;
+    bottom: -14px;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--c-border-strong), var(--c-border));
   }
 
+  .flow-node {
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--c-accent);
+    background: var(--c-bg);
+    border: 1.5px solid var(--c-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px var(--c-bg), 0 0 10px var(--c-accent-bg);
+  }
+
+  /* ===== Horizontal: cards with arrows ===== */
+  .flow-horizontal .flow-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 8px 0;
+  }
+  .flow-horizontal .flow-item {
+    display: flex;
+    align-items: stretch;
+    flex: 1 1 0;
+    min-width: 130px;
+  }
+  .flow-horizontal .flow-rail {
+    display: none;
+  }
+  .flow-horizontal .flow-card {
+    flex: 1;
+    flex-direction: column;
+  }
+  .flow-horizontal .flow-node { display: none; }
+
+  /* ===== Shared card ===== */
   .flow-card {
     display: flex;
     align-items: flex-start;
+    justify-content: space-between;
     gap: 10px;
-    padding: 12px 14px;
+    padding: 12px 15px;
     background: var(--c-bg-secondary);
     border: 1px solid var(--c-border);
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     min-width: 0;
   }
+  .flow-vertical .flow-card { flex: 1; }
   .flow-card:hover {
-    border-color: var(--c-border-strong);
+    border-color: var(--c-accent);
     box-shadow: var(--shadow-md);
-  }
-
-  .flow-horizontal .flow-card {
-    min-width: 120px;
-    max-width: 200px;
-  }
-  .flow-vertical .flow-card {
-    width: 100%;
-    max-width: 520px;
-  }
-
-  .flow-num {
-    flex-shrink: 0;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--c-accent);
-    background: var(--c-accent-bg);
-    padding: 2px 7px;
-    border-radius: 4px;
-    line-height: 1.4;
+    transform: translateY(-1px);
   }
 
   .flow-body {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
     min-width: 0;
   }
-  .flow-title {
-    font-size: 0.92rem;
-    color: var(--c-text);
-    line-height: 1.35;
-  }
-  .flow-sub {
-    font-size: 0.78rem;
-    color: var(--c-text-muted);
-    line-height: 1.4;
-  }
-  .flow-tag {
-    display: inline-block;
-    margin-top: 2px;
+  /* number chip shown only in horizontal cards (vertical uses rail node) */
+  .flow-hnum {
+    display: none;
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: var(--c-text-secondary);
-    background: var(--c-bg-tertiary);
-    border: 1px solid var(--c-border);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--c-accent);
+    background: var(--c-accent-bg);
     padding: 1px 6px;
     border-radius: 3px;
     width: fit-content;
   }
+  .flow-horizontal .flow-hnum { display: inline-block; }
+  .flow-title {
+    font-size: 0.95rem;
+    color: var(--c-text);
+    line-height: 1.35;
+  }
+  .flow-sub {
+    font-size: 0.8rem;
+    color: var(--c-text-muted);
+    line-height: 1.45;
+  }
+  .flow-tag {
+    flex-shrink: 0;
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--c-accent);
+    background: var(--c-accent-bg);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .flow-horizontal .flow-tag { margin-top: 4px; }
 
   .flow-arrow {
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
     font-family: var(--font-mono);
-    font-size: 1rem;
-    color: var(--c-text-muted);
-    padding: 0 8px;
+    font-size: 1.1rem;
+    color: var(--c-accent);
+    padding: 0 6px;
     user-select: none;
-  }
-  .flow-vertical .flow-arrow {
-    padding: 4px 0 4px 18px;
-    align-self: flex-start;
+    opacity: 0.7;
   }
 
   @media (max-width: 640px) {
     .flow-horizontal .flow-list {
       flex-direction: column;
-      align-items: stretch;
     }
     .flow-horizontal .flow-item {
       flex-direction: column;
-      align-items: stretch;
-    }
-    .flow-horizontal .flow-card {
-      max-width: none;
+      min-width: 0;
     }
     .flow-horizontal .flow-arrow {
-      padding: 4px 0 4px 18px;
-      align-self: flex-start;
+      justify-content: flex-start;
+      padding: 4px 0 4px 20px;
+      transform: rotate(90deg);
+      transform-origin: left center;
     }
   }
 </style>

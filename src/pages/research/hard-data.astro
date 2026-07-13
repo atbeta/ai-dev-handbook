@@ -1,6 +1,8 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
+import FlowSteps from '../../components/FlowSteps.astro';
+import StatBar from '../../components/StatBar.astro';
 ---
 
 <MainLayout title="硬数据与真实事故" description="MIT 95% 失败率、CodeRabbit 1.7x、Replit 删库——来自业界的量化数据和真实事故">
@@ -42,14 +44,17 @@ import Sidebar from '../../components/Sidebar.astro';
   <h2 id="coderabbit">CodeRabbit 报告：AI 代码问题数 1.7x</h2>
   <p><strong>来源</strong>：CodeRabbit <em>State of AI vs Human Code Generation Report</em>（2025-12，470 个开源 PR 分析）</p>
 
-  <table>
-    <thead><tr><th>指标</th><th>AI vs 人类</th></tr></thead>
-    <tbody>
-      <tr><td>AI co-authored PR 包含的问题数</td><td><strong>1.7x</strong> 人类 PR</td></tr>
-      <tr><td>逻辑错误和正确性问题</td><td><strong>+75%</strong></td></tr>
-      <tr><td>安全漏洞</td><td><strong>2.74x</strong></td></tr>
-    </tbody>
-  </table>
+  <StatBar
+    caption="AI co-authored PR 相对人类 PR 的问题倍数（人类基准 = 1.0×）"
+    max={3}
+    unit="×"
+    items={[
+      { label: '人类 PR 基准', value: 1.0, display: '1.0×', tier: 'low' },
+      { label: '问题总数', value: 1.7, display: '1.7×', tier: 'mid', highlight: true },
+      { label: '逻辑/正确性问题', value: 1.75, display: '+75%', tier: 'mid' },
+      { label: '安全漏洞', value: 2.74, display: '2.74×', tier: 'high' },
+    ]}
+  />
 
   <div class="callout warning">
     <strong>注意</strong>：CodeRabbit 分析的 PR 大概率使用 GPT-4 级别模型。如果你用的是更弱的模型，问题数可能更高。
@@ -58,15 +63,14 @@ import Sidebar from '../../components/Sidebar.astro';
   <h2 id="stackoverflow">Stack Overflow 2025 调查：信任度下降</h2>
   <p><strong>来源</strong>：Stack Overflow <em>2025 Developer Survey</em></p>
 
-  <table>
-    <thead><tr><th>指标</th><th>数据</th></tr></thead>
-    <tbody>
-      <tr><td>AI 工具普及率</td><td><strong>84%</strong>（几乎标配）</td></tr>
-      <tr><td>开发者好感度趋势</td><td><strong>70%+ → 60%</strong>（下降）</td></tr>
-      <tr><td>对 AI 输出准确性信任</td><td><strong>40% → 29%</strong>（下降）</td></tr>
-      <tr><td>调试 AI 代码时间超预期</td><td><strong>66%</strong> 开发者</td></tr>
-    </tbody>
-  </table>
+  <StatBar
+    caption="Stack Overflow 2025 开发者调查：用了 ≠ 满意"
+    items={[
+      { label: 'AI 工具普及率', value: 84, display: '84%', note: '几乎标配', tier: 'sat' },
+      { label: '对 AI 输出准确性信任', value: 29, display: '40%→29%', note: '同比下降', tier: 'high', highlight: true },
+      { label: '调试 AI 代码时间超预期', value: 66, display: '66%', note: '成本被低估', tier: 'mid' },
+    ]}
+  />
 
   <p>核心趋势：<strong>用了 ≠ 满意</strong>。全行业正在经历「AI 编码祛魅」——AI 是工具，不是万能方案；调试 AI 代码的成本被严重低估。</p>
 
@@ -105,11 +109,15 @@ import Sidebar from '../../components/Sidebar.astro';
   <p><strong>来源</strong>：快手技术团队公开分享（2026 年初万字长文）</p>
 
   <h3>关键时间线</h3>
-  <ul>
-    <li><strong>第 1 年</strong>：全面推广 AI 编码工具，代码生成量暴增</li>
-    <li><strong>第 2 年</strong>：发现代码质量下降，开始引入人工 Code Review 增强</li>
-    <li><strong>第 3 年</strong>：建立「AI 生成 + 自动化检查 + 人工审查」三层防线，代码质量恢复到 AI 引入前水平</li>
-  </ul>
+  <FlowSteps
+    layout="horizontal"
+    caption="快手 3 年 AI 辅助迭代（据公开分享）"
+    steps={[
+      { title: '第 1 年', sub: '全面推广 AI 工具，代码生成量暴增' },
+      { title: '第 2 年', sub: '代码质量下降，引入人工 Review 增强' },
+      { title: '第 3 年', sub: '建立生成 + 自动检查 + 人工审查三层防线' },
+    ]}
+  />
 
   <p>核心结论：<strong>AI 提高开发速度，但不提高代码质量。质量保障需要额外的机制投入——而且这个投入需要 2-3 年才能见到效果。</strong></p>
 

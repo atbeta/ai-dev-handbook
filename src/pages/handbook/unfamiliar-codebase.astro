@@ -1,6 +1,7 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
+import FlowSteps from '../../components/FlowSteps.astro';
 ---
 
 <MainLayout title="陌生代码库协作" description="接手遗留项目或陌生代码库时，如何用三阶段渐进信任引入 AI 辅助迁移和重构">
@@ -25,6 +26,16 @@ import Sidebar from '../../components/Sidebar.astro';
   </table>
 
   <h2 id="three-stages">三阶段渐进信任</h2>
+
+  <FlowSteps
+    layout="horizontal"
+    caption="渐进信任：先建心智地图，再逐步放权给 AI"
+    steps={[
+      { title: '考古', sub: '人亲自读入口、画心智地图', tag: '不动代码' },
+      { title: '侦察', sub: '跟着 AI 只读巡检、找边界', tag: '不动代码' },
+      { title: '协作', sub: '人写 SPEC、AI 执行、人审', tag: '可写代码' },
+    ]}
+  />
 
   <table>
     <thead><tr><th>阶段</th><th>你做什么</th><th>AI 能做什么</th><th>任务规模</th><th>期限</th></tr></thead>

@@ -1,6 +1,7 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
+import FlowSteps from '../../components/FlowSteps.astro';
 ---
 
 <MainLayout title="发布与回滚预案" description="AI 辅助变更的上线前检查、发布决策与回滚纪律——生产级交付的后半程 SOP">
@@ -36,6 +37,15 @@ import Sidebar from '../../components/Sidebar.astro';
 
   <h2 id="readiness">发布就绪的定义</h2>
   <p>发布就绪分三层，任一层未满足则禁止上线：</p>
+  <FlowSteps
+    layout="horizontal"
+    caption="三层就绪，逐层通过才可上线"
+    steps={[
+      { title: '代码就绪', sub: '测试 / lint / 安全扫描 / Spec 同步', tag: 'CI + Reviewer' },
+      { title: '变更就绪', sub: '影响面 / 依赖 / 数据迁移 / Flag', tag: 'Release Mgr' },
+      { title: '运维就绪', sub: '监控 / 告警 / runbook / 回滚路径', tag: 'Oncall' },
+    ]}
+  />
   <table>
     <thead><tr><th>层级</th><th>检查项</th><th>谁验</th></tr></thead>
     <tbody>
