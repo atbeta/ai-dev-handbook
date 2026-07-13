@@ -15,14 +15,18 @@ const isCurrent = (href: string) => currentPath === href;
 ---
 
 <nav class="sidebar-nav" aria-label="侧边栏导航" data-active-section={activeSection ?? ''}>
-  <input
-    class="sidebar-search"
-    type="search"
-    placeholder="🔍 过滤链接…"
-    aria-label="过滤侧边栏链接"
-    autocomplete="off"
-    spellcheck="false"
-  />
+  <div class="search-wrapper">
+    <span class="search-prefix">❯</span>
+    <input
+      class="sidebar-search"
+      type="search"
+      placeholder="grep -i..."
+      aria-label="过滤侧边栏链接"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <kbd class="search-shortcut">⌘K</kbd>
+  </div>
 
   <details data-section="research" data-active={isActive('research')} open={isActive('research')}>
     <summary>

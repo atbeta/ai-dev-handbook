@@ -45,8 +45,8 @@ const { title, description, showSidebar = true, showToc = true, class: className
     <header class="site-header">
       <div class="container">
         <a href="/" class="logo">
-          <span class="logo-icon">⚙️</span>
-          <span class="logo-text">AI Dev Handbook</span>
+          <span class="logo-prompt">❯_</span>
+          <span class="logo-text">ai-dev-handbook</span>
         </a>
         <nav class="main-nav" aria-label="主导航">
           <a href="/research/landscape" class={Astro.url.pathname.startsWith('/research') ? 'active' : ''}>调研</a>
@@ -212,12 +212,17 @@ const { title, description, showSidebar = true, showToc = true, class: className
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.05rem;
     color: var(--c-text);
     text-decoration: none;
+    font-family: var(--font-mono);
   }
-  .logo-icon { font-size: 1.3rem; }
+  .logo-prompt { 
+    color: var(--c-accent); 
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
   .main-nav {
     display: flex;
     align-items: center;
@@ -299,27 +304,49 @@ const { title, description, showSidebar = true, showToc = true, class: className
     padding-top: 16px;
   }
 
-  .sidebar-search {
-    display: block;
-    width: 100%;
-    margin: 0 0 16px;
-    padding: 8px 12px;
-    font-size: 0.82rem;
-    color: var(--c-text);
-    background: var(--c-bg-secondary);
-    border: 1px solid var(--c-border);
-    border-radius: 6px;
-    outline: none;
-    transition: all 0.2s;
+  .search-wrapper {
     position: sticky;
     top: 0;
     z-index: 2;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    background: var(--c-bg-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
     box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
   }
-  .sidebar-search::placeholder { color: var(--c-text-muted); }
-  .sidebar-search:focus {
+  .search-wrapper:focus-within {
     border-color: var(--c-accent);
     box-shadow: 0 0 0 3px var(--c-accent-bg);
+  }
+  .search-prefix {
+    padding-left: 12px;
+    color: var(--c-accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: bold;
+    user-select: none;
+  }
+  .sidebar-search {
+    flex: 1;
+    width: 100%;
+    padding: 8px 8px 8px 8px;
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    color: var(--c-text);
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+  .sidebar-search::placeholder { color: var(--c-text-muted); }
+  .search-shortcut {
+    padding-right: 12px;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--c-text-muted);
+    user-select: none;
   }
 
   /* Section details */
