@@ -1,0 +1,381 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="全员全栈团队模式与转型清单" description="FE 转 BE / BE 转 FE 技能清单 + 全员全栈团队设计（Team Topologies 视角）+ 平台工程铺垫 + 反模式 + 团队加强建议">
+  <Sidebar currentPath="/handbook/full-stack-team-model" slot="sidebar" />
+  <h1>全员全栈团队模式与转型清单</h1>
+  <div class="meta-line">
+    <span class="tag">实践指南</span>
+    <span class="tag">团队转型</span>
+    <span class="tag">2026</span>
+  </div>
+
+  <blockquote>
+    <p>全员全栈不是"取消 FE / BE 岗位"，而是 <strong>"stream-aligned team 内每个成员都具备端到端基础能力，agent 接管重复劳动"</strong>。本文给三份清单：FE → BE 技能清单、BE → FE 技能清单、团队要加强的底层能力。</p>
+  </blockquote>
+
+  <h2 id="overview">承接上页：数据 + 团队设计</h2>
+  <p>本页是 <a href="/research/full-stack-trend-2026">《全栈化趋势 2026》</a> 的姊妹篇——那里讲"<strong>为什么是拐点</strong>"，这里讲"<strong>怎么落地</strong>"。三块内容：</p>
+
+  <ol>
+    <li><strong>个人转型</strong>：FE → BE、BE → FE 各需要补什么</li>
+    <li><strong>团队设计</strong>：Team Topologies 视角下，全员全栈团队怎么排</li>
+    <li><strong>能力加强</strong>：团队要在哪些底层能力上投入（不止"代码"）</li>
+  </ol>
+
+  <h2 id="fe-to-be">第一份清单：前端转后端（FE → BE）</h2>
+
+  <p>假设你是一个 Vue/React/TypeScript 前端，想做"全员全栈"项目里的后端部分。<strong>需要补的不是"Java 语法"</strong>，而是<strong>三类心智模型切换</strong>：</p>
+
+  <h3 id="fe-to-be-1-paradigm">1.1 心智模型：从"应用层 → 系统层"</h3>
+  <p>前端思考的是"用户能看到什么"，后端思考的是"<strong>系统在看不见的地方做什么</strong>"。具体：</p>
+
+  <table>
+    <thead>
+      <tr><th>维度</th><th>前端惯常思维</th><th>后端必须补的思维</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>数据生命周期</td><td>从 API 拿到就用，不关心存哪</td><td>数据存哪、保留多久、备份策略、删除策略</td></tr>
+      <tr><td>错误处理</td><td>try-catch + toast 提示</td><td>事务回滚 / 幂等保证 / 死信队列 / 告警</td></tr>
+      <tr><td>状态管理</td><td>组件 state + store</td><td>进程内 / 跨进程 / 跨数据中心一致性</td></tr>
+      <tr><td>性能瓶颈</td><td>首屏加载 / 渲染</td><td>数据库慢查询 / GC / 锁 / IO 瓶颈 / 网络分区</td></tr>
+      <tr><td>安全边界</td><td>XSS / CSRF</td><td>SQL 注入 / 鉴权 / 越权 / 加密 / 审计</td></tr>
+      <tr><td>可观测性</td><td>Sentry 前端错误</td><td>metrics / trace / log / 告警链路</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="fe-to-be-2-skills">1.2 技能清单（最小可用 → 进阶）</h3>
+
+  <h4>最小可用（1-2 周可达）</h4>
+  <ul>
+    <li><strong>一个后端语言 + 框架</strong>：Java + Spring Boot / Python + FastAPI / Node.js + NestJS / Go + Gin</li>
+    <li><strong>SQL 基础</strong>：SELECT / INSERT / UPDATE / DELETE / JOIN / 索引原理</li>
+    <li><strong>REST API 设计</strong>：状态码、版本控制、错误响应格式</li>
+    <li><strong>认证基础</strong>：JWT / OAuth 2.0 / Session</li>
+    <li><strong>部署</strong>：Docker / 一个云平台（AWS / 阿里云）</li>
+  </ul>
+
+  <h4>进阶（2-3 月可达）</h4>
+  <ul>
+    <li><strong>事务与一致性</strong>：ACID、隔离级别、分布式事务（2PC / Saga / TCC）</li>
+    <li><strong>缓存</strong>：Redis / Memcached / 缓存一致性 / 缓存击穿</li>
+    <li><strong>消息队列</strong>：Kafka / RabbitMQ / 死信 / 重试</li>
+    <li><strong>数据库深入</strong>：查询计划、事务隔离、连接池、分库分表</li>
+    <li><strong>可观测性</strong>：Prometheus / Grafana / OpenTelemetry / 链路追踪</li>
+    <li><strong>CI/CD</strong>：GitHub Actions / GitLab CI / 蓝绿发布 / 金丝雀</li>
+    <li><strong>安全</strong>：OWASP Top 10 / 密钥管理 / 依赖漏洞扫描 / 合规</li>
+  </ul>
+
+  <h4>专家级（6-12 月+）</h4>
+  <ul>
+    <li><strong>分布式系统</strong>：CAP / 一致性模型 / 共识算法（Raft / Paxos）</li>
+    <li><strong>性能调优</strong>：JVM / GC / 数据库调优 / 锁竞争 / 高并发</li>
+    <li><strong>系统设计</strong>：大规模架构 / 容量规划 / 灾备</li>
+    <li><strong>可观测性架构</strong>：自研 APM / SLO / error budget</li>
+  </ul>
+
+  <h3 id="fe-to-be-3-anti-patterns">1.3 FE 转 BE 常见踩坑</h3>
+
+  <ul>
+    <li><strong>❌ 用前端思维做后端</strong>：例如"用户没看到错误就是没错误"——后端必须 fail loud + audit</li>
+    <li><strong>❌ 忽略资源生命周期</strong>：连接池忘记关 / 文件句柄泄漏 / goroutine 不退出</li>
+    <li><strong>❌ 假设单用户</strong>：前端 demo 通常是单人操作，后端必须考虑并发、竞态、幂等</li>
+    <li><strong>❌ 数据可变性</strong>：前端"修改对象属性"思维在后端可能造成隐藏 bug（DTO vs 实体混淆）</li>
+    <li><strong>❌ 过度依赖 ORM</strong>：不懂 SQL 直接用 ORM 写 N+1 查询，性能灾难</li>
+  </ul>
+
+  <h3 id="fe-to-be-4-resources">1.4 学习资源</h3>
+  <ul>
+    <li><strong>Spring Boot 路径</strong>：<a href="https://blog.csdn.net/qq_37515544/article/details/156983929">CSDN 全网最强学习路线</a>（基础 → Web → 数据 → 进阶 → 原理）</li>
+    <li><strong>系统设计</strong>：<a href="https://roadmap.sh/backend">roadmap.sh/backend</a></li>
+    <li><strong>Spring 原理</strong>：<a href="https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html">JavaGuide IoC &amp; AOP</a></li>
+    <li><strong>面试导向八股文</strong>：<a href="https://javabetter.cn/sidebar/sanfene/spring.html">二哥 Spring 41 题</a>（虽然面试导向，但知识密度高）</li>
+  </ul>
+
+  <h2 id="be-to-fe">第二份清单：后端转前端（BE → FE）</h2>
+
+  <p>Java/Go/Python 后端，想做"全员全栈"项目里的前端。<strong>补的不是"切页面"</strong>，而是<strong>"用户体验 + 客户端架构"</strong>：</p>
+
+  <h3 id="be-to-fe-1-paradigm">2.1 心智模型：从"系统层 → 应用层"</h3>
+
+  <table>
+    <thead>
+      <tr><th>维度</th><th>后端惯常思维</th><th>前端必须补的思维</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>执行环境</td><td>服务器（Linux + JVM）</td><td>浏览器（兼容 N 个版本）/ 移动端 WebView</td></tr>
+      <tr><td>状态来源</td><td>数据库 / 缓存</td><td>URL / localStorage / session / 内存</td></tr>
+      <tr><td>并发模型</td><td>多线程 / 异步任务</td><td>事件循环 / 单线程异步 / 微任务宏任务</td></tr>
+      <tr><td>性能瓶颈</td><td>DB / IO / 锁</td><td>首屏 / FCP / LCP / CLS / Web Vitals</td></tr>
+      <tr><td>安全模型</td><td>服务端鉴权为主</td><td>XSS / CSRF / token 存储 / 同源策略 / CORS</td></tr>
+      <tr><td>测试维度</td><td>单元 / 集成 / 压测</td><td>组件测试 / E2E / 视觉回归 / 跨浏览器</td></tr>
+      <tr><td>错误处理</td><td>500 页面 + 日志</td><td>降级 UI / skeleton / 重试 / 离线缓存</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="be-to-fe-2-skills">2.2 技能清单</h3>
+
+  <h4>最小可用（1-2 周可达）</h4>
+  <ul>
+    <li><strong>现代前端框架</strong>：React / Vue / Svelte（挑一个深入）</li>
+    <li><strong>TypeScript 基础</strong>：类型 / 接口 / 泛型 / utility types</li>
+    <li><strong>CSS 现代方案</strong>：Tailwind / CSS Modules / 组件库（Ant Design / shadcn / Element）</li>
+    <li><strong>构建工具</strong>：Vite / Webpack / 理解 bundle / tree shaking</li>
+    <li><strong>浏览器 DevTools</strong>：Network / Performance / Application / Console</li>
+  </ul>
+
+  <h4>进阶（2-3 月可达）</h4>
+  <ul>
+    <li><strong>状态管理</strong>：Redux / Zustand / Pinia / Jotai / TanStack Query</li>
+    <li><strong>组件设计</strong>：composition / props / slots / 组合模式 / Headless UI</li>
+    <li><strong>路由</strong>：React Router / Vue Router / Next.js App Router</li>
+    <li><strong>性能</strong>：memo / 虚拟列表 / 懒加载 / Web Vitals / bundle 分析</li>
+    <li><strong>测试</strong>：Vitest / Testing Library / Playwright</li>
+    <li><strong>可访问性</strong>：ARIA / 键盘导航 / 屏幕阅读器</li>
+    <li><strong>SSR / SSG</strong>：Next.js / Nuxt / Astro</li>
+  </ul>
+
+  <h4>专家级（6-12 月+）</h4>
+  <ul>
+    <li><strong>前端架构</strong>：monorepo / 微前端 / 设计系统 / monorepo 工具链</li>
+    <li><strong>浏览器底层</strong>：渲染原理 / 性能调优 / 缓存策略 / Service Worker</li>
+    <li><strong>设计系统</strong>：storybook / token / 主题 / 跨平台一致</li>
+  </ul>
+
+  <h3 id="be-to-fe-3-anti-patterns">2.3 BE 转 FE 常见踩坑</h3>
+
+  <ul>
+    <li><strong>❌ 假设稳定网络</strong>：后端"接口稳定"的假设在客户端是错的——要做 loading / retry / offline</li>
+    <li><strong>❌ 过度设计</strong>：把后端抽象癖带到前端（premature abstraction / 工厂模式 / DI）——前端简单优先</li>
+    <li><strong>❌ 忽略用户感知</strong>：后端"成功"≠用户"成功"——按钮是否可点、加载是否合理</li>
+    <li><strong>❌ 不看实际渲染</strong>：只看代码不看 Chrome DevTools / Performance</li>
+    <li><strong>❌ 忽视 a11y</strong>：键盘操作、屏幕阅读器、对比度——大多数 FE 也不做，但 BE 转过来<strong>特别容易</strong>忽视</li>
+  </ul>
+
+  <h3 id="be-to-fe-4-resources">2.4 学习资源</h3>
+  <ul>
+    <li><strong>前端总路线</strong>：<a href="https://roadmap.sh/frontend">roadmap.sh/frontend</a></li>
+    <li><strong>React vs Vue 选型</strong>：<a href="https://www.browserstack.com/guide/react-vs-vuejs">BrowserStack 2025</a>（Vue 学习曲线更友好）</li>
+    <li><strong>Web Vitals</strong>：<a href="https://web.dev/vitals/">web.dev/vitals</a></li>
+  </ul>
+
+  <h2 id="team-design">第三份清单：团队设计（Team Topologies 视角）</h2>
+
+  <p>全员全栈<strong>不等于不分工</strong>。正确的团队设计：</p>
+
+  <h3 id="td-stream-aligned">3.1 Stream-aligned team 是默认</h3>
+  <p>5-8 人一组，<strong>每个成员都是 generalist</strong>，但组里<strong>有人深度强在某个领域</strong>（"我 FE 最强，但我能写 BE"）。</p>
+
+  <p>关键：<strong>每个人能独立完成端到端交付</strong>，不需要 handoff。</p>
+
+  <h3 id="td-platform">3.2 Platform team 是关键支撑</h3>
+  <p>全员全栈<strong>离不开平台工程</strong>。平台团队提供：</p>
+
+  <ul>
+    <li><strong>CI/CD</strong>：提交即测试 / 一键部署</li>
+    <li><strong>可观测性</strong>：metrics / trace / log 默认接入</li>
+    <li><strong>认证 / 鉴权</strong>：统一 SSO / RBAC</li>
+    <li><strong>数据平台</strong>：数据接入 / 仓库 / 查询</li>
+    <li><strong>LLM harness</strong>：context template / agent workflow / guardrail</li>
+    <li><strong>设计系统</strong>：组件库 / token / 主题</li>
+  </ul>
+
+  <p>这是 Netflix "<strong>paved road</strong>" 模式的精髓——<strong>通用能力平台化，让 stream-aligned team 只做产品代码</strong>。</p>
+
+  <h3 id="td-specialist">3.3 Specialist / Complicated-subsystem 仍有价值</h3>
+  <p>CHI 2026 研究：<strong>AI assistance is weakest exactly where tacit, specialist knowledge matters</strong>。</p>
+
+  <p>含义：以下领域<strong>不应该全员全栈化</strong>，需要专人专岗：</p>
+
+  <ul>
+    <li><strong>数据库性能调优</strong>（大型 PG / MySQL 调优经验）</li>
+    <li><strong>分布式系统底层</strong>（一致性、共识算法、跨数据中心）</li>
+    <li><strong>安全审计 / 合规</strong>（GDPR / 等保 / 行业合规）</li>
+    <li><strong>ML 推理优化</strong>（GPU 利用、模型蒸馏）</li>
+    <li><strong>性能敏感的底层代码</strong>（浏览器引擎、数据库内核、网络协议）</li>
+  </ul>
+
+  <p>这些是 <strong>complicated-subsystem team</strong>，不该强行塞进 stream-aligned team。</p>
+
+  <h3 id="td-enabling">3.4 Enabling team 加速转型</h3>
+  <p>从"分工团队" → "全员全栈团队"需要一个 <strong>enabling team</strong> 负责：</p>
+
+  <ul>
+    <li>跨领域 training（pair / mob / workshop）</li>
+    <li>把 specialist 知识文档化 / 视频化</li>
+    <li>code review 时同步教学</li>
+    <li>设立 <strong>"exit criteria"</strong>：什么时候 enabling team 撤出？答：stream-aligned team 能独立完成端到端时。</li>
+  </ul>
+
+  <h3 id="td-sketch">3.5 团队配置示意</h3>
+
+  <pre><code>┌─────────────────────────────────────────────────────┐
+│            Stream-aligned team (5-8 人)              │
+│  每个成员 = T 形（前端深度 + 后端能写 + DB 基础）  │
+│  全员全栈 = 每个 T 能独立端到端                     │
+└──────────────┬──────────────────────┬───────────────┘
+               │  X-as-a-Service     │  consultation
+               ↓                      ↓
+┌──────────────────────────┐  ┌──────────────────────────┐
+│   Platform team (3-5 人) │  │ Complicated-subsystem   │
+│  CI/CD 监控 认证 LLM      │  │ DB 性能 分布式 安全 合规 │
+│  harness 设计系统         │  │ (按需抽人，不在 stream)  │
+└──────────────────────────┘  └──────────────────────────┘
+               ↑                      ↑
+               └──────── enabling ────┘
+                    (过渡期 6-12 个月)
+</code></pre>
+
+  <h2 id="capabilities">第四份清单：团队加强什么（不只是代码）</h2>
+
+  <p>全员全栈的最大风险不是"代码能力不够"，是 <strong>"配套能力没跟上"</strong>。需要加强：</p>
+
+  <h3 id="cap-1-cs">4.1 计算机基础（深度 ≥ 任何一个 specialist 都不该羞愧）</h3>
+  <ul>
+    <li><strong>网络</strong>：HTTP / TLS / TCP / DNS / 跨域</li>
+    <li><strong>操作系统</strong>：进程 / 线程 / IO 多路复用 / 内存管理</li>
+    <li><strong>数据库</strong>：索引原理 / 事务隔离 / 查询计划</li>
+    <li><strong>分布式系统</strong>：CAP / 一致性 / 共识</li>
+    <li><strong>算法 / 数据结构</strong>：解决实际性能问题的基础</li>
+  </ul>
+
+  <h3 id="cap-2-product">4.2 产品思维（不只是"实现需求"）</h3>
+  <ul>
+    <li>理解业务目标 / KPI</li>
+    <li>识别过度工程 / 砍功能</li>
+    <li>和 PM / 设计师 / 用户对话</li>
+    <li>为可衡量的结果负责</li>
+  </ul>
+
+  <h3 id="cap-3-ops">4.3 Ops 思维（"我的代码我运维"）</h3>
+  <ul>
+    <li><strong>可观测性</strong>：上线前想好 metrics / trace / alert</li>
+    <li><strong>事故响应</strong>：oncall / 排查 / 回滚 / 复盘</li>
+    <li><strong>SLO 思维</strong>：99.9% 是多少 downtime？error budget 怎么算？</li>
+    <li><strong>性能 / 容量规划</strong>：流量 10x 时会怎样</li>
+  </ul>
+
+  <h3 id="cap-4-collab">4.4 协作 / 沟通（全栈 ≠ 孤狼）</h3>
+  <ul>
+    <li>代码评审（包括跨领域——你能 review 我的 Spring 代码，我能 review 你的 React 代码）</li>
+    <li>结对编程（pair / mob）——快速传递技能</li>
+    <li>文档能力（不只是写 spec 也要会写 runbook / postmortem）</li>
+    <li>跨角色沟通（PM / 设计 / 测试 / 运维 / 安全）</li>
+  </ul>
+
+  <h3 id="cap-5-ai">4.5 AI 协作能力（2025-2026 的新增项）</h3>
+  <ul>
+    <li><strong>Prompt 工程</strong>：让 AI 输出可用代码</li>
+    <li><strong>AI 代码评审</strong>：识别 AI 写的常见错误（幻觉 / 边界）</li>
+    <li><strong>多 AI 工具协同</strong>：Copilot + Cursor + Claude Code + 内部 harness</li>
+    <li><strong>Context 整理</strong>：给 AI 准备合适的上下文（spec / 文档 / 现有代码）</li>
+  </ul>
+
+  <h3 id="cap-6-judgment">4.6 判断力 / 决策能力（最稀缺）</h3>
+  <p>Kent Beck 在 Pragmatic Summit 提到：</p>
+
+  <blockquote>
+    <p>"When the AI goes away for three minutes, we can talk about our philosophy of naming, or how we express conditionals, or about what we should be doing next. <strong>That three-minute gap is not idle time. It is where the irreducible work happens: deciding what to build, judging what came back.</strong>"</p>
+  </blockquote>
+
+  <p>含义：<strong>AI 把 generation 变便宜，verification 和 judgment 变得更重要</strong>。全栈团队需要培养：</p>
+
+  <ul>
+    <li><strong>业务判断</strong>：这个需求值不值得做？</li>
+    <li><strong>架构判断</strong>：这个抽象值得抽象吗？</li>
+    <li><strong>质量判断</strong>：AI 写的代码能 merge 吗？</li>
+    <li><strong>trade-off 判断</strong>：速度 vs 完美 / 一致性 vs 灵活 / 现在 vs 未来</li>
+  </ul>
+
+  <h2 id="anti-patterns">反模式（避免这些）</h2>
+
+  <h3 id="ap-1">AP-1：把"会写 CRUD"当全栈</h3>
+  <p>全栈 ≠ <strong>"用 AI 写个 CRUD + 部署"</strong>。真正的全栈包括：理解部署、监控、回滚、性能调优、安全审计——这些需要时间沉淀。</p>
+
+  <h3 id="ap-2">AP-2：强转方向，忽视人</h3>
+  <p>有些后端不爱写 UI，强转 FE 不会让他变全栈——只会让他不开心 + 写烂 UI。<strong>允许部分人在部分领域保持专精</strong>，让全栈 team 里有 specialist 是 OK 的。</p>
+
+  <h3 id="ap-3">AP-3：没有 paved road 就推全栈</h3>
+  <p>没有 CI/CD、没有监控、没有 auth 中间件、没有部署平台——这种团队推全栈 = <strong>把脏活让每个人重复一遍</strong>。</p>
+
+  <h3 id="ap-4">AP-4：追求"人人通吃"而牺牲深度</h3>
+  <p>CHI 2026 研究：<strong>AI 在 tacit knowledge 领域最弱</strong>。如果团队里没有 <strong>数据库性能 / 分布式系统 / 安全 / ML</strong> 的 specialist，长期来看会出大问题。</p>
+
+  <h3 id="ap-5">AP-5：忽视 burnout 风险</h3>
+  <p>Jamie Hurst 的 field report：<strong>"the role isn't sustainable at this pace."</strong></p>
+  <p>全栈 + AI 不是更轻松，是 <strong>认知负载重新分配</strong>。如果团队已经 burnout 边缘，不要再叠加全栈压力。</p>
+
+  <h3 id="ap-6">AP-6：把全栈当 KPI</h3>
+  <p>"下季度全员转全栈" 这种 KPI 是灾难信号。<strong>全栈是结果，不是目标</strong>。正确的目标是"提高产品迭代速度"，全栈只是手段之一。</p>
+
+  <h2 id="transformation-roadmap">转型 roadmap（建议 6-12 个月）</h2>
+
+  <h3 id="phase-1">阶段 1：铺垫（1-2 月）</h3>
+  <ul>
+    <li>梳理平台工程：CI/CD / 监控 / auth / deploy / 设计系统 → 至少 80% 平台化</li>
+    <li>选定 enabling team 负责人 + 时间盒</li>
+    <li>选 1 个小型 stream-aligned team 做试点（不是全员）</li>
+  </ul>
+
+  <h3 id="phase-2">阶段 2：试点（2-3 月）</h3>
+  <ul>
+    <li>试点团队 100% 端到端 ownership</li>
+    <li>每周 enabling team 主持 mob / workshop（前端讲给后端听，反之亦然）</li>
+    <li>2 周一次复盘——<strong>认知负载在哪里？burnout 信号？</strong></li>
+  </ul>
+
+  <h3 id="phase-3">阶段 3：扩展（3-6 月）</h3>
+  <ul>
+    <li>试点成功 → 推广到 2-3 个 stream-aligned team</li>
+    <li>沉淀 enabling 内容为文档 / 视频库</li>
+    <li>招聘时开始考虑 "generalist 优先" 而非 "specialist 优先"</li>
+</ul>
+
+  <h3 id="phase-4">阶段 4：稳态（6-12 月）</h3>
+  <ul>
+    <li>团队配置稳定：stream-aligned + platform + complicated-subsystem</li>
+    <li>enabling team 解散（成员回归各 team）</li>
+    <li>定期回顾：<strong>specialist 储备还够吗？burnout 风险？</strong></li>
+  </ul>
+
+  <h2 id="summary">一句话总结</h2>
+
+  <p><strong>全员全栈 = "端到端 ownership × generalist 团队 × 平台工程铺垫 × AI 加速"</strong>。</p>
+
+  <p>缺任何一个，都会出大问题：</p>
+
+  <ul>
+    <li>缺端到端 ownership → 全栈只是空话</li>
+    <li>缺 generalist 团队 → 全栈推不动</li>
+    <li>缺平台工程 → 全栈 = 每个人重复造轮子 + burnout</li>
+    <li>缺 AI → 全栈 = 工作量翻倍而不是减半</li>
+  </ul>
+
+  <p>四个条件<strong>齐了</strong>，全员全栈才能真正起飞。</p>
+
+  <h2 id="related">相关阅读</h2>
+  <ul>
+    <li><a href="/research/full-stack-trend-2026">全栈化趋势 2026：数据、大厂案例与判断</a></li>
+    <li><a href="/research/openspec-in-production">OpenSpec 在生产中的调教</a> — 平台工程的工具链落地</li>
+    <li><a href="/research/agent-ecosystem">Coding Agent 生态全景</a></li>
+    <li><a href="/handbook/spec-format">Spec 字段规范</a> — AI 协作需要清晰的 spec</li>
+    <li><a href="/handbook/ai-as-amplifier">AI 是放大器不是工程师</a></li>
+  </ul>
+
+  <h2 id="references">引用清单</h2>
+  <ol>
+    <li><a href="https://handsonarchitects.com/blog/2026/team-topologies-ai-harness-cognitive-load/">Team Topologies in the AI Era</a></li>
+    <li><a href="https://jamiehurst.co.uk/2026-05-24_ai-sustainable">Jamie Hurst: AI Sustainable field report</a></li>
+    <li><a href="https://dl.acm.org/doi/full/10.1145/3772318.3791176">CHI 2026: AI assistance and tacit specialist knowledge</a></li>
+    <li><a href="https://www.mckinsey.com/capabilities/mckinsey-technology/our-insights/designing-an-end-to-end-technology-workforce-for-the-ai-first-era">McKinsey: AI-first tech workforce</a></li>
+    <li><a href="https://blog.csdn.net/qq_37515544/article/details/156983929">CSDN: Spring Boot 学习路线</a></li>
+    <li><a href="https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html">JavaGuide: Spring IoC &amp; AOP</a></li>
+    <li><a href="https://roadmap.sh/frontend">roadmap.sh: Frontend Roadmap</a></li>
+    <li><a href="https://roadmap.sh/backend">roadmap.sh: Backend Roadmap</a></li>
+    <li><a href="https://www.browserstack.com/guide/react-vs-vuejs">BrowserStack: Vue vs React 2025</a></li>
+    <li><a href="https://tsh.io/state-of-frontend">State of Frontend 2024</a></li>
+    <li><a href="https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/">GitHub Octoverse 2025</a></li>
+  </ol>
+</MainLayout>
