@@ -134,3 +134,14 @@ npm run build
 ```
 
 如果只是改 Markdown 类文案但没有安装依赖，可以说明未运行构建的原因。
+
+## Learned User Preferences
+
+- 用户偏好用中文回复。
+- 站点文案保持正式工程手册语气，避免口语化或情绪化表达（如「踩坑」「搞定」「调教」「不熟项目+AI实战」等）。
+- 仅在用户明确要求时 git commit/push，不要主动提交。
+
+## Learned Workspace Facts
+
+- 内容体系化优化默认采用「中等重构」：不做大规模 URL 迁移，优先导航一致性、事实可信度、命名消歧与文案语气。
+- `npm run build` 可能改动 `.astro/types.d.ts`，交付前应恢复该生成文件，避免混入内容提交。

@@ -3,23 +3,23 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 ---
 
-<MainLayout title="OpenSpec 在生产中的调教" description="OpenSpec / Spec Kit / BMAD 等 SDD 工具出厂配置不够用，调教维度详解：自定义 schema、validation 钩子、模板库、流程集成、AI 指令调优与反模式">
+<MainLayout title="OpenSpec 生产环境调优" description="OpenSpec / Spec Kit / BMAD 等 SDD 工具默认配置往往不足以支撑企业落地；调优维度包括自定义 schema、validation 钩子、模板库、流程集成、AI 指令优化与反模式">
   <Sidebar currentPath="/research/openspec-in-production" slot="sidebar" />
-  <h1>OpenSpec 在生产中的调教</h1>
+  <h1>OpenSpec 生产环境调优</h1>
   <div class="meta-line">
     <span class="tag">工具调优</span>
     <span class="tag">生产落地</span>
   </div>
 
   <blockquote>
-    <p>OpenSpec 出厂配置是个人 / 小团队友好的。<strong>企业落地时，调教才是真正的工程</strong>——把通用 SDD 工具配置成你企业实际需要的形态。</p>
+    <p>OpenSpec 默认配置是个人 / 小团队友好的。<strong>企业落地时，调优才是真正的工程</strong>——把通用 SDD 工具配置成你企业实际需要的形态。</p>
   </blockquote>
 
   <h2 id="one-sentence">一句话总结</h2>
-  <p>SDD 工具（OpenSpec / Spec Kit / BMAD）的出厂 schema 是通用模板。<strong>生产环境需要在这五个维度上调教</strong>：自定义 schema、validation 钩子、模板库、流程集成、AI 指令调优。每一项都有具体的"配什么"和"避免什么"。</p>
+  <p>SDD 工具（OpenSpec / Spec Kit / BMAD）的默认 schema 是通用模板。<strong>生产环境需要在这五个维度上调优</strong>：自定义 schema、validation 钩子、模板库、流程集成、AI 指令调优。每一项都有具体的"配什么"和"避免什么"。</p>
 
-  <h2 id="why-tune">为什么必须调教</h2>
-  <p>出厂配置面临三个错位：</p>
+  <h2 id="why-tune">为什么必须调优</h2>
+  <p>默认配置面临三个错位：</p>
 
   <ul>
     <li><strong>通用 vs 企业</strong>：OpenSpec 默认 schema 不包含你的合规字段（GDPR / 等保 / 数据出境）；Spec Kit 的 phases 是 GitHub 风格，<strong>你企业有"反串讲"</strong>这种阶段。</li>
@@ -27,9 +27,9 @@ import Sidebar from '../../components/Sidebar.astro';
     <li><strong>单人 vs 团队</strong>：默认配置假定一人一 spec，<strong>企业里并行分支 / 跨团队 sync / 多 reviewer</strong> 没预设。</li>
   </ul>
 
-  <p>结果就是：工具上线三个月后，团队绕开它回到 IM / Word / Excel，spec 文档变孤儿。</p>
+  <p>结果就是：工具上线三个月后，团队绕开它回到 IM / Word / Excel，spec 与流程脱节、逐渐失效。</p>
 
-  <h2 id="dimensions">5 个调教维度</h2>
+  <h2 id="dimensions">5 个调优维度</h2>
 
   <table>
     <thead><tr><th>维度</th><th>做什么</th><th>OpenSpec 配置点</th><th>Spec Kit 配置点</th></tr></thead>
@@ -70,7 +70,7 @@ rollback:
 
   <p>这样跑 <code>openspec validate --schema enterprise-cn</code> 时，<strong>没有 Compliance / AuditTrail / RollbackPlan 的 spec 会失败</strong>——CI 直接卡住。</p>
 
-  <h3 id="schema-tips">调教 tips</h3>
+  <h3 id="schema-tips">调优建议</h3>
   <ul>
     <li><strong>从极简开始</strong>：第一版只加 1-2 个必填字段，避免团队抵触。第二轮再加。</li>
     <li><strong>字段名稳定</strong>：Compliance 字段不要突然改叫 ComplianceCheck，<strong>会让已经写的 spec 全部失效</strong>。</li>
@@ -116,13 +116,13 @@ jobs:
   </ul>
 
   <h2 id="template-library">维度 3：模板库</h2>
-  <p>OpenSpec 出厂 spec 模板是通用骨架。<strong>企业内部应该维护一份自己的模板</strong>——既符合 OpenSpec 规范，又带企业特色字段。</p>
+  <p>OpenSpec 默认 spec 模板是通用骨架。<strong>企业内部应该维护一份自己的模板</strong>——既符合 OpenSpec 规范，又带企业特色字段。</p>
 
   <h3 id="template-pattern">模板分层模式</h3>
 
   <pre><code>openspec/
 ├── schemas/
-│   ├── default.yaml           # 出厂默认
+│   ├── default.yaml           # 工具默认
 │   └── enterprise-cn.yaml     # 企业定制（extends default）
 ├── templates/
 │   ├── spec.md                # 通用骨架
@@ -137,7 +137,7 @@ jobs:
 
   <h3 id="template-evolution">模板演进</h3>
   <ul>
-    <li>第一版：fork 出厂模板，加 Compliance 段</li>
+    <li>第一版：fork 默认模板，加 Compliance 段</li>
     <li>第二版：拆出 profiles（customer-facing 强制安全字段，internal-tools 不强制）</li>
     <li>第三版：模板放进独立 repo（<code>your-org/openspec-templates</code>），跨项目复用</li>
   </ul>
@@ -177,7 +177,7 @@ jobs:
   </ul>
 
   <h2 id="ai-tuning">维度 5：AI 指令调优</h2>
-  <p>这是<strong>调教中最被低估</strong>的一环——AI 写 spec / lint spec 的姿势完全由你的指令文件决定。</p>
+  <p>这是<strong>调优中最被低估</strong>的一环——AI 写 spec / lint spec 的姿势完全由你的指令文件决定。</p>
 
   <h3 id="agents-md">AGENTS.md / copilot-instructions.md</h3>
   <p>在仓库根放一份"AI 怎么用这个 spec 体系"的指令文件。OpenClaw / Cursor / Claude Code 都认这个文件。</p>
@@ -209,7 +209,7 @@ jobs:
     <thead><tr><th>杠杆</th><th>效果</th></tr></thead>
     <tbody>
       <tr><td>在指令里<strong>列反模式</strong></td><td>比正面说"应该这样"更有效——AI 看到禁止项会警觉</td></tr>
-      <tr><td>在指令里<strong>给完整示例</strong></td><td>比抽象规则效果好——直接抄样例</td></tr>
+      <tr><td>在指令里<strong>给完整示例</strong></td><td>比抽象规则更有效——便于按样例对齐格式</td></tr>
       <tr><td>指令文件<strong>放在仓库根</strong></td><td>所有人共用同一份指令——团队一致性</td></tr>
       <tr><td>指令里<strong>列必跑命令</strong></td><td>AI 不会跳过 <code>openspec validate</code></td></tr>
       <tr><td>指令<strong>定期更新</strong></td><td>不更新的指令 = 过时的指令；建议每次评审后迭代</td></tr>
@@ -221,7 +221,7 @@ jobs:
 
   <h3 id="week-1">第 1 周：基础 schema + CI</h3>
   <ul>
-    <li>fork 出厂 schema，加 2-3 个企业必填字段</li>
+    <li>fork 默认 schema，加 2-3 个企业必填字段</li>
     <li>pre-commit hook 接 <code>openspec validate --strict</code></li>
     <li>跑 1-2 个 feature 验证</li>
   </ul>
@@ -263,21 +263,21 @@ jobs:
   <h3 id="ap-5">AP-5：把 review 决议只写在 IM 里</h3>
   <p>评审决议必须落在 spec 旁边的 <code>review-X-resolution.md</code>，否则半年后没人知道为什么这么改。决议和 spec 一样是<strong>source of truth</strong>。</p>
 
-  <h2 id="metrics">调教成功的标志</h2>
-  <p>三个月后回来看这些数字：</p>
+  <h2 id="metrics">调优成效信号</h2>
+  <p>三个月后回来看这些数字（以下为<strong>待团队校准的参考阈值</strong>，不是行业事实）：</p>
 
   <ul>
-    <li><strong>spec 覆盖率</strong>：生产代码里有多少 % 对应 spec 编号。目标 ≥ 80%。</li>
-    <li><strong>open_questions 解决率</strong>：30 天内的 open_questions 解决了多少 %。目标 ≥ 90%。</li>
-    <li><strong>archive 后实现漂移率</strong>：archive 后多少 % 的 PR 引用 spec 编号。目标 ≥ 70%。</li>
-    <li><strong>团队主动率</strong>：团队自己主动写 spec 的比例（非被要求）。目标 ≥ 60%。</li>
+    <li><strong>spec 覆盖率</strong>：生产代码里有多少 % 对应 spec 编号。参考目标 ≥ 80%。</li>
+    <li><strong>open_questions 解决率</strong>：30 天内的 open_questions 解决了多少 %。参考目标 ≥ 90%。</li>
+    <li><strong>archive 后实现漂移率</strong>：archive 后多少 % 的 PR 引用 spec 编号。参考目标 ≥ 70%。</li>
+    <li><strong>团队主动率</strong>：团队自己主动写 spec 的比例（非被要求）。参考目标 ≥ 60%。</li>
   </ul>
 
   <p>如果<strong>覆盖率不涨</strong>，说明 spec 流程在落地阻力上失败了——回去看 AP 反模式。</p>
 
   <h2 id="related">相关阅读</h2>
   <ul>
-    <li><a href="/handbook/why-spec-driven-dev">为什么需要 spec-driven-dev</a> — 我们的工具定位</li>
+    <li><a href="/handbook/why-spec-driven-dev">为什么需要 Spec-Driven-Dev</a> — 我们的工具定位</li>
     <li><a href="/handbook/spec-format">Spec 字段规范</a> — 13 字段格式（中文工业流程）</li>
     <li><a href="/handbook/workflow">6 步工作流</a> — 模糊需求 → Frozen Spec</li>
     <li><a href="/handbook/lint-protocol">AI Lint 协议</a> — 4 段对抗性 AI 评审</li>

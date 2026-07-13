@@ -3,9 +3,9 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 ---
 
-<MainLayout title="为什么需要 spec-driven-dev" description="spec-driven-dev 与 OpenSpec、Spec Kit 的区别：流程层而非工具层；为企业评审会议而设计；不是替代 SDD 工具，而是企业流程到 SDD 生态的桥梁">
+<MainLayout title="为什么需要 Spec-Driven-Dev" description="Spec-Driven-Dev 与 OpenSpec、Spec Kit 的区别：流程层而非工具层；为企业评审会议而设计；不是替代 SDD 工具，而是企业流程到 SDD 生态的桥梁">
   <Sidebar currentPath="/handbook/why-spec-driven-dev" slot="sidebar" />
-  <h1>为什么需要 spec-driven-dev</h1>
+  <h1>为什么需要 Spec-Driven-Dev</h1>
   <div class="meta-line">
     <span class="tag">工具定位</span>
     <span class="tag">Why</span>
@@ -53,7 +53,7 @@ import Sidebar from '../../components/Sidebar.astro';
   <ul>
     <li><strong>没有显式 gate</strong>：企业里有需求串讲、设计评审、测试评审，每次评审都有会议纪要 / 决议 / 行动项。OpenSpec 的 <code>validate</code> 是语法校验，不是评审会议协议。</li>
     <li><strong>没编码并行</strong>：企业里"特性设计 ⫽ 测试设计"是常事，但 OpenSpec 把每个 change proposal 当作独立文件夹，<strong>没有显式的"等两边都完成才进下一阶段"语义</strong>。</li>
-    <li><strong>仪式感一刀切</strong>：每个 change 都跑同样的流程，"半天能搞定的小权限调整"也得跑全套，<strong>劝退的根源</strong>。</li>
+    <li><strong>仪式感一刀切</strong>：每个 change 都跑同样的流程，小范围权限调整也得跑全套，<strong>是流程阻力的主要来源</strong>。</li>
     <li><strong>AI 评审意见可能杜撰</strong>：把"AI 合评审意见"这件事做得不留痕，会让企业担心 AI 凭空生成 reviewer 发言。</li>
   </ul>
 
@@ -115,7 +115,7 @@ stages:
   <p>机器读 frontmatter 用于编排（"等 03 和 05 都 done 才进 04"），人读 body 用于状态汇报。<strong>OpenSpec 用 <code>.openspec/</code> 目录 + CLI，我们用单文件——agent orchestrator 友好</strong>。</p>
 
   <h3 id="openspec-bridge">4. OpenSpec 兼容（非竞争）</h3>
-  <p>我们的 stage 9 验收通过后，<strong>自动把 spec 切片到 <code>.openspec/specs/&amp;lt;slug&amp;gt;/spec.md</code></strong>——格式完全符合 OpenSpec markdown 规范。外部协作者可以用：</p>
+  <p>我们的 stage 9 验收通过后，<strong>自动把 spec 切片到 <code>.openspec/specs/&lt;slug&gt;/spec.md</code></strong>——格式完全符合 OpenSpec markdown 规范。外部协作者可以用：</p>
 
   <pre><code class="language-bash">openspec list
 openspec show &lt;feature&gt;
@@ -171,11 +171,11 @@ openspec validate &lt;feature&gt; --strict</code></pre>
 
   <h2 id="migration">如何从 OpenSpec / Spec Kit 迁移过来</h2>
   <ol>
-    <li>把你现有的 spec.md 复制到 <code>features/&amp;lt;slug&amp;gt;/requirements-v0.1.md</code></li>
+    <li>把你现有的 spec.md 复制到 <code>features/&lt;slug&gt;/requirements-v0.1.md</code></li>
     <li>初始化 <code>state.md</code>（参考 <a href="https://github.com/atbeta/spec-driven-dev/blob/main/examples/state-standard.example.md">examples/state-standard.example.md</a>）</li>
     <li>tier 字段根据 feature 规模填 lite / standard / full</li>
     <li>进 stage 1，让 agent 引导填接下来的 stage</li>
-    <li>stage 9 通过后，成果切片回 <code>.openspec/specs/&amp;lt;slug&amp;gt;/</code>，外部协作者无缝衔接</li>
+    <li>stage 9 通过后，成果切片回 <code>.openspec/specs/&lt;slug&gt;/</code>，外部协作者无缝衔接</li>
   </ol>
 
   <h2 id="related">相关阅读</h2>
@@ -184,7 +184,7 @@ openspec validate &lt;feature&gt; --strict</code></pre>
     <li><a href="/handbook/workflow">6 步工作流</a> — 模糊需求 → Frozen Spec</li>
     <li><a href="/handbook/spec-format">Spec 字段规范</a> — 13 字段格式（中文工业流程）</li>
     <li><a href="/handbook/quality-gate">质量门工具</a> — 3 道闸门心智模型</li>
-    <li><a href="/research/openspec-in-production">OpenSpec 在生产中的调教</a> — 如何把 OpenSpec 配置成你企业需要的形态</li>
+    <li><a href="/research/openspec-in-production">OpenSpec 生产环境调优</a> — 如何把 OpenSpec 配置成企业需要的形态</li>
     <li><a href="/research/agent-ecosystem">Coding Agent 生态全景</a> — 上下游工具图谱</li>
   </ul>
 
