@@ -21,6 +21,9 @@ export const spine: SpineEntry[] = [
   { path: '/research/ai-boundaries', label: 'AI 能力边界', stage: '判断与边界' },
   { path: '/research/vibe-vs-spec', label: 'Vibe vs Spec 辩论', stage: '判断与边界' },
   { path: '/research/hard-data', label: '硬数据与事故', stage: '判断与边界' },
+  { path: '/research/ai-tech-selection', label: 'AI 时代技术选型', stage: '判断与边界' },
+  { path: '/research/ai-vue-stack', label: 'Vue 栈 AI 评估', stage: '判断与边界' },
+  { path: '/research/ai-java-spring-boot-stack', label: 'Java + Spring Boot AI 评估', stage: '判断与边界' },
   // 02 Spec 工程化
   { path: '/handbook/why', label: '为什么需要这套流程', stage: 'Spec 工程化' },
   { path: '/handbook/workflow', label: '6 步工作流', stage: 'Spec 工程化' },
@@ -50,6 +53,7 @@ export const spine: SpineEntry[] = [
   // 07 组织推广
   { path: '/strategy/pilot-playbook', label: '试点负责人 Playbook', stage: '组织推广' },
   { path: '/strategy/pilot-lessons', label: '试点复盘案例', stage: '组织推广' },
+  { path: '/handbook/tech-stack-ai-era', label: 'AI 时代技术选型 SOP', stage: '组织推广' },
   { path: '/handbook/full-stack-team-model', label: '全员全栈团队模式', stage: '组织推广' },
   { path: '/research/transformation', label: '团队转型路线图', stage: '组织推广' },
 ];
@@ -71,6 +75,18 @@ export const guides: Record<string, GuideEntry> = {
   '/research/hard-data': {
     audience: '需要用数据和真实事故说服自己或团队的人',
     outcome: '掌握可引用的量化信号与事故教训，理解风险的真实量级',
+  },
+  '/research/ai-tech-selection': {
+    audience: '准备给团队选技术栈或评估现有栈的决策者',
+    outcome: '得到 5 层评估框架，对「要不要换栈」给出一个能说服人的判断',
+  },
+  '/research/ai-vue-stack': {
+    audience: '在前端选型中考虑 Vue 的工程师 / 负责人',
+    outcome: '理解 Vue 栈在 AI 时代的真实位置、Anthony Fu Skills 与 Cursor Rules 黄金清单',
+  },
+  '/research/ai-java-spring-boot-stack': {
+    audience: '后端用 Java + Spring Boot 的工程师 / 负责人',
+    outcome: '掌握 Spring I/O 2026 信号、JVM 平台复兴、AI 编码反模式与升级路径',
   },
   '/handbook/why': {
     audience: '准备把 AI 引入生产级开发流程的团队',
@@ -167,6 +183,10 @@ export const guides: Record<string, GuideEntry> = {
   '/handbook/full-stack-team-model': {
     audience: '在评估「全员全栈 + AI」组织模式的管理者',
     outcome: '理解能力要求、转型路径与落地前提',
+  },
+  '/handbook/tech-stack-ai-era': {
+    audience: '准备给团队做技术选型或重新评估现有栈的负责人',
+    outcome: '拿到 5 步决策流程、5 层 Checklist、30/60/90 天路径与反模式清单',
   },
   '/research/transformation': {
     audience: '规划团队整体 AI 转型的决策者',

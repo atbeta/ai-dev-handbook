@@ -30,7 +30,7 @@ AI Dev Handbook 是一份面向生产级软件开发的 AI 辅助工程化指南
 上面的六段主线是内容组织维度。在首页，它被表达为一条更贴近实际交付的「生产交付主线」，把全站页面串成从需求到运维的七个阶段。新增内容应优先能挂到其中某个阶段；缺口用「待补」标记，而不是留白或硬凑。
 
 ```text
-01 判断与边界   -> landscape / ai-boundaries / vibe-vs-spec / hard-data / full-stack-trend-2026
+01 判断与边界   -> landscape / ai-boundaries / vibe-vs-spec / hard-data / ai-tech-selection / ai-vue-stack / ai-java-spring-boot-stack / full-stack-trend-2026
 02 Spec 工程化  -> why / workflow / spec-format / clarification / lint-protocol / context-engineering
 03 协作与分工   -> contract-first / constitution / team-roles / why-spec-driven-dev / openspec-in-production
 04 场景执行     -> first-task-sop / unfamiliar-codebase / parallel-sessions / async-nightly

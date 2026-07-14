@@ -1,0 +1,203 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="AI 时代的技术选型：5 层评估框架" description="当 Agent 接管代码生成后，技术选型的决策维度发生了根本变化：训练数据分布、工具链反馈环、模式可预测性、运行时性能、生态成熟度。给出可复用的评估框架与共识/分歧地图。">
+  <Sidebar currentPath="/research/ai-tech-selection" slot="sidebar" />
+  <h1>AI 时代的技术选型</h1>
+  <div class="meta-line">
+    <span class="tag">行业调研</span>
+    <span class="tag">决策框架</span>
+    <span class="tag">2026 中</span>
+  </div>
+
+  <blockquote>
+    <p>当主要"开发者"变成 Coding Agent，技术选型的评估维度被重排：不是"哪个语言最强"，而是"哪个语言能让 Agent <strong>在最少的人工干预下</strong> 稳定地生产可维护代码"。</p>
+  </blockquote>
+
+  <h2 id="one-sentence">一句话总结</h2>
+  <p>2025-2026 业界出现三个共识信号：<strong>(1) 具体语言重要性下降</strong>（AI 处理跨语言语法翻译） <strong>(2) 训练数据丰富的语言仍是 Agent 首选</strong>（JavaScript/TypeScript 第一梯队，Java/Python 紧随其后）<strong>(3) "换技术栈"不如"重塑现有技术栈的使用方式"</strong>（加 .cursorrules / Agent Skills / 现代语言特性约束）。</p>
+
+  <h2 id="five-layers">5 层评估框架</h2>
+  <p>当 Agent 是主要代码生产者，传统选型标准（招聘池、IDE 插件、团队熟悉度）权重降低；新框架的核心问题是：</p>
+
+  <table>
+    <thead>
+      <tr><th>层级</th><th>问题</th><th>权重</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>L1 训练数据分布</strong></td><td>模型在该语言上"见过"多少代码？corner case 表现如何？</td><td>高（决定生成质量基准）</td></tr>
+      <tr><td><strong>L2 工具链反馈环</strong></td><td>错误信息结构化程度？自我纠错要走几轮？</td><td>高（决定 review 迭代成本）</td></tr>
+      <tr><td><strong>L3 模式可预测性</strong></td><td>同一个问题，模型是否每次给出同一种解法？</td><td>高（决定代码一致性）</td></tr>
+      <tr><td><strong>L4 运行时性能/部署</strong></td><td>冷启动、内存、并发、可移植性</td><td>中（不能被生成质量掩盖）</td></tr>
+      <tr><td><strong>L5 生态与招聘</strong></td><td>社区、库、人才市场</td><td>低（仍然重要，但权重降）</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="L1-training-data">L1：训练数据分布决定生成质量基准</h3>
+  <p>这是最反直觉的一点：<strong>模型对语言/框架的熟练度，跟 GitHub 和 Stack Overflow 的代码量高度相关</strong>。</p>
+
+  <blockquote>
+    <p>Code generation quality tracks training data representation. JavaScript and TypeScript dominate GitHub and Stack Overflow by volume. Every frontier model performs best on JS/TS generation tasks.</p>
+    <footer>— <a href="https://blog.serghei.pl/posts/choosing-a-language-when-agents-write-your-code/">Choosing a Language When Agents Write Your Code</a></footer>
+  </blockquote>
+
+  <ul>
+    <li><strong>第一梯队</strong>：JavaScript / TypeScript（GitHub 训练数据最多）</li>
+    <li><strong>第二梯队</strong>：Python、Java、C#（数据量大）</li>
+    <li><strong>第三梯队</strong>：Go、Rust、C++</li>
+    <li><strong>数据稀疏</strong>：Elixir、Clojure、Zig 等——Agent 仍然可用，但 corner case 多</li>
+  </ul>
+
+  <p>直接后果：</p>
+  <ul>
+    <li><strong>Go</strong> 的简单 HTTP handler Agent 几乎一遍就对，但 <strong>goroutine 死锁、channel leak</strong> 这类 corner case 翻车率高</li>
+    <li><strong>JavaScript</strong> 的 happy path 全语言最强，但 <strong>错误处理模式漂移</strong>（throw / Result / promise / async-await 四种同文件）</li>
+    <li><strong>Python</strong> 数据多，但 <strong>MyPy 没强制开启时</strong> Agent 拿不到静态反馈</li>
+  </ul>
+
+  <h3 id="L2-feedback-loop">L2：工具链反馈环决定自我纠错成本</h3>
+  <p>Agent 不读文档——它写代码、跑工具链、读输出、改自己。所以 <strong>错误信号结构化程度</strong> 决定 review 成本。</p>
+
+  <table>
+    <thead>
+      <tr><th>语言</th><th>典型反馈</th><th>自我纠错轮次</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>TypeScript</strong></td><td><code>tsc --noEmit</code> → <code>file:line:col TS2345: ...</code></td><td>1 轮</td></tr>
+      <tr><td><strong>Go</strong></td><td><code>go vet</code> + <code>staticcheck</code> → 结构化但类型系统较弱</td><td>1-2 轮</td></tr>
+      <tr><td><strong>Rust</strong></td><td>borrow checker 极强，但概念门槛让 Agent 难以理解"为什么借不过"</td><td>1-3 轮</td></tr>
+      <tr><td><strong>Python</strong></td><td>runtime TypeError + traceback 当散文解析</td><td>2-4 轮</td></tr>
+      <tr><td><strong>Java</strong></td><td>编译错误结构化，但 <strong>冗长错误链</strong>（一个 NPE 关联多层调用）Agent 偶尔卡</td><td>1-3 轮</td></tr>
+    </tbody>
+  </table>
+
+  <p>关键洞察：<strong>工具链质量对 Agent 不等于对人类的工具链质量</strong>。人类能"上下文读错误"，Agent 需要 <code>file:line:col</code> 结构化。</p>
+
+  <h3 id="L3-pattern-predictability">L3：模式可预测性决定一致性</h3>
+  <p>这是 Java 反直觉翻身的环节：<strong>Java 啰嗦，但 Agent 写出来的反而一致</strong>。</p>
+
+  <blockquote>
+    <p>Verbose but predictable beats compact but variable for agentic maintenance. Predictability of patterns matters more than character count.</p>
+    <footer>— <a href="https://blog.serghei.pl/posts/choosing-a-language-when-agents-write-your-code/">Choosing a Language When Agents Write Your Code</a></footer>
+  </blockquote>
+
+  <ul>
+    <li><strong>Java</strong>：错误处理、Lombok getter/setter、Spring 注解、Builder pattern——模式高度统一，Agent 不会漂移</li>
+    <li><strong>Go</strong>：<code>if err != nil &#123; return fmt.Errorf("...: %w", err) &#125;</code> 几乎唯一解，Agent 100% 重现</li>
+    <li><strong>TypeScript</strong>：错误处理风格 4+ 种，Agent 根据 prompt 上下文随机选——这是 TS 工程最大的隐患</li>
+    <li><strong>Python</strong>：鸭子类型，Agent 容易混用 dataclass / pydantic / TypedDict</li>
+  </ul>
+
+  <h3 id="L4-runtime">L4：运行时性能 / 部署</h3>
+  <p>这一层权重"中"，是因为 <strong>现代语言运行时进化太快，2025-2026 出现了几波"抹平差距"的浪潮</strong>：</p>
+
+  <ul>
+    <li><strong>Java 21 LTS Virtual Threads</strong>：并发模型对齐 Node.js，practical concurrency 从 1000 req/node 跃到 10000+</li>
+    <li><strong>GraalVM Native Image</strong>：启动时间秒级 → 毫秒级，内存 300-500 MB → 50-100 MB</li>
+    <li><strong>Spring Boot 4 + Project Leyden</strong>：JDK 25 的 AOT cache 让 Spring 启动模型实用化</li>
+    <li><strong>Bun / Deno</strong>：Node.js 兼容 + 启动更快，TypeScript 路线加强</li>
+  </ul>
+
+  <p>实际意义：<strong>2026 选技术栈不再需要为"运行时性能"牺牲"开发体验"</strong>——两者都在快速收敛。</p>
+
+  <h3 id="L5-ecosystem">L5：生态成熟度（仍重要但权重下降）</h3>
+  <p>从 Stack Overflow Developer Survey 2025 与 GitHub Octoverse 2025 看：</p>
+
+  <ul>
+    <li><strong>前端</strong>：React 44.7% > Angular 18.2% > <strong>Vue 17.6%</strong> > Svelte 7.2%</li>
+    <li><strong>后端</strong>：Java/Spring 仍是企业首选；Node.js 在初创与全栈场景增长；Go 在基础设施和延迟敏感场景</li>
+    <li><strong>语言</strong>：TypeScript 在 2025 年 8 月首次超越 Python 和 JavaScript 成为 GitHub 使用量第一</li>
+  </ul>
+
+  <p>AI 时代的新变量：<strong>"生态成熟度"被部分外包给了 Agent</strong>。模型见过 React，也见过 Vue，也见过 Svelte——这种场景下，"社区文档好不好"反而比"用的人多不多"更重要，因为 Agent 是文档的主要消费者。</p>
+
+  <h2 id="consensus-vs-divergence">业界共识 vs 分歧地图</h2>
+
+  <h3 id="consensus">共识（2025-2026 多源一致）</h3>
+  <ol>
+    <li><strong>语言重要性下降，AI 处理语法翻译</strong>：<a href="https://mimo.org/blog/ai-vs-traditional-programming">AI vs Traditional Programming (Mimo)</a>、<a href="https://blog.serghei.pl/posts/choosing-a-language-when-agents-write-your-code/">Choosing a Language When Agents Write Your Code</a></li>
+    <li><strong>JavaScript / TypeScript 是 Agent 第一公民</strong>：训练数据量决定一切</li>
+    <li><strong>Java / JVM 在 2025-2026 经历"平台复兴"</strong>：Virtual Threads + GraalVM + Spring AI 让 Java 重回现代选项</li>
+    <li><strong>vibe coding 有边界</strong>：bounded / low-stakes 场景效率最高；<strong>production 系统需要 spec 支撑</strong>（<a href="https://www.augmentcode.com/guides/vibe-coding-vs-spec-driven-development">Augment Code</a>、<a href="https://www.infoworld.com/article/4166817/vibe-coding-or-spec-driven-development-how-to-choose.html">InfoWorld</a>）</li>
+    <li><strong>"Agent Skills" / "Cursor Rules" 成为标准实践</strong>：把团队约定编码到 agent 上下文</li>
+  </ol>
+
+  <h3 id="divergence">分歧</h3>
+  <ol>
+    <li><strong>Vue vs React</strong>：市场份额 React 领先，但 Vue 学习曲线 + Agent Skills 生态完整度差距缩小</li>
+    <li><strong>Spring Boot 是否仍是 Java 后端首选</strong>：企业内主流，但 Quarkus / Micronaut 在 GraalVM 路线领先</li>
+    <li><strong>Node.js vs Go vs Java 后端定位</strong>：三足鼎立，取决于团队惯性、人才市场和延迟要求</li>
+    <li><strong>vibe coding 是否能进 production</strong>：支持方强调可控 demo 速度；反对方强调不可维护性（Jamie Hurst 警告 burnout）</li>
+  </ol>
+
+  <h2 id="key-insight">核心洞察：不是"换技术栈"，是"重塑使用方式"</h2>
+
+  <p>回到 Beta 在 2026 年的实际场景：<strong>前端 Vue、后端 Java (Spring Boot)</strong>——这个组合在 AI 时代不是劣势，而是<strong>被低估的优势</strong>。</p>
+
+  <h3 id="vue-advantage">Vue 栈在 AI 时代的真实位置</h3>
+  <ul>
+    <li><strong>17.6% 使用率（SO 2025）</strong> 不是落后——是"避开 React 内卷 + Vue DX 优势"的理性选择</li>
+    <li><strong>Anthony Fu 的 Skills 集合</strong>（<a href="https://github.com/antfu/skills">antfu/skills</a>）覆盖 Vue/Nuxt/Pinia/Vite/Vitest/Vueuse/<strong>vue-best-practices</strong> 等 10+ 套——是 React 生态缺位的"AI 时代标准包"</li>
+    <li><strong>Nuxt UI v4 内置 MCP Server</strong>（<a href="https://ui.nuxt.com/docs/getting-started/ai/skills">Nuxt UI Skills</a>），直接把组件文档喂给 Cursor/Claude Code</li>
+    <li>Vue 3 + Composition API + script setup + TypeScript = Agent 友好的"约束集"</li>
+  </ul>
+
+  <h3 id="java-advantage">Java 栈在 AI 时代的真实位置</h3>
+  <ul>
+    <li><strong>训练数据量大</strong>——Java 是 SWE-bench Multilingual 核心语言</li>
+    <li><strong>模式高度可预测</strong>——错误处理、注解、Builder 都是模板化</li>
+    <li><strong>Spring I/O 2026 主题</strong>：JVM 平台"追上来了"——Virtual Threads、Project Leyden AOT、GraalVM native image、Spring AI 2.0/2.1</li>
+    <li><strong>Spring AI 2.1 "agentic foundations"</strong>——把 AI 直接集成进 Spring 编程模型，不再需要切到 Python</li>
+    <li>Java 25 LTS + Spring Boot 4 = 启动毫秒级、内存大幅下降、云原生能力追上 Go</li>
+  </ul>
+
+  <h2 id="decision-matrix">决策矩阵（Vue + Java 栈的 AI 时代适配度）</h2>
+
+  <table>
+    <thead>
+      <tr><th>维度</th><th>Vue 3</th><th>React</th><th>Java 21+/Spring Boot 4</th><th>Node.js/TS</th><th>Go</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>L1 训练数据</td><td>★★★</td><td>★★★★</td><td>★★★★</td><td>★★★★★</td><td>★★★</td></tr>
+      <tr><td>L2 反馈环</td><td>★★★★ (Volar)</td><td>★★★ (TS + ESLint)</td><td>★★★★ (compile + Spring)</td><td>★★★★★ (tsc)</td><td>★★★★ (go vet)</td></tr>
+      <tr><td>L3 模式可预测</td><td>★★★★ (Agent Skills)</td><td>★★★ (风格多)</td><td>★★★★★ (Lombok/Records)</td><td>★★★ (4 种错误处理)</td><td>★★★★★ (单一错误处理)</td></tr>
+      <tr><td>L4 运行时</td><td>★★★★ (Vite/SSG)</td><td>★★★★ (RSC)</td><td>★★★★★ (VT + GraalVM)</td><td>★★★ (event loop 限制)</td><td>★★★★★ (goroutine)</td></tr>
+      <tr><td>L5 生态</td><td>★★★</td><td>★★★★★</td><td>★★★★★</td><td>★★★★</td><td>★★★</td></tr>
+      <tr><td><strong>综合（AI 时代）</strong></td><td><strong>★★★★</strong></td><td>★★★★</td><td><strong>★★★★★</strong></td><td>★★★★</td><td>★★★★</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="action-items">行动清单（Vue + Java 栈 30 天升级路径）</h2>
+
+  <ol>
+    <li><strong>Week 1</strong>：建立 <code>.cursorrules</code> / <code>CLAUDE.md</code>——把团队约定（Composition API、script setup、Spring 注解风格、Lombok vs records）写进 Agent 上下文</li>
+    <li><strong>Week 2</strong>：安装 Anthony Fu Skills 集合 + Nuxt UI Skills（Vue 项目）；安装 Spring AI + Spring Boot 4 升级评估（Java 项目）</li>
+    <li><strong>Week 3</strong>：强制 <code>strict</code> 模式 / TypeScript / 关闭 <code>any</code>；Java 升级 JDK 21+，开 Virtual Threads 试点</li>
+    <li><strong>Week 4</strong>：跑真实任务、统计 review 迭代次数、收敛 spec 模板（不依赖 vibe coding）</li>
+  </ol>
+
+  <h2 id="further-reading">延伸阅读</h2>
+  <ul>
+    <li><a href="/research/ai-vue-stack">Vue 技术栈 AI 时代深度评估</a>（待写）</li>
+    <li><a href="/research/ai-java-spring-boot-stack">Java + Spring Boot AI 时代深度评估</a>（待写）</li>
+    <li><a href="/research/agent-ecosystem">Coding Agent 生态全景</a>——理解 Agent 能力边界</li>
+    <li><a href="/research/vibe-vs-spec">Vibe vs Spec 辩论</a>——理解何时用 vibe、何时用 spec</li>
+    <li><a href="/research/full-stack-trend-2026">全栈化趋势 2026</a>——理解组织模式变化</li>
+  </ul>
+
+  <h2 id="references">引用</h2>
+  <ol>
+    <li><a href="https://blog.serghei.pl/posts/choosing-a-language-when-agents-write-your-code/">Choosing a Language When Agents Write Your Code</a> (Serghei, Apr 2026) — 5 层框架的核心理论来源</li>
+    <li><a href="https://stackoverflow.blog/2025/05/29/not-just-a-vibe-the-stack-overflow-developer-survey-is-really-here/">Stack Overflow Developer Survey 2025</a></li>
+    <li><a href="https://github.blog/news-insights/octoverse/octoverse-2025/">GitHub Octoverse 2025</a></li>
+    <li><a href="https://dev.to/woohuiren/attended-spring-io-2026-3j5o">Attended Spring I/O 2026</a> (Huiren Woo, Apr 2026) — Java 平台复兴的现场记录</li>
+    <li><a href="https://medium.com/@poorna2k6/optimizing-cloud-native-java-a-comparative-analysis-of-spring-boot-4-0-d05bb01fd5b7">Optimizing Cloud-Native Java: Spring Boot 4.0 + Virtual Threads + GraalVM</a> (Feb 2026)</li>
+    <li><a href="https://vueschool.io/articles/vuejs-tutorials/vue-agent-skills-for-reliable-ai-development/">Vue Agent Skills for Reliable AI Development</a> (Vue School, Mar 2026)</li>
+    <li><a href="https://www.augmentcode.com/guides/vibe-coding-vs-spec-driven-development">Vibe Coding vs Spec-Driven Development (2026)</a></li>
+    <li><a href="https://www.javacodegeeks.com/2026/06/stop-blindly-trusting-ai-java-pitfalls-i-discovered-in-2026.html">Stop Blindly Trusting AI: Java Pitfalls I Discovered in 2026</a></li>
+    <li><a href="https://artificialanalysis.ai/agents/coding-agents">AI Coding Agent Benchmarks &amp; Leaderboard</a></li>
+    <li><a href="https://llm-stats.com/benchmarks">AI Benchmarks 2026 (SWE-bench Multilingual)</a></li>
+  </ol>
+</MainLayout>

@@ -1,0 +1,386 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="Java + Spring Boot AI 时代深度评估" description="Java 21 Virtual Threads、Spring Boot 4 + Project Leyden、Spring AI 2.0/2.1、Embabel agent framework——JVM 平台在 2025-2026 经历复兴，AI 生成 Java 的反模式与避坑指南。">
+  <Sidebar currentPath="/research/ai-java-spring-boot-stack" slot="sidebar" />
+  <h1>Java + Spring Boot AI 时代深度评估</h1>
+  <div class="meta-line">
+    <span class="tag">栈级调研</span>
+    <span class="tag">Java 21+ / Spring Boot 4</span>
+    <span class="tag">2026 中</span>
+  </div>
+
+  <blockquote>
+    <p>JVM 平台终于追上来了——Project Loom 让并发模型对齐 Node.js，Project Leyden 让启动时间对齐 Go，Spring AI 2.0 让 Java 程序员不必再切到 Python 才能用大模型。Java 不老，是被低估了。</p>
+  </blockquote>
+
+  <h2 id="one-sentence">一句话总结</h2>
+  <p>Spring I/O 2026 的核心信号：<strong>JVM 平台正在经历复兴</strong>。Virtual Threads（Java 21）、Project Leyden AOT（JDK 25）、Spring Boot 4、Spring AI 2.0/2.1、Embabel agent framework——五项 JVM 平台级变革同时落地，让"Java 老旧、笨重、慢启动"成为历史。</p>
+
+  <h2 id="positioning">Java 在 AI 时代的真实位置</h2>
+
+  <h3 id="wrong-perception">曾经的认知（已被打破）</h3>
+  <ul>
+    <li>"Java 啰嗦，启动慢，内存重"</li>
+    <li>"Spring 太复杂，不如 Node.js / Go 简洁"</li>
+    <li>"AI 用 Python，Java 程序员被边缘化"</li>
+  </ul>
+
+  <h3 id="2026-reality">2026 现状</h3>
+  <table>
+    <thead>
+      <tr><th>维度</th><th>2020</th><th>2026</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>并发模型</strong></td><td>OS 线程 1:1，约 1000 req/node 封顶</td><td>Virtual Threads（Java 21 LTS），百万级并发任务</td></tr>
+      <tr><td><strong>启动时间</strong></td><td>3-8 秒（JVM warmup）</td><td>GraalVM Native Image 毫秒级；Project Leyden AOT cache</td></tr>
+      <tr><td><strong>内存占用</strong></td><td>300-500 MB/实例</td><td>50-100 MB（native image）</td></tr>
+      <tr><td><strong>AI 集成</strong></td><td>手写 REST 调用 OpenAI</td><td>Spring AI 2.0：原生 SDK for OpenAI / Anthropic / Google GenAI</td></tr>
+      <tr><td><strong>代码冗长</strong></td><td>必须 getter/setter</td><td>Records、sealed classes、pattern matching、text blocks</td></tr>
+      <tr><td><strong>Null 安全</strong></td><td>运行时 NPE</td><td>JSpecify @Nullable（Spring 6 采纳）</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <p>Something shifted at Spring I/O this year. The conversation wasn't really about Spring. It was about the JVM platform finally catching up to where developers needed it to be, and Spring riding that wave.</p>
+    <footer>— <a href="https://dev.to/woohuiren/attended-spring-io-2026-3j5o">Attended Spring I/O 2026</a> (Huiren Woo, Apr 2026)</footer>
+  </blockquote>
+
+  <h2 id="platform-changes">5 项 JVM 平台级变革（2025-2026）</h2>
+
+  <h3 id="virtual-threads">1. Project Loom Virtual Threads（Java 21 LTS）</h3>
+  <p><strong>颠覆点</strong>：虚拟线程改变"阻塞"语义——从此 blocking is fine。</p>
+
+  <blockquote>
+    <p>Virtual threads fundamentally change how we think about blocking. The industry spent years treating blocking as something to avoid (hence the reactive stack's whole existence). Virtual threads flip that. Blocking is fine if the thread is virtual and cheap.</p>
+    <footer>— <a href="https://dev.to/woohuiren/attended-spring-io-2026-3j5o">Spring I/O 2026 Keynote</a></footer>
+  </blockquote>
+
+  <p>实际数据（<a href="https://medium.com/@poorna2k6/optimizing-cloud-native-java-a-comparative-analysis-of-spring-boot-4-0-d05bb01fd5b7">Cloud-Native Java research</a>）：</p>
+  <ul>
+    <li>Spring Boot 3.5 + Virtual Threads：<strong>98% 启动延迟降低</strong>、<strong>85% 成本节约</strong></li>
+    <li>practical concurrency 从 ~1000 req/node 跃到 ~10000+ req/node</li>
+    <li>HikariCP 调小：<code>spring.datasource.hikari.maximum-pool-size=10</code>（虚拟线程等待效率高，无需大池）</li>
+  </ul>
+
+  <p><strong>对 AI 编码的影响</strong>：</p>
+  <ul>
+    <li>Agent 写 <code>synchronized</code> / 阻塞 I/O 不再是性能陷阱</li>
+    <li>Reactive stack（WebFlux）不再是默认选项；<strong>blocking stack 回归主流</strong></li>
+    <li>Spring I/O 2026 官方建议："If you've been forcing reactive patterns into places where simple blocking I/O would do the job, the platform is telling you to stop."</li>
+  </ul>
+
+  <h3 id="project-leyden">2. Project Leyden AOT Cache（JDK 25）</h3>
+  <p><strong>颠覆点</strong>：JDK 级别的 AOT caching，让 Spring AOT subsystem 真正实用化。</p>
+
+  <ul>
+    <li><strong>JDK 25</strong>：AOT cache 首发</li>
+    <li><strong>JDK 29</strong>：expanded version</li>
+    <li>Spring Boot 4 的 AOT 引擎可配置数据库方言、可视化生成的 AOT 代码</li>
+  </ul>
+
+  <p>实际效果：JVM warmup 不再是 cloud-native 障碍，<strong>Java 应用的 K8s autoscaling 行为对齐 Go</strong>。</p>
+
+  <h3 id="spring-ai">3. Spring AI 2.0 / 2.1</h3>
+  <p><strong>颠覆点</strong>：Spring 程序员不必再切到 Python 生态才能用大模型。</p>
+
+  <p>Spring AI 2.0 "solid foundations"：</p>
+  <ul>
+    <li><strong>原生 Java SDK</strong>：OpenAI、Anthropic、Google GenAI（不必手写 REST）</li>
+    <li>原生特性：prompt caching、batching、structured output</li>
+    <li>ChatClient 改进：<code>ToolCallAdvisor</code>、<code>ToolSearchTool</code></li>
+    <li>新 Session API</li>
+    <li><strong>A2A（AI-to-AI）integration</strong></li>
+  </ul>
+
+  <p>Spring AI 2.1 "agentic foundations"：</p>
+  <ul>
+    <li>Agent 框架正式化</li>
+    <li>Tool calling 标准化</li>
+    <li>Multi-step reasoning 内建</li>
+  </ul>
+
+  <h3 id="embabel">4. Embabel（Rod Johnson 创业项目）</h3>
+  <p><strong>重磅信号</strong>：Spring Framework 的创始人 Rod Johnson（2003 年 Spring 的发明者）现在是 <a href="https://2026.springio.net/sessions/building-killer-ai-agents-on-your-spring-stack-with-embabel/">Embabel</a> 的核心开发者。</p>
+
+  <blockquote>
+    <p>Rod Johnson, the Spring Framework creator, is now building Embabel: a framework for multi-step AI agents. It's written in Kotlin, but Java users don't need to worry about it. Minimal wrangling.</p>
+    <footer>— <a href="https://dev.to/woohuiren/attended-spring-io-2026-3j5o">Spring I/O 2026</a></footer>
+  </blockquote>
+
+  <p>Embabel 的核心思想：<strong>动态路径寻找（dynamic pathfinding）</strong></p>
+  <ul>
+    <li>给定目标，框架自动构建到达目标的 action path</li>
+    <li>每步动态评估可用 action</li>
+    <li>不需显式指定条件——框架根据 expectation 推断</li>
+  </ul>
+
+  <p>实战要点（Rod Johnson 反复强调）：<strong>"don't give all your tools to the LLM"</strong>——给 Agent 工具要做权限分层，避免 Agent 误调。</p>
+
+  <h3 id="jspecify">5. JSpecify @Nullable（Spring 6 采纳）</h3>
+  <p><strong>颠覆点</strong>：平台级 null safety 终于来了。</p>
+  <ul>
+    <li>JSpecify 给 Java 加了 <code>@Nullable</code> 类型注解</li>
+    <li>Spring 6 / Spring Boot 4 采纳</li>
+    <li>支持 package-level nullability：<code>package-info.java</code> 标记整个包为 non-null</li>
+    <li>对 AI 编码的意义：Agent 写 NPE-prone 代码会立刻被静态检查抓出</li>
+  </ul>
+
+  <h2 id="spring-boot-4">Spring Boot 4 关键能力</h2>
+
+  <h3 id="concurrency-limits">Concurrency limits 一等公民</h3>
+  <p>Spring Boot 4 把并发限制提升为一等配置：</p>
+  <pre><code>spring.concurrency-limit.max-requests=1000
+spring.concurrency-limit.timeout=30s</code></pre>
+
+  <p>以前要 bolt-on rate limiting 或 semaphore，现在配置即可。</p>
+
+  <h3 id="retryable">Retryable 升级</h3>
+  <ul>
+    <li>指数退避 + jitter + circuit breaker 交互开箱即用</li>
+    <li>不再需要手写重试逻辑</li>
+  </ul>
+
+  <h3 id="meta-annotations">Meta annotations via @Component</h3>
+  <p>用注解组合注册 bean：</p>
+  <pre><code>@Service  // 标准注解
+@AuthenticatedService  // 自定义元注解，包了 @Service + @PreAuthorize
+public class OrderService &#123; ... &#125;</code></pre>
+
+  <h3 id="webauth">WebAuth + One-Time-Token（OTT）</h3>
+  <ul>
+    <li>WebAuth 是 modern auth 标准</li>
+    <li>OTT 给"不想走 MFA 的简化流"</li>
+    <li>Spring Security 6.5+ 内置支持</li>
+  </ul>
+
+  <h3 id="modulith">Modulith 模块化单体</h3>
+  <p>Spring Modulith 在 Spring Boot 4 完整化：</p>
+  <ul>
+    <li>ArchUnit 验证模块边界</li>
+    <li>isolated testing + integration testing with selective change detection</li>
+    <li>"fewer systems with the same structure"——少做系统，但每个系统结构对齐</li>
+  </ul>
+
+  <h2 id="anti-patterns">AI 生成 Java 代码的常见反模式</h2>
+
+  <h3 id="verbosity">反模式 1：跳过现代 Java 特性</h3>
+  <p>Agent 训练数据覆盖 Java 8 时代，倾向写冗长 getter/setter：</p>
+
+  <pre><code>// 反例（Agent 容易写）
+public class User &#123;
+    private String name;
+    private int age;
+
+    public String getName() &#123; return name; &#125;
+    public void setName(String name) &#123; this.name = name; &#125;
+    public int getAge() &#123; return age; &#125;
+    public void setAge(int age) &#123; this.age = age; &#125;
+&#125;
+
+// 正例（用 records）
+public record User(String name, int age) &#123;&#125;</code></pre>
+
+  <p><strong>解法</strong>：</p>
+  <ul>
+    <li>把 "Use records for DTOs, sealed types for closed hierarchies" 写进 <code>.cursorrules</code></li>
+    <li>Piotr Minkowski 的 <a href="https://piotrminkowski.com/2026/03/24/claude-code-template-for-spring-boot/">Claude Code Template for Spring Boot</a> 直接写明："Do not use the Lombok library."</li>
+  </ul>
+
+  <h3 id="deprecated-apis">反模式 2：使用 deprecated APIs</h3>
+  <p>训练数据会带 Agent 用 WebMvcConfigurer 旧版、javax.* 包、Spring Web 5 API：</p>
+  <ul>
+    <li>Java EE → Jakarta EE（javax → jakarta）</li>
+    <li>Spring Security 5 → 6 API 大改</li>
+    <li>Spring Boot 2.x → 3.x 配置模型变化</li>
+  </ul>
+
+  <p><strong>解法</strong>：在 prompt 中明确 Spring Boot 版本与 Java 版本，让 Agent 不会推荐过时的 API。<a href="https://katyella.com/blog/ai-code-review-java/">AI Code Review for Java Teams</a> 建议："For Spring Boot projects, specify the Spring Boot version so it doesn't suggest deprecated APIs."</p>
+
+  <h3 id="blocking-reactive-mix">反模式 3：阻塞 + 反应式混用</h3>
+  <p>Agent 可能把 <code>WebClient</code> 嵌进 <code>@Transactional</code>，或者在 <code>Mono</code> 里调 <code>Thread.sleep</code>：</p>
+  <pre><code>// 反例
+&#64;Transactional
+public Mono&lt;User&gt; getUser(Long id) &#123;
+    return userRepository.findById(id)  // 阻塞！违反响应式
+        .delayElement(Duration.ofSeconds(1));  // 阻塞线程
+&#125;
+
+// 正例
+// 简单场景用 Virtual Threads + 阻塞即可
+&#64;Transactional
+public User getUser(Long id) &#123;
+    return userRepository.findById(id).orElseThrow();
+&#125;</code></pre>
+
+  <p><strong>Spring I/O 2026 官方建议</strong>：用 Virtual Threads 后，绝大多数场景不必混用反应式。</p>
+
+  <h3 id="exceptions-swallowed">反模式 4：Exception 被吞掉</h3>
+  <p>Agent 写 <code>try &#123; ... &#125; catch (Exception e) &#123; log.error(e); &#125;</code>，吞掉 NPE：</p>
+  <pre><code>// 反例
+try &#123;
+    user.getProfile().getAddress().getCity();
+&#125; catch (Exception e) &#123;
+    log.error(e);
+    return null;
+&#125;
+
+// 正例：用 Optional 链
+return Optional.ofNullable(user)
+    .map(User::getProfile)
+    .map(Profile::getAddress)
+    .map(Address::getCity)
+    .orElse(null);</code></pre>
+
+  <p><strong>解法</strong>：<code>.cursorrules</code> 写 "No swallowed exceptions, use Optional chain for nested null handling."</p>
+
+  <h3 id="high-complexity">反模式 5：High cyclomatic complexity</h3>
+  <blockquote>
+    <p>Compared to human-generated code, LLMs often generated code with a higher cyclomatic complexity. Our outcomes suggest that LLMs tend to over-engineer solutions, which could result in code that is harder to maintain and more prone to errors.</p>
+    <footer>— <a href="https://medium.com/@abhishek97.edu/why-ai-cant-write-optimized-code-the-verbosity-problem-and-how-to-solve-it-d9339bb9b290">Why AI Can't Write Optimized Code</a></footer>
+  </blockquote>
+
+  <p>Agent 倾向 over-engineer：加 helper method、加 abstraction layer、加 defensive code。<strong>解法</strong>：code review 时强制 "方法不超过 30 行、圈复杂度不超过 10"。</p>
+
+  <h2 id="claude-code-template">Claude Code 实战模板</h2>
+
+  <p>来自 Piotr Minkowski 的 <a href="https://piotrminkowski.com/2026/03/24/claude-code-template-for-spring-boot/">Claude Code Template for Spring Boot</a>：</p>
+
+  <pre><code>## Project Conventions
+
+- The Maven artifact name must be the same as the parent directory name.
+- Use semantic versioning for the Maven project. Each time you generate a new version, bump the PATCH section of the version number.
+- Use `pl.piomin.services` as the group ID for the Maven project and base Java package.
+- Do not use the Lombok library.
+
+## Java Style
+
+- Use Java 21+ features (records, sealed classes, pattern matching, text blocks).
+- Always use Virtual Threads for I/O-bound operations.
+- Use Optional chain for nested null handling, no swallowed exceptions.
+- Prefer composition over inheritance.
+
+## Spring Boot
+
+- Spring Boot 4.0+ baseline.
+- Use Spring AI 2.x for LLM integration.
+- Enable JSpecify @Nullable for null safety.
+- HikariCP pool size: 10 (rely on Virtual Threads).</code></pre>
+
+  <h2 id="specific-stack">Beta 公司常见 Java 栈：最优搭配</h2>
+
+  <table>
+    <thead>
+      <tr><th>层</th><th>推荐选型</th><th>理由</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>JDK</strong></td><td>Java 21 LTS → Java 25 LTS</td><td>Virtual Threads（21）+ Project Leyden（25）</td></tr>
+      <tr><td><strong>框架</strong></td><td>Spring Boot 4</td><td>Modulith + Spring AI 2.1 + JSpecify</td></tr>
+      <tr><td><strong>并发</strong></td><td>Virtual Threads + blocking stack</td><td>不要 WebFlux（除非真实需要非阻塞流式）</td></tr>
+      <tr><td><strong>数据访问</strong></td><td>Spring Data JPA + Hibernate 6+</td><td>MySQL/PostgreSQL with HikariCP pool=10</td></tr>
+      <tr><td><strong>安全</strong></td><td>Spring Security 6.5+ + WebAuth/OTT</td><td>现代 auth 标准</td></tr>
+      <tr><td><strong>AI 集成</strong></td><td>Spring AI 2.1（OpenAI/Anthropic/Google）</td><td>不必切到 Python</td></tr>
+      <tr><td><strong>构建</strong></td><td>Maven / Gradle（团队习惯）</td><td>无 AI 时代差异</td></tr>
+      <tr><td><strong>Native 部署</strong></td><td>GraalVM Native Image（可选）</td><td>启动毫秒级、内存 50-100MB</td></tr>
+      <tr><td><strong>Null 安全</strong></td><td>JSpecify @Nullable + ErrorProne/SpotBugs</td><td>静态检查</td></tr>
+      <tr><td><strong>测试</strong></td><td>JUnit 5 + Mockito 5 + Testcontainers</td><td>真实环境测试</td></tr>
+      <tr><td><strong>API 文档</strong></td><td>SpringDoc OpenAPI 3</td><td>AI 可读 schema</td></tr>
+      <tr><td><strong>可观测性</strong></td><td>Micrometer + OpenTelemetry</td><td>Spring Boot 4 默认支持</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="anti-vibe">拒绝 vibe coding：用 Spec + Agent 协作</h2>
+
+  <p>对于生产 Java 系统，<strong>纯 vibe coding 不够</strong>。理由：</p>
+
+  <blockquote>
+    <p>Vibe coding delivers measurable value in bounded, low-stakes contexts where speed outweighs long-term maintainability. It lacks deterministic behavior, making it fundamentally unsuitable for systems that need to be maintained, scaled, or supported long-term.</p>
+    <footer>— <a href="https://www.augmentcode.com/guides/vibe-coding-vs-spec-driven-development">Vibe Coding vs Spec-Driven Development (2026)</a></footer>
+  </blockquote>
+
+  <p>推荐流程：</p>
+  <ol>
+    <li><strong>Spec first</strong>：先写清楚 spec（接口契约、边界、数据模型）</li>
+    <li><strong>AI 生成骨架</strong>：把 spec 喂给 Agent 生成 Controller / Service / Repository 骨架</li>
+    <li><strong>人类填业务</strong>：核心业务逻辑由人写（domain knowledge 密集区）</li>
+    <li><strong>AI 补测试</strong>：让 Agent 基于已写代码生成 test cases（reflection 自己）</li>
+    <li><strong>Spec + Code 双向 review</strong>：AI Lint + 人类 review</li>
+  </ol>
+
+  <h2 id="30-day-upgrade">30 天升级路径（Java/Spring Boot 团队）</h2>
+
+  <h3 id="week-1">Week 1：基础设施</h3>
+  <ul>
+    <li>JDK 升级到 21 LTS，开 Virtual Threads 试点</li>
+    <li>写 <code>CLAUDE.md</code> / <code>.cursorrules</code>：明确 Spring Boot 版本、Java 版本、代码风格</li>
+    <li>安装 Spring AI 2.0 评估</li>
+  </ul>
+
+  <h3 id="week-2">Week 2：现代 Java 特性</h3>
+  <ul>
+    <li>团队培训：records、sealed classes、pattern matching、text blocks</li>
+    <li>SonarQube / SpotBugs 加规则：禁用 raw types、强制 @Override</li>
+    <li>JSpecify @Nullable 推广</li>
+  </ul>
+
+  <h3 id="week-3">Week 3：Spring AI + Spring Boot 4 评估</h3>
+  <ul>
+    <li>试点一个 internal 工具用 Spring AI 重构（替代 Python 脚本）</li>
+    <li>评估 Spring Boot 4 GA 后迁移路径</li>
+    <li>Modulith 评估：是否拆分为模块化单体而非微服务</li>
+  </ul>
+
+  <h3 id="week-4">Week 4：度量与收敛</h3>
+  <ul>
+    <li>真实任务统计：AI 生成 Java 的 review 迭代次数</li>
+    <li>Spec 模板沉淀（基于踩过的坑）</li>
+    <li>建立"AI 生成代码必须通过的检查项"</li>
+  </ul>
+
+  <h2 id="summary">结论</h2>
+
+  <p>Java 在 2026 不是"老旧选择"，而是 <strong>"训练数据丰富 + 模式可预测 + 平台复兴"</strong> 的最佳 AI 时代后端之一。</p>
+
+  <p>关键认知更新：</p>
+  <ul>
+    <li><strong>Virtual Threads 颠覆</strong>：Java 并发模型对齐 Node.js / Go，blocking stack 回归主流</li>
+    <li><strong>Spring Boot 4 + Project Leyden</strong>：启动毫秒级，云原生能力对齐 Go</li>
+    <li><strong>Spring AI 2.0/2.1</strong>：Java 程序员不必切到 Python 也能用大模型</li>
+    <li><strong>JSpecify @Nullable</strong>：平台级 null safety</li>
+  </ul>
+
+  <p>对 Beta 当前场景（Java + Spring Boot 后端），<strong>不需要换技术栈</strong>，只需要：</p>
+  <ol>
+    <li>JDK 升级到 21+（Virtual Threads）</li>
+    <li>Spring Boot 升级到 4（Modulith + Spring AI）</li>
+    <li>强制现代 Java 特性（records、sealed、pattern matching）</li>
+    <li>JSpecify 推广（null safety）</li>
+    <li>AI 协作流程建立（spec-first + AI skeleton + human domain）</li>
+  </ol>
+
+  <h2 id="further-reading">延伸阅读</h2>
+  <ul>
+    <li><a href="/research/ai-tech-selection">AI 时代的技术选型：5 层评估框架</a></li>
+    <li><a href="/research/ai-vue-stack">Vue 技术栈 AI 时代深度评估</a></li>
+    <li><a href="/research/agent-ecosystem">Coding Agent 生态全景</a></li>
+    <li><a href="/research/infrastructure-impact">基础设施影响</a></li>
+  </ul>
+
+  <h2 id="references">引用</h2>
+  <ol>
+    <li><a href="https://dev.to/woohuiren/attended-spring-io-2026-3j5o">Attended Spring I/O 2026</a> (Huiren Woo, Apr 2026) — 现场记录 Juergen Hoeller keynote 与 Bootiful Spring Boot 4</li>
+    <li><a href="https://medium.com/@poorna2k6/optimizing-cloud-native-java-a-comparative-analysis-of-spring-boot-4-0-d05bb01fd5b7">Optimizing Cloud-Native Java: Spring Boot 4.0 + Virtual Threads + GraalVM</a> (Feb 2026)</li>
+    <li><a href="https://www.danvega.dev/blog/2025/09/17/spring-boot-3-features">Spring Boot 3.x Features Guide (2022-2025)</a></li>
+    <li><a href="https://piotrminkowski.com/2026/03/24/claude-code-template-for-spring-boot/">Claude Code Template for Spring Boot</a> (Piotr Minkowski, Mar 2026)</li>
+    <li><a href="https://www.javacodegeeks.com/2026/06/stop-blindly-trusting-ai-java-pitfalls-i-discovered-in-2026.html">Stop Blindly Trusting AI: Java Pitfalls I Discovered in 2026</a></li>
+    <li><a href="https://katyella.com/blog/ai-code-review-java/">AI Code Review for Java Teams</a> (Mar 2026)</li>
+    <li><a href="https://bronson.ai/resources/java-code-generator-best-java-ai-tools-for-developers-in-2026/">Java Code Generator: Best Java AI Tools for Developers in 2026</a></li>
+    <li><a href="https://www.altenpolska.pl/en/2025/09/08/spring-boot-3-and-java-21-whats-new-what-changed-and-enterprise-use-cases/">Java 21 and Spring Boot 3 – New Features and Enterprise Use Cases</a></li>
+    <li><a href="https://hiveoscity.com/best/spring-boot">Best AI Coding Tools for Spring Boot (2026)</a></li>
+    <li><a href="https://www.augmentcode.com/guides/vibe-coding-vs-spec-driven-development">Vibe Coding vs Spec-Driven Development (2026)</a></li>
+    <li><a href="https://www.infoworld.com/article/4166817/vibe-coding-or-spec-driven-development-how-to-choose.html">Vibe coding or spec-driven development? How to choose</a> (InfoWorld, May 2026)</li>
+    <li><a href="https://blog.serghei.pl/posts/choosing-a-language-when-agents-write-your-code/">Choosing a Language When Agents Write Your Code</a></li>
+  </ol>
+</MainLayout>

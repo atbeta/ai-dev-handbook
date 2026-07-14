@@ -1,0 +1,223 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="AI 时代技术选型决策 SOP" description="当 Agent 接管代码生成后，技术选型从一次性事件变成周期性纪律。本文给出 5 步决策流程、5 层评估 Checklist 与 30/60/90 天实施路径，帮助团队在不脱离现有栈的前提下，最大化 AI 编码效率。">
+  <Sidebar currentPath="/handbook/tech-stack-ai-era" slot="sidebar" />
+  <h1>AI 时代技术选型决策 SOP</h1>
+  <div class="meta-line">
+    <span class="tag">决策 SOP</span>
+    <span class="tag">技术选型</span>
+    <span class="tag">2026 中</span>
+  </div>
+
+  <blockquote>
+    <p>技术选型不是一次性事件。<strong>AI 时代的技术选型是周期性纪律</strong>——每季度重新评估栈对 Agent 的友好度，每半年更新 .cursorrules / Agent Skills。本 SOP 把决策流程、评估工具、实施路径固定下来。</p>
+  </blockquote>
+
+  <h2 id="positioning">为什么需要这个 SOP</h2>
+  <p>很多团队在 2025-2026 面临同一个问题：</p>
+  <ul>
+    <li>"我们该换技术栈吗？"</li>
+    <li>"Vue / React / Svelte 怎么选？"</li>
+    <li>"Java / Spring Boot 是不是太老旧？"</li>
+    <li>"AI Coding 工具出来后，选型逻辑要不要变？"</li>
+  </ul>
+
+  <p>本文不给出"必须换"或"绝对不换"的答案，而是给一个 <strong>可复用的决策流程</strong>，让团队能根据自己的约束做判断。</p>
+
+  <h2 id="decision-flow">5 步决策流程</h2>
+
+  <h3 id="step-1">Step 1：明确决策触发条件</h3>
+  <p>不是每次"想换技术栈"都要走完整流程。先确认触发条件：</p>
+
+  <table>
+    <thead>
+      <tr><th>触发条件</th><th>严重度</th><th>建议响应</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>团队新人招聘困难</td><td>高</td><td>走完整 5 步流程</td></tr>
+      <tr><td>AI 生成代码 review 迭代 ≥3 次</td><td>高</td><td>走 Step 2-4（评估当前栈）</td></tr>
+      <tr><td>运行时性能不达标（启动慢 / 内存高）</td><td>高</td><td>走 Step 2-4 + 考虑 native image</td></tr>
+      <tr><td>团队个人偏好某技术</td><td>中</td><td>走 Step 2（数据驱动判断）</td></tr>
+      <tr><td>看到一篇"X 框架死了"的博客</td><td>低</td><td>不必响应</td></tr>
+      <tr><td>AI Coding 工具更新后栈不友好</td><td>中</td><td>走 Step 3-4（加约束）</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="step-2">Step 2：数据收集（2-3 天）</h3>
+  <p>不靠"我觉得"，靠数据：</p>
+  <ol>
+    <li><strong>AI 训练数据</strong>：用 <a href="https://blog.serghei.pl/posts/choosing-a-language-when-agents-write-your-code/">Choosing a Language When Agents Write Your Code</a> 的视角——模型在该语言上见过多少代码？corner case 表现？</li>
+    <li><strong>团队实际 review 数据</strong>：统计过去 30 天 AI 生成的 PR，按语言/框架分组，review 迭代次数、缺陷密度</li>
+    <li><strong>运行时数据</strong>：启动时间、内存占用、p99 latency（用生产 telemetry）</li>
+    <li><strong>社区信号</strong>：Stack Overflow Survey、GitHub Octoverse、HN/Reddit/X 的趋势话题</li>
+    <li><strong>团队熟悉度</strong>：成员在栈上的平均年限、最近一次大重构的痛苦度</li>
+  </ol>
+
+  <h3 id="step-3">Step 3：5 层评估（1-2 天）</h3>
+  <p>用 <a href="/research/ai-tech-selection">AI 时代技术选型</a> 的 5 层框架评估当前栈与候选栈：</p>
+
+  <table>
+    <thead>
+      <tr><th>层级</th><th>评估问题</th><th>评估方法</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>L1 训练数据</td><td>模型在该语言上"见过"多少代码？</td><td>GitHub 语言排名 + 跑 10 个真实任务看生成质量</td></tr>
+      <tr><td>L2 反馈环</td><td>工具链错误是否结构化？</td><td>故意写 3 类典型 bug，看 tsc/go vet/compile 报错清晰度</td></tr>
+      <tr><td>L3 模式可预测</td><td>同一问题模型是否同解？</td><td>同一 prompt 跑 5 次，统计解法分布</td></tr>
+      <tr><td>L4 运行时</td><td>冷启动 / 内存 / 并发是否达标？</td><td>k6 / wrk 压测 + Prometheus 监控</td></tr>
+      <tr><td>L5 生态</td><td>社区 / 库 / 招聘是否够？</td><td>Indeed / 拉勾 / 招聘数据 + npm/maven 下载量趋势</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="step-4">Step 4：决策（1 天）</h3>
+  <p>5 层评估后，按权重综合判断：</p>
+
+  <table>
+    <thead>
+      <tr><th>结论</th><th>触发条件</th><th>下一步</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>保留当前栈</strong></td><td>L1-L4 总分 ≥ 当前栈 80%</td><td>加约束（Step 5）</td></tr>
+      <tr><td><strong>试点新栈</strong></td><td>L1-L4 总分 ≥ 当前栈 90% 且 L5 显著更好</td><td>30 天非关键路径试点</td></tr>
+      <tr><td><strong>迁移</strong></td><td>L1-L4 总分 ≥ 当前栈 110% 或 L4 有数量级差距</td><td>6-12 月渐进迁移 + 双栈并行期</td></tr>
+      <tr><td><strong>混合</strong></td><td>不同服务有不同最优</td><td>按服务/模块选型，不强求统一</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>关键原则</strong>：</p>
+  <ul>
+    <li>不要为"用的人多"换栈——AI 时代训练数据更重要</li>
+    <li>不要为"个人偏好"换栈——除非偏好背后有可量化数据</li>
+    <li>不要为"博客说"换栈——除非有可复现的实测数据</li>
+  </ul>
+
+  <h3 id="step-5">Step 5：约束强化（无论是否换栈）</h3>
+  <p>无论决策结果是什么，都要执行：</p>
+
+  <table>
+    <thead>
+      <tr><th>动作</th><th>前端</th><th>后端</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Agent Skills</td><td>Anthony Fu Skills 全量</td><td>Spring AI Skills（如有）</td></tr>
+      <tr><td>Cursor Rules</td><td><code>.cursorrules</code> 写死 script setup / Composition API / Pinia</td><td><code>.cursorrules</code> 写死 records / sealed / Spring Boot 版本</td></tr>
+      <tr><td>类型严格化</td><td>TS strict + noImplicitAny</td><td>JSpecify @Nullable + ErrorProne</td></tr>
+      <tr><td>现代特性</td><td>Vue 3.5+ Composition API</td><td>Java 21+ Virtual Threads</td></tr>
+      <tr><td>测试约束</td><td>Vitest + Playwright + MSW</td><td>JUnit 5 + Testcontainers</td></tr>
+      <tr><td>CI 门禁</td><td>ESLint + typecheck + tests</td><td>SpotBugs + SonarQube + tests</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="beta-context">Beta 当前场景的具体应用</h2>
+
+  <p>Beta 当前场景：<strong>前端 Vue + 后端 Java (Spring Boot)</strong>。按 5 步流程评估：</p>
+
+  <h3 id="current-evaluation">当前栈评估</h3>
+  <table>
+    <thead>
+      <tr><th>层</th><th>Vue 3</th><th>Java 21+ / Spring Boot 4</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>L1</td><td>★★★★ (Anthony Fu Skills 补足)</td><td>★★★★ (SWE-bench 核心语言)</td></tr>
+      <tr><td>L2</td><td>★★★★ (Volar + TypeScript)</td><td>★★★★ (compile + JSpecify)</td></tr>
+      <tr><td>L3</td><td>★★★★ (Skills 标准化)</td><td>★★★★★ (模式高度统一)</td></tr>
+      <tr><td>L4</td><td>★★★★ (Vite + SSG)</td><td>★★★★★ (Virtual Threads + GraalVM)</td></tr>
+      <tr><td>L5</td><td>★★★ (国内友好)</td><td>★★★★★ (企业主流)</td></tr>
+      <tr><td><strong>综合</strong></td><td><strong>★★★★</strong></td><td><strong>★★★★★</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="conclusion">结论</h3>
+  <p><strong>不换栈，重塑使用方式。</strong></p>
+
+  <ul>
+    <li>Vue 侧：加 Anthony Fu Skills + Cursor Rules + TypeScript 严格化</li>
+    <li>Java 侧：升级 JDK 21+ + Spring Boot 4 + JSpecify + records / sealed / pattern matching</li>
+    <li>流程侧：spec-first + AI skeleton + human domain logic + AI tests</li>
+  </ul>
+
+  <h2 id="30-60-90">30 / 60 / 90 天实施路径</h2>
+
+  <h3 id="day-0-30">Day 0-30：基础设施</h3>
+  <ol>
+    <li>建 <code>.cursorrules</code> / <code>CLAUDE.md</code>（前后端各一份）</li>
+    <li>安装 Anthony Fu Skills（前端）+ Spring AI 评估（后端）</li>
+    <li>类型严格化（TS strict / JSpecify）</li>
+    <li>JDK 21 升级评估（Virtual Threads 试点）</li>
+    <li>选 5 个真实任务做 baseline 测量</li>
+  </ol>
+
+  <h3 id="day-30-60">Day 30-60：约束落地</h3>
+  <ol>
+    <li>ESLint / SpotBugs 加规则禁用反模式</li>
+    <li>CI 加 AI Lint（Agent 评审 PR）</li>
+    <li>团队培训：records / sealed / pattern matching / Virtual Threads</li>
+    <li>Spec 模板沉淀（基于踩过的坑）</li>
+    <li>Spring Boot 4 GA 后评估迁移路径</li>
+  </ol>
+
+  <h3 id="day-60-90">Day 60-90：度量与收敛</h3>
+  <ol>
+    <li>跑 20 个真实任务，对比 Day 0 baseline（review 迭代次数、缺陷密度）</li>
+    <li>沉淀团队专属 <code>.cursorrules</code>（基于 60 天踩过的坑）</li>
+    <li>建立"AI 生成代码必须通过的检查项"</li>
+    <li>Modulith 评估：是否拆分为模块化单体而非微服务</li>
+    <li>季度复盘机制建立（90 天后进入下一个循环）</li>
+  </ol>
+
+  <h2 id="anti-patterns">决策反模式（避免踩坑）</h2>
+
+  <h3 id="cargo-cult">反模式 1：潮流跟风（cargo cult）</h3>
+  <p>"大家都说 X 框架更好 → 换"。<strong>不评估自己的约束就换栈</strong>，是最大的浪费。</p>
+  <p>解法：先做 5 层评估，看到分数差距 ≥ 20% 再说。</p>
+
+  <h3 id="blank-slate">反模式 2：blank slate 思维</h3>
+  <p>"新项目不用考虑现有栈"。<strong>忽略迁移成本、组织惯性、人员熟悉度</strong>。</p>
+  <p>解法：迁移成本也算 L5 的权重项，不能只看语言本身。</p>
+
+  <h3 id="framework-fetishism">反模式 3：框架原教旨主义</h3>
+  <p>"React 一定比 Vue 好" / "Go 一定比 Java 先进"。<strong>框架没有绝对优劣</strong>，只有约束适配。</p>
+  <p>解法：用 5 层框架评估，不要预设结论。</p>
+
+  <h3 id="rewrite-from-scratch">反模式 4：推倒重写</h3>
+  <p>"现有栈太乱了，重写吧"。<strong>没有 Spec 的重写就是 vibe coding 的放大版</strong>，只会放大混乱。</p>
+  <p>解法：渐进迁移 + 双栈并行 + Spec 严格化。</p>
+
+  <h2 id="success-metrics">成功指标（30/60/90 天度量）</h2>
+
+  <table>
+    <thead>
+      <tr><th>指标</th><th>Day 0 baseline</th><th>Day 30 目标</th><th>Day 90 目标</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>AI 生成代码 review 迭代次数</td><td>3+ 次</td><td>2 次</td><td>1 次</td></tr>
+      <tr><td>PR 缺陷密度（bugs / PR）</td><td>高</td><td>中</td><td>低</td></tr>
+      <tr><td>新人 onboarding 时间</td><td>1 月</td><td>3 周</td><td>2 周</td></tr>
+      <tr><td>Spec 覆盖率</td><td>0%</td><td>30%</td><td>80%</td></tr>
+      <tr><td>AI Lint 通过率</td><td>n/a</td><td>60%</td><td>85%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="further-reading">延伸阅读</h2>
+  <ul>
+    <li><a href="/research/ai-tech-selection">AI 时代的技术选型：5 层评估框架</a>——评估工具</li>
+    <li><a href="/research/ai-vue-stack">Vue 技术栈 AI 时代深度评估</a></li>
+    <li><a href="/research/ai-java-spring-boot-stack">Java + Spring Boot AI 时代深度评估</a></li>
+    <li><a href="/research/agent-ecosystem">Coding Agent 生态全景</a>——理解 Agent 能力边界</li>
+    <li><a href="/handbook/why-spec-driven-dev">Spec-Driven-Dev 定位</a>——为什么不能纯 vibe coding</li>
+    <li><a href="/handbook/quality-gate">质量门工具</a>——CI 怎么约束 AI 输出</li>
+  </ul>
+
+  <h2 id="references">引用</h2>
+  <ol>
+    <li><a href="/research/ai-tech-selection">AI 时代的技术选型</a>——本 SOP 的评估工具来源</li>
+    <li><a href="/research/ai-vue-stack">Vue 技术栈 AI 时代深度评估</a></li>
+    <li><a href="/research/ai-java-spring-boot-stack">Java + Spring Boot AI 时代深度评估</a></li>
+    <li><a href="https://blog.serghei.pl/posts/choosing-a-language-when-agents-write-your-code/">Choosing a Language When Agents Write Your Code</a> (Serghei, Apr 2026)</li>
+    <li><a href="https://www.augmentcode.com/guides/vibe-coding-vs-spec-driven-development">Vibe Coding vs Spec-Driven Development (2026)</a></li>
+    <li><a href="https://dev.to/woohuiren/attended-spring-io-2026-3j5o">Attended Spring I/O 2026</a> (Apr 2026)</li>
+  </ol>
+</MainLayout>

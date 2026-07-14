@@ -1,0 +1,294 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<MainLayout title="Vue 技术栈 AI 时代深度评估" description="Vue 3 在 AI 编码时代的真实位置：训练数据、市场份额、Anthony Fu Skills 生态、Nuxt UI MCP Server、Cursor Rules 黄金清单、常见 Agent 反模式与避坑指南。">
+  <Sidebar currentPath="/research/ai-vue-stack" slot="sidebar" />
+  <h1>Vue 技术栈 AI 时代深度评估</h1>
+  <div class="meta-line">
+    <span class="tag">栈级调研</span>
+    <span class="tag">Vue 3 / Nuxt 4</span>
+    <span class="tag">2026 中</span>
+  </div>
+
+  <blockquote>
+    <p>Vue 在 AI 时代的"落后感"是错觉。Vue 17.6% 市场份额背后是<strong>DX 优势 + Agent Skills 生态完整</strong>，这两个维度比"用的人多"对 AI 编码更重要。</p>
+  </blockquote>
+
+  <h2 id="one-sentence">一句话总结</h2>
+  <p>Vue 栈（Vue 3 + Composition API + script setup + TypeScript + Pinia + Vite + Nuxt）是 <strong>AI 时代被低估的"约束友好型"前端栈</strong>——比起 React 生态的"自由组合"，Vue 的"约定式 + Agent Skills 标准化"反而更适合 Agent 稳定产出。</p>
+
+  <h2 id="positioning">市场位置：17.6% 背后的真相</h2>
+
+  <p>Stack Overflow Developer Survey 2025 的数据：</p>
+  <ul>
+    <li><strong>React 44.7%</strong> / Angular 18.2% / <strong>Vue 17.6%</strong> / Svelte 7.2%</li>
+    <li>Vue 是"第二大独立前端框架"（Angular 是企业内强绑定，开源生态 Vue 更活跃）</li>
+  </ul>
+
+  <p>但市场占比不等于 AI 友好度。换个角度：</p>
+
+  <table>
+    <thead>
+      <tr><th>框架</th><th>AI 训练数据</th><th>生态 Agent Skills</th><th>约束强度</th><th>适合 Agent 程度</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>React</strong></td><td>★★★★★</td><td>★★ (零散) </td><td>★ (灵活)</td><td>★★ 自由度过剩 → 风格漂移</td></tr>
+      <tr><td><strong>Vue 3</strong></td><td>★★★★</td><td>★★★★★ (Anthony Fu)</td><td>★★★★</td><td>★★★★ 约定 + 工具约束齐备</td></tr>
+      <tr><td><strong>Svelte 5</strong></td><td>★★</td><td>★★</td><td>★★★★</td><td>★★★ 数据少但语法简单</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>关键洞察</strong>：React 训练数据最多，但因为它太自由（4+ 种错误处理风格、class vs function、default vs named export），Agent 在同一项目里会"风格漂移"。Vue 因为约定更强 + Agent Skills 标准化，反而产出更一致。</p>
+
+  <h2 id="why-vue-ai-friendly">为什么 Vue 对 Agent 友好</h2>
+
+  <h3 id="composition-default">1. Composition API + script setup 是 Agent 默认</h3>
+  <p>Vue 3 的两个关键收敛：</p>
+  <ul>
+    <li><strong>Composition API</strong> 取代 Options API（2022 年后）</li>
+    <li><strong>&lt;script setup&gt;</strong> 宏（defineProps / defineEmits / defineModel）让组件定义极简</li>
+  </ul>
+
+  <p>Agent 训练数据中 Composition API + script setup 已经占主导（2024 年后），Options API 写法会越来越被视为"老旧代码"。</p>
+
+  <h3 id="agent-skills">2. Anthony Fu 的 Skills 集合 = "Vue AI 标准包"</h3>
+  <p>这是 React 生态<strong>完全缺位</strong>的一块。Anthony Fu（Vue/Vite/Nuxt 核心贡献者）维护的 <a href="https://github.com/antfu/skills">antfu/skills</a> 包含 10+ 套 agent skills：</p>
+
+  <table>
+    <thead>
+      <tr><th>Skill</th><th>覆盖范围</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>vue</code></td><td>Vue 3 Composition API、script setup 宏、reactivity</td></tr>
+      <tr><td><code>nuxt</code></td><td>file-based routing、server routes、modules、auto-imports</td></tr>
+      <tr><td><code>pinia</code></td><td>类型安全状态管理（Composition API 风格）</td></tr>
+      <tr><td><code>vite</code></td><td>配置、插件、SSR、library mode</td></tr>
+      <tr><td><code>vitest</code></td><td>Vite 驱动的单元测试</td></tr>
+      <tr><td><code>unocss</code></td><td>原子化 CSS 引擎</td></tr>
+      <tr><td><code>vueuse-functions</code></td><td>200+ Vue composition 工具函数</td></tr>
+      <tr><td><code>vue-best-practices</code></td><td>Vue 3 + TypeScript 最佳实践</td></tr>
+      <tr><td><code>vue-router-best-practices</code></td><td>路由模式与约定</td></tr>
+      <tr><td><code>vue-testing-best-practices</code></td><td>Vue 测试约定</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>安装命令</strong>：</p>
+  <pre><code>npx skills add antfu/skills --skill='*'    # 全量安装
+npx skills add antfu/skills --skill=vue      # 单 skill 安装
+npx skills add antfu/skills --skill=nuxt</code></pre>
+
+  <blockquote>
+    <p>What makes this collection stand out is the source of truth. It uses git submodules to reference official documentation directly, and the skills are curated by one of the most prolific contributors in the Vue ecosystem. When the official docs update, the skills can be regenerated to reflect the latest recommended patterns.</p>
+    <footer>— <a href="https://vueschool.io/articles/vuejs-tutorials/vue-agent-skills-for-reliable-ai-development/">Vue Agent Skills for Reliable AI Development</a></footer>
+  </blockquote>
+
+  <h3 id="nuxt-ui-mcp">3. Nuxt UI v4 内置 MCP Server</h3>
+  <p>Nuxt UI v4（基于 Reka UI + Tailwind CSS v4 + Tailwind Variants）发布了一个独立的 <a href="https://ui.nuxt.com/docs/getting-started/ai/skills">Agent Skills</a>，关键能力：</p>
+  <ul>
+    <li>提供 <strong>MCP Server</strong>，把 125+ 可访问 Vue 组件的文档、源码、用法示例直接喂给 Claude Code / Cursor / GitHub Copilot</li>
+    <li>覆盖安装（Nuxt / Vue / Laravel / AdonisJS）、主题（语义色）、组件 props / composables（<code>useToast</code>, <code>useOverlay</code>）、表单验证（Standard Schema）</li>
+    <li>额外的 reference files 按需加载——保持响应聚焦、上下文高效</li>
+  </ul>
+
+  <p>安装命令：</p>
+  <pre><code>npx skills add nuxt/ui</code></pre>
+
+  <h3 id="agent-skill-vs-mcp">4. Skills vs MCP：选择标准</h3>
+  <p>Agent Skills（Vue/Vite/Nuxt/Pinia 等）和 MCP Server（Nuxt UI 提供）的区别：</p>
+
+  <table>
+    <thead>
+      <tr><th>维度</th><th>Agent Skills</th><th>MCP Server</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>位置</td><td>本地（无延迟）</td><td>远程服务器（增加延迟）</td></tr>
+      <tr><td>加载方式</td><td>渐进披露（按需）</td><td>工具描述进入 system prompt</td></tr>
+      <tr><td>行为</td><td>自然语言指令（受 Agent 解释）</td><td>固定 input/output schema（确定性）</td></tr>
+      <tr><td>创建难度</td><td>低（纯 .md 文件）</td><td>高（需实现 server）</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>经验法则</strong>：</p>
+  <ul>
+    <li><strong>Skill 优先</strong>：约定、最佳实践、模式选择</li>
+    <li><strong>MCP 补充</strong>：组件文档、API schema、外部数据源</li>
+    <li>Vue 生态目前 Skill 比 MCP 更成熟——Anthony Fu 集合是黄金标准</li>
+  </ul>
+
+  <h2 id="cursor-rules">Cursor Rules 黄金清单（Vue 3 + Nuxt）</h2>
+
+  <p>来自 <a href="https://dev.to/deadbyapril/the-best-cursor-rules-for-every-framework-in-2026-20-examples-29ag">The Best Cursor Rules for Every Framework in 2026</a> 与 <a href="https://dev.to/olivia_craft/cursor-rules-for-vue-3-and-nuxt-ai-dev-guide-2026-iim">Cursor Rules for Vue 3 and Nuxt</a>，8 条黄金规则：</p>
+
+  <ol>
+    <li><strong>&lt;script setup&gt; 默认</strong>：永远不要 Options API，宏优先（<code>defineProps</code>, <code>defineEmits</code>, <code>defineModel</code>）</li>
+    <li><strong>Prop 不可变</strong>：永远不要在子组件里 mutate prop。用 <code>computed</code> 或本地 ref 派生</li>
+    <li><strong>纪律化 reactivity</strong>：<code>ref</code> 用于 primitive，<code>reactive</code> 谨慎使用（深度响应陷阱），<code>shallowRef</code> 用于大对象</li>
+    <li><strong>Pinia setup stores</strong>：永远用 setup 语法（不是 Options 风格），<code>defineStore('xxx', () =&gt; &#123; ... &#125;)</code></li>
+    <li><strong>composables over mixins</strong>：用 composable 替代 mixin（命名空间隔离 + tree-shaking）</li>
+    <li><strong>Nuxt useFetch 显式 key</strong>：<code>useFetch('/api/x', &#123; key: 'unique-id' &#125;)</code> 避免 hydration 错位</li>
+    <li><strong>typed Vue Router 4</strong>：所有 <code>route.params</code> / <code>route.query</code> 用泛型声明</li>
+    <li><strong>测试三层</strong>：<code>Vitest</code>（单元）+ <code>Playwright</code>（E2E）+ <code>MSW</code>（mock 后端）</li>
+  </ol>
+
+  <p>典型 <code>.cursorrules</code> 开头：</p>
+
+  <pre><code>You are an expert in Vue 3 + TypeScript + Nuxt 4 + Pinia + Vite.
+
+Hard rules:
+- Always use &lt;script setup lang="ts"&gt;
+- Use defineProps/defineEmits with TypeScript generics
+- Pinia setup stores only
+- No Options API
+- No mixins (use composables)
+- Reactivity: ref for primitives, shallowRef for large objects
+- Tests: Vitest + Playwright + MSW</code></pre>
+
+  <h2 id="anti-patterns">AI 生成 Vue 代码的常见反模式</h2>
+
+  <h3 id="options-api">反模式 1：混用 Options API / Composition API</h3>
+  <p>Agent 训练数据覆盖 Vue 2 时期 → 可能在新组件里冒出 Options 语法。解法：</p>
+  <ul>
+    <li><code>.cursorrules</code> 第一条写死 "Always &lt;script setup&gt;"</li>
+    <li>Anthony Fu <code>vue</code> skill 默认推荐 Composition API</li>
+  </ul>
+
+  <h3 id="vuex-not-pinia">反模式 2：Vuex 4 / Vuex 3 残留</h3>
+  <p>Vuex 3 时代的 <code>this.$store.commit('SET_USER', payload)</code> 字符串 commit 会让 Agent 写出来。<strong>Vue 3 时代必须 Pinia</strong>。</p>
+  <ul>
+    <li>Anthony Fu <code>pinia</code> skill 明确禁止 Vuex</li>
+    <li>如果迁移旧项目，<code>.cursorrules</code> 写明 "Pinia only, no Vuex"</li>
+  </ul>
+
+  <h3 id="event-emit-no-types">反模式 3：<code>$emit</code> 不带类型检查</h3>
+  <p>Vue 2 时代 <code>this.$emit('input', value)</code> 在父组件 <code>@input</code> 接收，<strong>没有编译时校验事件是否存在</strong>。Vue 3 + script setup + typed <code>defineEmits</code> 解决。</p>
+  <pre><code>// 反例
+const emit = defineEmits(['update:modelValue'])
+emit('update:modelValue', 'foo')  // 字符串，无类型
+
+// 正例
+const emit = defineEmits&lt;&#123;
+  'update:modelValue': [value: string]
+&#125;&gt;()
+emit('update:modelValue', 'foo')  // 类型校验</code></pre>
+
+  <h3 id="mixin-collision">反模式 4：Mixins 命名冲突</h3>
+  <p>Vue 2 mixin 注入 <code>created()</code> hook 到每个 consumer，可能静默冲突。Agent 看到老代码会复制 mixin 模式。</p>
+  <ul>
+    <li><code>.cursorrules</code> 强制 "No mixins, use composables"</li>
+  </ul>
+
+  <h3 id="useeffect-data-fetch">反模式 5：watchEffect / watch 内做数据获取</h3>
+  <p>有些 Agent 会把 React 的 <code>useEffect(() =&gt; fetch())</code> 模式迁移成 Vue 的 <code>watchEffect</code>，导致重复请求、内存泄漏。</p>
+  <ul>
+    <li>Nuxt 项目用 <code>useFetch</code> / <code>useAsyncData</code>（带 SSR + cache）</li>
+    <li>非 Nuxt 项目用 <code>@vueuse/core</code> 的 <code>useFetch</code> 或专门 composable</li>
+  </ul>
+
+  <h2 id="specific-stack">Beta 公司常见 Vue 栈：最优搭配</h2>
+
+  <table>
+    <thead>
+      <tr><th>层</th><th>推荐选型</th><th>理由</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>框架</strong></td><td>Vue 3.5+</td><td>useTemplateRef / onWatcherCleanup 新特性</td></tr>
+      <tr><td><strong>语言</strong></td><td>TypeScript 严格模式</td><td>strict + noImplicitAny + noUncheckedIndexedAccess</td></tr>
+      <tr><td><strong>构建</strong></td><td>Vite 5+</td><td>Anthony Fu <code>vite</code> skill 覆盖</td></tr>
+      <tr><td><strong>状态管理</strong></td><td>Pinia setup stores</td><td>Vuex 已弃维护</td></tr>
+      <tr><td><strong>路由</strong></td><td>Vue Router 4 typed</td><td>router typed generics</td></tr>
+      <tr><td><strong>UI 库</strong></td><td>Nuxt UI v4 / Element Plus / Naive UI</td><td>Nuxt UI 有 MCP server；其他走 skill</td></tr>
+      <tr><td><strong>工具函数</strong></td><td>VueUse (200+ composables)</td><td>Anthony Fu 维护</td></tr>
+      <tr><td><strong>样式</strong></td><td>UnoCSS / Tailwind CSS v4</td><td>AI 生成友好（utility class 描述意图）</td></tr>
+      <tr><td><strong>测试</strong></td><td>Vitest + Playwright + MSW</td><td>三层测试，Anthony Fu <code>vitest</code> skill</td></tr>
+      <tr><td><strong>SSR / SSG</strong></td><td>Nuxt 4</td><td>Anthony Fu <code>nuxt</code> skill</td></tr>
+      <tr><td><strong>表单</strong></td><td>VeeValidate + Zod</td><td>类型化 schema 验证</td></tr>
+      <tr><td><strong>HTTP</strong></td><td>ofetch / Axios + interceptor</td><td>Nuxt 内置 ofetch</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="decision-frame">Vue 栈决策框架</h2>
+
+  <h3 id="use-vue">什么时候选 Vue</h3>
+  <ul>
+    <li><strong>团队初次接触现代前端</strong>：Vue 学习曲线最平缓</li>
+    <li><strong>企业内中后台 / SaaS</strong>：Vue + Element Plus / Naive UI 是国内主流</li>
+    <li><strong>想最大化 AI 编码效率</strong>：Anthony Fu Skills + Cursor Rules 完整闭环</li>
+    <li><strong>SSR / SSG / 全栈</strong>：Nuxt 4 是 Vue 生态最完整的 meta-framework</li>
+    <li><strong>国内业务为主</strong>：中文文档、社区、招聘池都最友好</li>
+  </ul>
+
+  <h3 id="not-use-vue">什么时候不选 Vue</h3>
+  <ul>
+    <li><strong>前端架构师个人偏好 React 生态</strong>（component composition 哲学差异）</li>
+    <li><strong>重度依赖某个 React 专用库</strong>（如某些状态机库、动画库）</li>
+    <li><strong>团队已经在 React 上大量沉淀</strong>（迁移成本不划算）</li>
+    <li><strong>需要最广的招聘池</strong>（React 仍是市场份额第一）</li>
+  </ul>
+
+  <h2 id="30-day-upgrade">30 天升级路径（Vue 3 团队）</h2>
+
+  <h3 id="week-1">Week 1：建立 Agent Skills 基础设施</h3>
+  <ul>
+    <li>全量安装 Anthony Fu Skills 集合：<code>npx skills add antfu/skills --skill='*'</code></li>
+    <li>写 <code>.cursorrules</code>：把团队约定编码进去</li>
+    <li>团队成员同步 <code>CLAUDE.md</code>（给 Claude Code 用）</li>
+  </ul>
+
+  <h3 id="week-2">Week 2：约束强化</h3>
+  <ul>
+    <li><code>tsconfig.json</code> 开 <code>strict</code>、<code>noImplicitAny</code>、<code>noUncheckedIndexedAccess</code></li>
+    <li>ESLint 规则对齐：禁用 Options API、禁用 Vuex、禁用 mixin</li>
+    <li>Prettier 统一格式（让 Agent 输出不需要再格式化）</li>
+  </ul>
+
+  <h3 id="week-3">Week 3：组件库落地</h3>
+  <ul>
+    <li>选定 UI 库（推荐 Nuxt UI v4 with MCP server）</li>
+    <li>把组件库 Skills / MCP 安装到所有 Agent 配置</li>
+    <li>统一组件命名约定（PascalCase / 业务前缀）</li>
+  </ul>
+
+  <h3 id="week-4">Week 4：度量与收敛</h3>
+  <ul>
+    <li>跑 5-10 个真实任务，记录 AI 生成的 review 迭代次数</li>
+    <li>沉淀团队专属 <code>.cursorrules</code>（基于踩过的坑）</li>
+    <li>建立"AI 生成代码必须经过的检查项"清单</li>
+  </ul>
+
+  <h2 id="summary">结论</h2>
+
+  <p>Vue 在 AI 时代不是"小众选择"，而是 <strong>"约束友好 + 工具完整 + 学习曲线友好"</strong> 的最优解之一。</p>
+
+  <p>关键在于：<strong>不要让 Agent 在裸 Vue 项目里自由发挥</strong>——把 Anthony Fu Skills + Cursor Rules + 团队约定三层叠加，把 Agent 约束在"Vue 最佳实践"内。</p>
+
+  <p>与 React 的对比不在"哪个更好"，而在"哪个更适合你的约束环境"：</p>
+  <ul>
+    <li><strong>React</strong>：需要更强的工程纪律 + 内部规范来约束 Agent</li>
+    <li><strong>Vue</strong>：自带约定 + 工具生态更友好</li>
+  </ul>
+
+  <p>对 Beta 当前场景（Vue + Java Spring Boot 全栈），Vue 这一侧 <strong>不需要换技术栈</strong>，只需要"重塑使用方式"。</p>
+
+  <h2 id="further-reading">延伸阅读</h2>
+  <ul>
+    <li><a href="/research/ai-tech-selection">AI 时代的技术选型：5 层评估框架</a></li>
+    <li><a href="/research/ai-java-spring-boot-stack">Java + Spring Boot AI 时代深度评估</a></li>
+    <li><a href="/research/agent-ecosystem">Coding Agent 生态全景</a></li>
+    <li><a href="/research/context-engineering">上下文工程（行业视角）</a></li>
+  </ul>
+
+  <h2 id="references">引用</h2>
+  <ol>
+    <li><a href="https://vueschool.io/articles/vuejs-tutorials/vue-agent-skills-for-reliable-ai-development/">Vue Agent Skills for Reliable AI Development</a> (Vue School, Mar 2026) — Anthony Fu Skills 集合详解</li>
+    <li><a href="https://github.com/antfu/skills">antfu/skills</a> — Vue/Vite/Nuxt/Pinia/Vitest/Vueuse 全套 Skills</li>
+    <li><a href="https://antigravity.codes/agent-skills/nuxt/nuxt-ui">Nuxt UI v4 Agent Skill</a> — 125+ 组件的 MCP server</li>
+    <li><a href="https://dev.to/olivia_craft/cursor-rules-for-vue-3-and-nuxt-ai-dev-guide-2026-iim">Cursor Rules for Vue 3 and Nuxt: AI Dev Guide 2026</a> (Apr 2026)</li>
+    <li><a href="https://dev.to/deadbyapril/the-best-cursor-rules-for-every-framework-in-2026-20-examples-29ag">The Best Cursor Rules for Every Framework in 2026</a> (Mar 2026)</li>
+    <li><a href="https://www.groovyweb.co/blog/vue-vs-react-comparison-2026">Vue vs React in 2026</a> — 性能、生态、招聘、学习曲线对比</li>
+    <li><a href="https://www.imaginarycloud.com/blog/best-frontend-frameworks">Best Frontend Frameworks for 2026</a> — Stack Overflow 2025 数据来源</li>
+    <li><a href="https://vueschool.io/articles/vuejs-tutorials/setting-up-your-ide-for-nuxt-ui-a-complete-guide/">Setting Up Your IDE for Nuxt UI</a> (Dec 2025)</li>
+    <li><a href="https://developertoolkit.ai/en/cookbook/frontend-recipes/vue-patterns/">Vue.js Development Patterns for Cursor &amp; Claude Code</a></li>
+  </ol>
+</MainLayout>
