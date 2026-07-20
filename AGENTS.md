@@ -1,147 +1,67 @@
 # AGENTS.md
 
-本仓库是 `AI Dev Handbook`，一个中文 Astro 静态站，目标是沉淀“AI 辅助生产级软件开发和维护”的系统方法论。后续维护时，优先把它当成一套内容操作系统，而不是普通文档站。
+本仓库是中文 Astro 静态站，沉淀 AI 辅助生产级开发方法论。
 
-## 工作语言
+**AGENTS.md 只放 agent 执行必须的纪律**。项目定位、主线六段、内容分类、写作规则、持续追踪机制、维护边界、推荐阅读路径等全部在 `README.md`，不要在此复制。
 
-- 面向用户、页面正文、README 和站点内容默认使用中文。
-- 代码、路径、命令、文件名保持英文。
-- 术语可保留英文原词，例如 Spec、Context Engineering、Quality Gate、Coding Agent、MCP、RFC、ADR。
+## 技术栈
 
-## 项目主线
+- Astro 5.6+（见 `package.json` 锁版本）、Node 20+、npm
+- 部署：Vercel（`vercel.json`），所有 push 都会 build，master push 部署到 production
+- 无后端、无数据库
 
-所有新增或修改内容都要挂到这条主线之一：
+## 命令
 
-```text
-行业判断 -> 工程方法 -> 执行场景 -> 工具体系 -> 组织推广 -> 持续追踪
-```
+- `npm run dev`：本地开发服务器
+- `npm run build`：构建静态站；**会生成 `.astro/types.d.ts`，提交前应恢复**
+- `npm run preview`：预览构建产物
 
-含义如下：
+提交或交付前必跑 `npm run build`。如果只是改 Markdown 文案但没装依赖，commit message 里说明未跑构建的原因。
 
-- **行业判断**：AI 辅助开发的趋势、数据、事故、生态、边界和大厂案例。
-- **工程方法**：Spec 工程化、澄清循环、AI Lint、契约优先、上下文工程、质量门。
-- **执行场景**：第一单、陌生代码库、多会话并行、夜间异步、文档同步、团队角色。
-- **工具体系**：Context Engineering、AI Coding、Quality Gate、Engineering Efficiency 四层工具框架。
-- **组织推广**：试点、培训、推广、度量、治理、成熟工程流程的 AI 化。
-- **持续追踪**：工具变化、厂商 changelog、社区趋势、事故案例、研究报告和过时内容清理。
+## 目录职责
 
-核心观点必须保持一致：
+- `src/pages/research/`：行业判断、研究、案例、工具生态、数据和风险
+- `src/pages/handbook/`：可执行方法、SOP、协作纪律、工程实践和具体场景
+- `src/pages/strategy/`：团队试点、组织推广、管理视角和落地路线
+- `src/pages/templates/`：可复制模板、Checklist、Prompt、度量表和流程卡片
+- `src/components/Sidebar.astro`：全站侧边栏；新增页面通常要同步改
+- `src/layouts/MainLayout.astro`：全站布局、导航、主题和基础样式
 
-> AI 是放大器，不是工程师。生产级交付不能依赖“AI 自己会懂”，必须通过 Spec、上下文、质量门和人类验收来约束。
+**新页面应优先挂现有主线，新增分类、URL 迁移、长期专题演进规则 → 读 `README.md#新增内容原则`**，不要在此复制。
 
-## 长期专题方向
+## Do
 
-后续一段时间，内容扩展优先围绕：**大厂成熟软件开发流程的 AI 辅助落地**。
+- 复用现有 `MainLayout` + `Sidebar` 结构（Astro frontmatter 模板见 README）
+- 先给判断框架，再给工具或案例；不要把页面写成工具清单
+- 涉及数字、报告、厂商能力时标注时间语境；缺来源的降级为"团队经验值"或"观察信号"
+- 改动 Sidebar / 布局后，跑 `npm run build` 确认没破坏
+- 修改导航时同步检查 `Sidebar.astro` 的分组、当前路径和阅读顺序
 
-新增这类内容时，不要只写“某工具怎么用”。优先映射到成熟软件开发流程中的具体环节：
+## Don't
 
-- 需求与立项：PRD、RFC、ADR、需求评审、Spec 冻结。
-- 设计与拆解：架构评审、接口契约、任务切片、风险识别。
-- 开发与协作：代码生成、结对协作、跨团队依赖、陌生代码库接手。
-- 测试与质量：测试生成、变更影响分析、AI code review、安全扫描、质量门。
-- 发布与运维：发布说明、回滚预案、事故复盘、文档同步。
-- 组织与治理：试点、培训、工具准入、成本控制、合规、度量。
+- **不要主动 `git commit` / `git push`**；等用户明确要求
+- **不要修改 `.astro/types.d.ts`**（build 产物）
+- **不要为分类洁癖移动现有 URL**（特别是 `src/pages/research/transformation.astro`，它在 research 下是有意保留的）
+- **不要引入新内容分类**，除非 `research/handbook/strategy/templates` 明显承载不下
+- **不要把阶段事实包装成永久事实**（工具状态、厂商能力、协议采用度）
+- **不要为了新增内容大规模重写现有页面**；优先做局部补充和结构化链接
+- **不要把内容整理任务扩展成 UI 重构**；发现 bug 可以顺手修，但守住范围
 
-每篇新增内容都应回答四个问题：
+## Git
 
-1. 这个实践属于成熟工程流程的哪一环？
-2. AI 增强了什么？
-3. 人类仍然必须负责什么？
-4. 质量门或退出条件在哪里？
+- 主分支：`master`（master push 部署到 production）
+- 提交风格：以 conventional commits 为主（`feat:`、`fix:`、`docs:`、`chore:` 等），版本号或简单 `feat:` 也常见
+- 不主动 commit/push；按用户指令操作
 
-## 目录归属
+## 用户偏好
 
-站点内容位于 `src/pages/`：
+- 回复中文
+- 工程手册语气，避免口语化表达（「踩坑」「搞定」「调教」「不熟项目+AI实战」等）
+- 站点文案保持正式，不要情绪化或营销化
 
-- `src/pages/research/`：行业判断、研究、案例、工具生态、数据和风险。
-- `src/pages/handbook/`：可执行方法、SOP、协作纪律、工程实践和具体场景。
-- `src/pages/strategy/`：团队试点、组织推广、管理视角和落地路线。
-- `src/pages/templates/`：可复制模板、Checklist、Prompt、度量表和流程卡片。
-- `src/components/Sidebar.astro`：全站侧边栏目录。新增页面后通常要同步更新这里。
-- `src/layouts/MainLayout.astro`：全站布局、导航、主题和基础样式。
+## 何时读 README / 子文档
 
-当前 `research/transformation.astro` 保留为“团队转型路线图”的调研入口，并从组织推广侧栏关联过去；除非新增 strategy 索引或迁移方案，否则不要只为分类洁癖移动 URL。
-
-新增页面时，优先复用现有页面结构：
-
-```astro
----
-import MainLayout from '../../layouts/MainLayout.astro';
-import Sidebar from '../../components/Sidebar.astro';
----
-
-<MainLayout title="页面标题" description="一句话描述">
-  <Sidebar currentPath="/section/slug" slot="sidebar" />
-  <h1>页面标题</h1>
-  <div class="meta-line"><span class="tag">分类</span></div>
-  ...
-</MainLayout>
-```
-
-## 内容写作规则
-
-- 先给判断框架，再给工具或案例。不要把页面写成工具清单。
-- 每页尽量有明确的“下一步”或“相关章节”，避免孤岛。
-- 新观点要说明适用边界，不要写成无条件结论。
-- 生产级实践要包含质量门、人工验收点或失败模式。
-- 涉及数字、报告、厂商能力和工具状态时，标注时间语境，避免把阶段性事实写成永久事实。
-- 缺少公开来源或样本口径的数字，不要写成行业事实；降级为“团队经验值”“观察信号”“待团队校准阈值”。
-- 厂商报告、自报 benchmark、社区传闻要标注来源性质，不能包装成中立实证。
-- 模板类内容要可直接复制使用，避免只讲概念。
-- 反模式、事故和失败案例要落到可执行的防范措施。
-
-## 工具和业界追踪规则
-
-工具内容采用“框架稳定、工具滚动更新”的维护方式。
-
-工具状态统一使用这些语义：
-
-- `主流`：已有广泛采用，可作为默认推荐或团队标配候选。
-- `新兴`：值得 PoC，但不宜直接大规模推广。
-- `观察`：方向值得关注，证据不足。
-- `下滑`：被替代、维护放缓或使用风险上升。
-- `弃用`：不再推荐，除非为了历史背景或迁移说明保留。
-
-更新节奏：
-
-- 每月 review 工具状态、厂商 changelog、社区热点、事故案例和关键指标。
-- 每季度复查首页洞察、阅读路径、工具分层和研究结论。
-- 遇到重大事故、工具停更、平台能力突变或行业共识变化，优先更新 `research/`，再同步影响到 `handbook/` 和 `templates/`。
-
-## 编辑纪律
-
-- 不要为了新增内容大规模重写现有页面；优先做局部补充和结构化链接。
-- 不要引入新的内容分类，除非现有 `research/handbook/strategy/templates` 明显无法承载。
-- 修改导航时同步检查 `Sidebar.astro` 的分组、当前路径和阅读顺序。
-- 首页的页数、版本、更新时间如果改动，应与实际内容保持一致。
-- 发现明显 bug 可以顺手修，但不要把内容整理任务扩展成 UI 重构。
-
-## 本地验证
-
-常用命令：
-
-```bash
-npm install
-npm run dev
-npm run build
-npm run preview
-```
-
-提交或交付前至少运行：
-
-```bash
-npm run build
-```
-
-如果只是改 Markdown 类文案但没有安装依赖，可以说明未运行构建的原因。
-
-## Learned User Preferences
-
-- 用户偏好用中文回复。
-- 站点文案保持正式工程手册语气，避免口语化或情绪化表达（如「踩坑」「搞定」「调教」「不熟项目+AI实战」等）。
-- 仅在用户明确要求时 git commit/push，不要主动提交。
-
-## Learned Workspace Facts
-
-- 内容体系化优化默认采用「中等重构」：不做大规模 URL 迁移，优先导航一致性、事实可信度、命名消歧与文案语气。
-- `npm run build` 可能改动 `.astro/types.d.ts`，交付前应恢复该生成文件，避免混入内容提交。
+- 修改内容结构、新增分类、动首页 → 读 `README.md#主线` + `#新增内容原则`
+- 改工具状态、调整长期专题 → 读 `README.md#持续追踪机制`
+- 改 Sidebar / 布局 → 直接看 `src/components/Sidebar.astro` 现有模式
+- 写新页面 → 读 `README.md` 里给的 Astro 模板 + 当前目录下其他 `.astro` 页面
