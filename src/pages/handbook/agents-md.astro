@@ -1,0 +1,363 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const title = "AGENTS.md 实践：生产级项目怎么写";
+const description = "基于 ETH Zurich 论文和 6 个真实生产仓库，提炼生产级 AGENTS.md 的 6 段推荐结构、progressive disclosure 模式、subdir 范式与三大反模式";
+---
+
+<MainLayout title={title} description={description}>
+  <Sidebar currentPath="/handbook/agents-md" slot="sidebar" />
+  <h1>{title}</h1>
+  <div class="meta-line">
+    <span class="tag">实践指南</span>
+    <span class="tag">SOP</span>
+    <span class="tag">Context Engineering · Layer 1</span>
+  </div>
+
+  <blockquote>
+    <p>AGENTS.md 是项目级的「AI 入职手册」。它被每种 agent 在每次 session 启动时自动加载，每一行都会消耗 token 和注意力。论文数据显示，写对是放大器，写错是噪声放大器。</p>
+  </blockquote>
+
+  <p>本页讲 <strong>怎么写好</strong> AGENTS.md。<a href="/handbook/context-engineering#agents-md">上下文工程 · AGENTS.md</a> 讲它在工具栈里的位置和最小模板；<a href="/research/context-engineering">上下文工程（行业视角）</a> 讲概念和原则。三个页面互不重复。</p>
+
+  <h2 id="what-it-is">它是什么、谁在用</h2>
+
+  <p><strong>AGENTS.md</strong> 是放在项目根目录的 Markdown 文件，被 AI 编码 agent 自动读取作为项目级上下文。OpenAI 于 <strong>2025 年 8 月</strong> 发布，<strong>2025 年 12 月</strong> 捐给 Linux Foundation 旗下 <a href="https://aaif.io/projects/agents-md/">Agentic AI Foundation (AAIF)</a>，由 <a href="https://agents.md/">agents.md project</a> 维护。AAIF 路线图显示 <strong>2026 年内会发布 v1.0 稳定规范</strong>。</p>
+
+  <p>据论文和 AAIF 自报数据，已有 <strong>60,000+</strong> 公开仓库使用，原生支持包括：</p>
+  <table>
+    <thead><tr><th>类型</th><th>代表工具</th></tr></thead>
+    <tbody>
+      <tr><td>终端 Agent</td><td>OpenAI Codex、Claude Code、Gemini CLI、Goose、OpenCode、Aider、Cursor CLI</td></tr>
+      <tr><td>IDE Agent</td><td>Cursor、Zed、JetBrains Junie、Windsurf、VS Code + Copilot</td></tr>
+      <tr><td>云端 / 异步</td><td>GitHub Copilot Coding Agent、Google Jules、Factory、Devin、Mux</td></tr>
+      <tr><td>国内</td><td>阿里云百炼智能体、Hermes Agent（按公开博客自报）</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>关键事实</strong>：<a href="https://vibecoding.app/blog/agents-md-guide">vibecoding 2026-06 调研</a> 显示 <strong>Claude Code 自 v2 起也原生读取 AGENTS.md</strong>，之前只读 CLAUDE.md。这意味着"AGENTS.md vs CLAUDE.md"不再是互斥选择，AGENTS.md 是 <strong>universal 单一事实源</strong>，CLAUDE.md 是 Anthropic 更丰富的<strong>补充层</strong>。</p>
+
+  <h2 id="paper-evidence">关键证据：ETH 论文给我们的反直觉结论</h2>
+
+  <p><a href="https://arxiv.org/abs/2602.11988"><strong>Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?</strong></a>，Gloaguen et al., ETH SRI，ICML 2026（v2 提交 2026-06-23）。这是迄今对 AGENTS.md 最严谨的实证研究。</p>
+
+  <p>研究方法：构建 <strong>AGENTbench</strong> 基准，138 个实例、12 个真实仓库（Python），用 <strong>SWE-bench Lite</strong> 测 LLM 自动生成的文件，对比有无 AGENTS.md 的任务成功率和成本。</p>
+
+  <h3>三个反直觉的数据</h3>
+
+  <table>
+    <thead><tr><th>结论</th><th>数据</th><th>含义</th></tr></thead>
+    <tbody>
+      <tr><td>developer 提供的 AGENTS.md</td><td>任务成功率 <strong>+4%</strong>（平均）</td><td>人写的有用，但只是微正</td></tr>
+      <tr><td>LLM 自动生成的 AGENTS.md</td><td>任务成功率 <strong>-3%</strong>（平均）</td><td>自动生成 <strong>有害</strong>，除非人工精修</td></tr>
+      <tr><td>两类文件的成本开销</td><td>推理成本 <strong>+20% 以上</strong></td><td>每行 AGENTS.md 都有 token 代价</td></tr>
+    </tbody>
+  </table>
+
+  <h3>论文其他关键发现</h3>
+  <ul>
+    <li><strong>"Repository overviews ... not helpful"</strong>：详细目录树、项目结构概览对 agent 导航<strong>没有帮助</strong>，agent 能自己探索</li>
+    <li><strong>"Context files are redundant documentation"</strong>：当 AGENTS.md 和 README / CONTRIBUTING 内容重叠时，<strong>反而</strong>没有提升；只在其他文档都移除时 LLM 生成的文件才有 ~2.7% 提升</li>
+    <li><strong>"Stronger models don't generate better context files"</strong>：GPT-5 等强模型自动生成的 AGENTS.md <strong>不</strong>比小模型更好</li>
+    <li><strong>"Human-written context files should describe only minimal requirements"</strong>：论文核心建议</li>
+  </ul>
+
+  <div class="admonition warning">
+    <div class="admonition-title">三条直接的工程含义</div>
+    <ol>
+      <li><strong>不要堆目录树</strong>：详细列 src/、lib/、tests/ 没什么用，agent 能自己看</li>
+      <li><strong>不要和 README 重复</strong>：把 README 已有的项目定位、阅读路径再写一遍只会拉高成本</li>
+      <li><strong>不要 LLM 直接生成</strong>：除非有强制的人工精修流程（Anthropic 官方对 <code>/init</code> 的建议就是"生成 + 立即 refine"）</li>
+    </ol>
+  </div>
+
+  <h2 id="recommended-structure">生产级推荐结构（6 段）</h2>
+
+  <p>GitHub Program Manager Director <a href="https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/">Matt Nigh 2025-11 在 GitHub 官方 blog 公布的 2500+ 文件研究</a> 指出，top tier 的 AGENTS.md 都覆盖六个核心 area：</p>
+
+  <table>
+    <thead><tr><th>段</th><th>放什么</th><th>典型长度</th></tr></thead>
+    <tbody>
+      <tr><td>1. 技术栈</td><td>语言 / 框架 / 关键依赖 + <strong>版本</strong></td><td>3-5 行</td></tr>
+      <tr><td>2. 命令</td><td>build / test / lint / single-test + flags</td><td>5-10 行</td></tr>
+      <tr><td>3. 架构约束</td><td>目录职责、模块边界、<strong>单向依赖方向</strong></td><td>5-15 行</td></tr>
+      <tr><td>4. Do / Don't</td><td>明确要做什么、绝对不能碰什么</td><td>5-10 行</td></tr>
+      <tr><td>5. Git 工作流</td><td>分支命名、commit 格式、PR 规则</td><td>3-5 行</td></tr>
+      <tr><td>6. 何时读 README / 子文档</td><td>指针式引用，详情去别处</td><td>3-5 行</td></tr>
+    </tbody>
+  </table>
+
+  <h3>可直接复制的骨架</h3>
+
+  <pre><code># AGENTS.md
+
+本项目是 [一句话定位]。详情见 README，重复信息不在此堆。
+
+## 技术栈
+- Language: TypeScript 5.x
+- Framework: Next.js 15 (App Router)
+- DB: PostgreSQL + Prisma 5.x
+- Test: Vitest + Playwright
+- Package manager: pnpm 9.x（**不要用 npm / yarn**，会改 lockfile）
+
+## 命令
+- 装依赖: `pnpm install`
+- 跑 dev: `pnpm dev`
+- 单测: `pnpm test &lt;file&gt;`（**不要** `pnpm test` 全量）
+- Lint: `pnpm lint --fix`
+- 构建: `pnpm build`
+
+## 目录职责
+- `app/` — Next.js routes，**只能**被 `lib/` 依赖
+- `lib/` — 共享业务逻辑，**禁止** import `app/`
+- `prisma/` — schema + migrations，**禁止**手改数据库
+- `tests/e2e/` — Playwright，端到端
+
+## Do
+- 改 schema 走 `pnpm prisma migrate dev --name xxx`
+- API route 必须有 Zod schema 校验
+- 提交前跑 `pnpm lint && pnpm test &lt;changed&gt;`
+
+## Don't
+- **不要** `pnpm test` 跑全量（CI 才跑）
+- **不要**手改 `node_modules/` 或 `prisma/migrations/` 已应用的
+- **不要** commit `.env` 或任何含 secret 的文件
+- **不要**改 `package.json` 的 lockfileVersion
+
+## Git
+- 分支: `feat/xxx` / `fix/xxx` / `chore/xxx`
+- Commit: conventional commits（`feat:`、`fix:`、`docs:`）
+- PR: 标题 conventional、body 关联 issue
+
+## 何时读 README / 子文档
+- 项目定位、阅读路径、贡献流程 → `README.md`
+- 数据库 schema 详情 → `prisma/schema.prisma` 注释
+- 部署流程 → `docs/deploy.md`
+</code></pre>
+
+  <h3>行数预算</h3>
+
+  <table>
+    <thead><tr><th>来源</th><th>推荐</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://code.claude.com/docs/en/best-practices">Anthropic 官方</a>（code.claude.com）</td><td><strong>&lt; 300 行</strong>，每行问自己"删掉它 Claude 会犯错吗"</td></tr>
+      <tr><td>HumanLayer 工程实践</td><td><strong>&lt; 60 行</strong>（个人偏好，非 universal）</td></tr>
+      <tr><td>GitHub 2500+ 文件研究</td><td>用 <strong>6 段</strong> 覆盖核心 area，<strong>短</strong> + <strong>命令优先</strong></td></tr>
+      <tr><td>betterclaw 2500 仓库分析</td><td>超过 150 行回报递减（第三方分析，方法论未完全公开）</td></tr>
+    </tbody>
+  </table>
+
+  <p>实操建议：<strong>目标 &lt; 100 行</strong>，hard cap 300 行。超过 100 行意味着开始堆细节——把那些细节移去 <a href="#progressive-disclosure">SKILL.md</a> 或子目录 AGENTS.md。</p>
+
+  <div class="admonition info">
+    <div class="admonition-title">Anthropic 官方原话</div>
+    <p>"For each line, ask: 'Would removing this cause Claude to make mistakes?' If not, cut it. <strong>Bloated CLAUDE.md files cause Claude to ignore your actual instructions!</strong>"</p>
+    <p>这同样适用于 AGENTS.md——行越多，agent 越会忽略关键纪律。</p>
+  </div>
+
+  <h2 id="progressive-disclosure">Progressive disclosure：AGENTS.md 之外还有 SKILL.md</h2>
+
+  <p>AGENTS.md 不是 agent 上下文的<strong>唯一</strong>载体。Anthropic 在 <a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">2025-10 engineering blog</a> 推出 <strong>Agent Skills</strong> 体系，2025-12 升级为 <a href="https://agentskills.io/"><strong>agentskills.io 开放标准</strong></a>，现已被 20+ 工具支持：Claude Code、Cursor、OpenAI Codex、GitHub Copilot、VS Code、Gemini CLI、OpenCode、Goose、Amp、Factory、Junie、Letta、Mux、OpenHands、Databricks Genie 等。</p>
+
+  <h3>Skills 的三层加载</h3>
+
+  <table>
+    <thead><tr><th>层</th><th>内容</th><th>何时加载</th><th>典型大小</th></tr></thead>
+    <tbody>
+      <tr><td>L1 · Frontmatter</td><td><code>name</code> + <code>description</code></td><td>启动时预加载到 system prompt</td><td>~100 tokens / skill</td></tr>
+      <tr><td>L2 · SKILL.md body</td><td>程序性指令、checklist、流程</td><td>任务匹配时按需加载</td><td>推荐 &lt; 5000 tokens</td></tr>
+      <tr><td>L3 · 引用文件</td><td>参考文档、代码、fixtures</td><td>agent 主动读取时加载</td><td>unbounded</td></tr>
+    </tbody>
+  </table>
+
+  <h3>CLAUDE.md / AGENTS.md vs SKILL.md 怎么分工</h3>
+
+  <p>Anthropic 官方原话：</p>
+  <blockquote>
+    <p>"Create a skill when you keep pasting the same instructions, checklist, or multi-step procedure into chat, <strong>or when a section of CLAUDE.md has grown into a procedure rather than a fact</strong>."</p>
+  </blockquote>
+
+  <p>实操判断：</p>
+  <ul>
+    <li><strong>AGENTS.md / CLAUDE.md 放事实</strong>：技术栈、命令、目录职责、Do/Don't（"是什么"）</li>
+    <li><strong>SKILL.md 放程序</strong>：长 checklist、多步流程、特定任务（"怎么做"）</li>
+    <li><strong>判断标准</strong>：如果一个段落每次 session 都会用，放 AGENTS.md；如果只在某类任务用，放 SKILL.md</li>
+  </ul>
+
+  <p>路径：</p>
+  <ul>
+    <li>enterprise：managed settings 注入（公司全局）</li>
+    <li>personal：<code>~/.claude/skills/&lt;name&gt;/SKILL.md</code>（个人跨项目）</li>
+    <li>project：<code>.claude/skills/&lt;name&gt;/SKILL.md</code>（项目内）</li>
+    <li><strong>nested</strong>：monorepo 子目录也能放，子包写自己用的 skill</li>
+  </ul>
+
+  <p>Cursor 等价物是 <code>.cursor/rules/*.mdc</code>（见下文），但 MDC 不支持 SKILL.md 那种"按需描述匹配"，粒度更粗。</p>
+
+  <h2 id="three-anti-patterns">三大反模式（带数据）</h2>
+
+  <h3>反模式 1：让 LLM 直接生成、直接用</h3>
+  <p>论文数据：成功率 <strong>-3%</strong>，成本 <strong>+20%</strong>。原因是 LLM 倾向写"通用最佳实践"和"obviously good advice"，而这些 agent 早就知道。</p>
+  <p><strong>例外</strong>：Anthropic 官方 <a href="https://code.claude.com/docs/en/best-practices"><code>/init</code> 命令</a> 推荐用 Claude Code 自动生成 CLAUDE.md 草稿，但<strong>必须</strong>立即人工精修、删除废话。这是"自动生成 + 强制精修"模式，论文未测，但符合"minimal requirements"原则。</p>
+
+  <h3>反模式 2：只描述不展示</h3>
+  <p>GitHub Matt Nigh 2025-11 关键观察：<strong>"One real code snippet showing your style beats three paragraphs describing it"</strong>。写"follow clean code principles" agent 会忽略；给一个 <code>// ✅ good</code> / <code>// ❌ bad</code> 对比它立刻理解。</p>
+
+  <h3>反模式 3：长期不更新</h3>
+  <p>过期的 AGENTS.md 比没 AGENTS.md <strong>更糟</strong>——它会引导 agent 跑错的命令、用废弃的 API、走错目录。Anthropic 官方原话："<strong>Bloated CLAUDE.md files cause Claude to ignore your actual instructions</strong>"——bloat 往往是过时内容积累出来的。</p>
+  <p>同步纪律：改架构 / 改命令 / 改 lint 规则 → <strong>当 PR 同步改 AGENTS.md</strong>。每季度做一次清理：删过时、补空白、agent 反复出错的位置加规则。</p>
+
+  <h2 id="subdir-pattern">Subdir AGENTS.md 怎么用</h2>
+
+  <p>GitHub Copilot 官方文档明确："<strong>the nearest AGENTS.md file in the directory tree taking precedence</strong>"。大多数支持 AGENTS.md 的工具都遵循这个规则。</p>
+
+  <h3>何时用</h3>
+  <p>subdir 真的有<strong>独立于 root 的约定</strong>。Sentry 实际做法：</p>
+  <ul>
+    <li>root <code>AGENTS.md</code>：Sentry overview + commands</li>
+    <li><code>src/AGENTS.md</code>：backend patterns + security</li>
+    <li><code>tests/AGENTS.md</code>：testing patterns</li>
+    <li><code>static/AGENTS.md</code>：frontend patterns + design system</li>
+    <li><code>.agents/skills/</code>：commit / pre-commit / hybrid cloud 等 workflow</li>
+  </ul>
+
+  <h3>何时不用</h3>
+  <ul>
+    <li>subdir 跟 root 一样，重复只会让 agent 困惑（该听哪个？）</li>
+    <li>subdir 是临时实验目录</li>
+    <li>subdir 没特殊约定</li>
+  </ul>
+
+  <h3>反模式</h3>
+  <p>每个目录都放一个空 stub AGENTS.md 写"see root"——是反模式。文件越多，agent 启动时要扫描的越多，token 浪费越多。</p>
+
+  <h2 id="ecosystem-map">AGENTS.md vs 其他工具配置文件</h2>
+
+  <p>90% 内容相同，但每个文件有特定功能。下面是当前（2026-07）的生态地图：</p>
+
+  <table>
+    <thead><tr><th>文件</th><th>读它的工具</th><th>功能定位</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td><code>AGENTS.md</code>（根）</td><td>20+ universal</td><td><strong>项目级单一事实源</strong></td><td>OpenAI 提出，AAIF 托管，最广泛支持</td></tr>
+      <tr><td><code>CLAUDE.md</code></td><td>Claude Code</td><td>Anthropic 的<strong>扩展层</strong></td><td>支持 3 层 memory（user / project / local）+ skills 体系，比 AGENTS.md 更"丰富"</td></tr>
+      <tr><td><code>.cursor/rules/*.mdc</code></td><td>Cursor</td><td>Cursor 的<strong>作用域化</strong>规则</td><td>MDC 格式 = Markdown + YAML frontmatter（<code>description</code> / <code>globs</code> / <code>alwaysApply</code>），4 种激活模式</td></tr>
+      <tr><td><code>.github/agents/*.md</code></td><td>GitHub Copilot</td><td><strong>多 agent 团队</strong>（@docs-agent、@test-agent）</td><td>frontmatter 定义 persona，GitHub 2025-11 推出，<strong>不是社区标准</strong>，但 monorepo 多团队有用</td></tr>
+      <tr><td><code>.cursorrules</code></td><td>Cursor（旧）</td><td><strong>已 deprecate</strong></td><td>老的单文件格式，2024 风格；新项目请用 <code>.cursor/rules/*.mdc</code></td></tr>
+      <tr><td><code>.claude/skills/&lt;name&gt;/SKILL.md</code></td><td>Claude Code + 20+ via agentskills.io</td><td><strong>按需加载</strong>的程序</td><td>三层 progressive disclosure，不每次注入</td></tr>
+    </tbody>
+  </table>
+
+  <h3>推荐用法</h3>
+  <ol>
+    <li><strong>AGENTS.md 做 single source of truth</strong>：放所有项目级纪律，跨工具通用</li>
+    <li><strong>Claude Code 用户加 CLAUDE.md</strong>：享受 3 层 memory + skills 体系；但内容<strong>不要</strong>和 AGENTS.md 重复，互补</li>
+    <li><strong>Cursor 用户加 .cursor/rules/*.mdc</strong>：用 globs 限定作用域，避免每个文件都被注入</li>
+    <li><strong>Sentry 实践</strong>：在 AGENTS.md 第二行写 "<strong>AGENTS.md is the source of truth. Do not add to CLAUDE.md or Cursor rules.</strong>"——把规则写在源头</li>
+  </ol>
+
+  <h2 id="production-examples">6 个真实生产实例（2026-06 验证）</h2>
+
+  <p><a href="https://ssojet.com/blog/agents-md-examples">SSOJet 2026-06-24 调研</a> 验证了 6 个 production 仓库的 AGENTS.md 实际写法，<strong>每个文件 2026-06-22 raw URL HTTP 200</strong>。每条后面是一句话点评：</p>
+
+  <table>
+    <thead><tr><th>仓库</th><th>Star（2026-06）</th><th>特点</th><th>行数</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://github.com/openai/codex/blob/main/AGENTS.md">openai/codex</a></td><td>92,577</td><td><strong>长 linting brief</strong>：Rust clippy 规则逐条 + sandbox env 保护。<strong>作者自己承认太长</strong>（300+ 行），仅作 rule style 范本</td><td>300+</td></tr>
+      <tr><td><a href="https://raw.githubusercontent.com/getsentry/sentry/master/AGENTS.md">getsentry/sentry</a></td><td>44,143</td><td><strong>subdir 范式</strong>：root + <code>src/</code> + <code>tests/</code> + <code>static/</code> 四个 AGENTS.md + <code>.agents/skills/</code>。第二行声明"AGENTS.md is the source of truth"</td><td>中（root 250+）</td></tr>
+      <tr><td><a href="https://github.com/apache/airflow/blob/main/AGENTS.md">apache/airflow</a></td><td>45,884</td><td><strong>风格强制</strong>：命名规则（"Dag" title case 全大写例外）+ 禁裸跑 pytest（强制 breeze 容器）</td><td>中</td></tr>
+      <tr><td><a href="https://github.com/temporalio/temporal/blob/main/AGENTS.md">temporalio/temporal</a></td><td>21,124</td><td><strong>persona 优先</strong>：第一行 "You are an experienced developer ..."，"Before implementing, you MUST REVIEW" 强制先读开发指南</td><td>中</td></tr>
+      <tr><td><a href="https://github.com/cloudflare/workers-sdk/blob/main/AGENTS.md">cloudflare/workers-sdk</a></td><td>4,179</td><td><strong>monorepo 防护</strong>：第一行 "Use pnpm - never use npm or yarn"，保护 shared lockfile</td><td>短</td></tr>
+      <tr><td>coder/coder</td><td>—</td><td><strong>行为契约</strong>："Rule #1" 显式要求 + 禁 sycophantic 套话（"You're absolutely right!"）</td><td>短</td></tr>
+    </tbody>
+  </table>
+
+  <p>六个范式各自的<strong>核心启示</strong>：</p>
+  <ul>
+    <li><strong>openai/codex</strong>：示范"如何把 lint 规则写成 agent 指令"，但<strong>不要</strong>复制 300 行</li>
+    <li><strong>sentry</strong>：示范"subdir 范式 + source of truth 声明"</li>
+    <li><strong>airflow</strong>：示范"如何用 AGENTS.md 强约束风格"</li>
+    <li><strong>temporal</strong>：示范"persona + 强流程"，适合复杂系统</li>
+    <li><strong>workers-sdk</strong>：示范"monorepo 防护第一行"——最值得复制</li>
+    <li><strong>coder/coder</strong>：示范"用 AGENTS.md 防 agent 行为问题"（禁 sycophantic）</li>
+  </ul>
+
+  <h2 id="landing-sop">落地 SOP</h2>
+
+  <h3>新项目</h3>
+  <ol>
+    <li>在脚手架阶段生成 AGENTS.md（参考本页骨架）</li>
+    <li>第一段是<strong>技术栈 + 版本</strong>，第二段是<strong>命令</strong>，其余按需</li>
+    <li>目标 &lt; 100 行；hard cap 300 行</li>
+  </ol>
+
+  <h3>已存在项目（改造）</h3>
+  <ol>
+    <li>读 README + CONTRIBUTING，列出<strong>所有</strong>和 agent 相关的纪律</li>
+    <li>删掉 README 已有的（不要重复）</li>
+    <li>挑出"agent 不会自己发现"的部分：build 命令、特殊工具约定、test 路径、Don't-do 清单</li>
+    <li>用 6 段结构重组</li>
+  </ol>
+
+  <h3>持续纪律</h3>
+  <ul>
+    <li>改架构 / 改命令 / 改 lint 规则 → <strong>当 PR 同步改</strong> AGENTS.md</li>
+    <li>每季度清理一次：删过时、补空白</li>
+    <li>agent 反复出错的位置 → 是 AGENTS.md 的 gap，加规则</li>
+    <li>度量（可选）：<code>wc -l AGENTS.md</code> 控制在目标内；观察 agent retry 率</li>
+  </ul>
+
+  <h3>团队推</h3>
+  <ol>
+    <li>新项目脚手架内置 AGENTS.md 模板</li>
+    <li>review checklist 加一项："AGENTS.md 是否同步更新"</li>
+    <li>每季度 review 工具状态、命令是否过时</li>
+  </ol>
+
+  <h2 id="faq">常见问题</h2>
+
+  <h3>Q: AGENTS.md 和 README 该谁先写？</h3>
+  <p>项目刚启动时<strong>先写 README</strong>（给人类看）；AGENTS.md 可以在有了第一波约定后写。<strong>不要先写 AGENTS.md 复用 README 之前的状态</strong>——大概率会重复。</p>
+
+  <h3>Q: 多语言 monorepo 怎么办？</h3>
+  <p>root AGENTS.md 只写 monorepo 级（包管理、monorepo 命令、跨包约定）。每个包一个 <code>AGENTS.md</code>，放包内特定约定。Sentry 是范本。</p>
+
+  <h3>Q: 个人小项目也要写吗？</h3>
+  <p>如果只有你一个人用 agent，<strong>建议 &lt; 30 行</strong>，只放命令和 Do/Don't；如果完全不用 agent，可以不写。</p>
+
+  <h3>Q: AGENTS.md 该不该 commit 进 git？</h3>
+  <p><strong>必须 commit</strong>。它是项目级配置，不是个人偏好。所有团队成员和 CI 都依赖它。</p>
+
+  <h3>Q: 我的项目 60k stars，要不要按 openai/codex 写 300 行？</h3>
+  <p><strong>不要</strong>。论文数据显示详细目录树没用，命令 + Do/Don't 才是高 ROI。&lt; 100 行是绝大多数项目的甜点。</p>
+
+  <div class="related-links">
+    <h3>相关章节</h3>
+    <ul>
+      <li><a href="/handbook/context-engineering#agents-md">上下文工程 · AGENTS.md</a> — 工具栈位置 + 最小模板</li>
+      <li><a href="/research/context-engineering">上下文工程（行业视角）</a> — 概念和原则</li>
+      <li><a href="/handbook/tool-stack">工具体系</a> — AGENTS.md 在 4 层工具里的位置</li>
+      <li><a href="/handbook/anti-patterns">反模式与失败模式</a> — 流程层面的反模式</li>
+      <li><a href="/templates/agents-md">AGENTS.md 模板</a> — 可直接复制的骨架</li>
+    </ul>
+  </div>
+</MainLayout>
+
+<style>
+  .related-links {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+  }
+  .related-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+  .related-links li a {
+    font-size: 0.875rem;
+  }
+</style>
+</MainLayout>
