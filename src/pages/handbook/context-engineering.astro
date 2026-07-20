@@ -26,58 +26,9 @@ import Sidebar from '../../components/Sidebar.astro';
   <p><strong>状态</strong>：🟢 主流 · <strong>成本</strong>：极低 · <strong>收益</strong>：高</p>
 
   <h3>是什么</h3>
-  <p>放在项目根目录的 Markdown 文件，给 AI 解释"项目是什么、约定是什么、怎么工作"。Cursor、Claude Code、Cline、Aider 等 Agent 型工具通常支持读取类似项目说明文件，但读取规则和优先级因产品而异。</p>
+  <p>放在项目根目录的 Markdown 文件，给 AI 解释“项目是什么、约定是什么、怎么工作”。Cursor、Claude Code、Cline、Aider 等 Agent 型工具通常支持读取类似项目说明文件，但读取规则和优先级因产品而异。</p>
 
-  <h3>应该写什么</h3>
-  <ul>
-    <li><strong>项目一句话定位</strong>：是什么、给谁用、解决什么问题</li>
-    <li><strong>技术栈</strong>：语言、框架、关键依赖、版本</li>
-    <li><strong>代码组织</strong>：目录结构、模块边界、命名约定</li>
-    <li><strong>必读/必避</strong>：跑测试的命令、提交规范、绝对不能动的地方</li>
-    <li><strong>常见任务模板</strong>：加 feature 怎么开始、修 bug 怎么走</li>
-  </ul>
-
-  <h3>最小模板</h3>
-  <pre><code># Project Name
-
-## 这是什么
-[一句话说明]
-
-## 技术栈
-- Language: TypeScript 5.x
-- Framework: Next.js 15
-- DB: PostgreSQL + Prisma
-- Test: Vitest + Playwright
-
-## 目录结构
-- `app/` - Next.js app router
-- `lib/` - 共享业务逻辑
-- `prisma/` - schema + migrations
-- `tests/e2e/` - Playwright
-
-## 开发命令
-- 跑测试: `pnpm test`
-- Lint: `pnpm lint`
-- 启动 dev: `pnpm dev`
-
-## 铁律
-- 所有 DB 操作走 Prisma client，禁裸 SQL
-- API route 必须有 Zod schema 校验
-- 提交前必须跑 lint + test
-
-## 常见任务
-- 加新 API: 在 `app/api/` 建 route.ts, 先写 Zod schema
-- 改 schema: `pnpm prisma migrate dev --name xxx`
-</code></pre>
-
-  <h3>进阶：分层 AGENTS.md</h3>
-  <p>大项目可以用 <code>AGENTS.md</code> + <code>CLAUDE.md</code> + 子目录 <code>AGENTS.md</code> 的组合：</p>
-  <ul>
-    <li>根 <code>AGENTS.md</code>：全局约定</li>
-    <li><code>packages/api/AGENTS.md</code>：该子包特有约定（API 鉴权、错误码规范）</li>
-    <li><code>packages/web/AGENTS.md</code>：前端特有约定（状态管理、组件库）</li>
-  </ul>
-  <p>部分工具会在进入子目录时叠加读取上级与当前目录的说明文件；落地前应以所用工具的官方规则为准。</p>
+  <p>本节只点它在工具栈里的位置和成本收益判断；具体的 6 段推荐结构、SKILL.md 互补、subdir 范式、生产级反模式、6 个真实仓库实例，详见 <a href="/handbook/agents-md"><strong>AGENTS.md 实践</strong></a>。</p>
 
   <h2 id="code-graph">CodeGraph · 代码图谱</h2>
   <p><strong>状态</strong>：🟡 新兴 · <strong>成本</strong>：中（需集成）· <strong>收益</strong>：高（跨文件任务）</p>

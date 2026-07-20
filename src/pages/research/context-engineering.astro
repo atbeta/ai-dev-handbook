@@ -29,34 +29,7 @@ import Sidebar from '../../components/Sidebar.astro';
 
   <h2 id="agents-md">AGENTS.md：项目的「AI 入职手册」</h2>
   <p>AGENTS.md 是上下文工程的核心文件之一。它通常位于项目根目录，用来给 Agent 型工具提供项目结构、约定和约束；不同工具的读取规则并不完全相同。</p>
-
-  <h3>一份好的 AGENTS.md 应该包含</h3>
-  <pre><code># AGENTS.md
-
-## Project Overview
-- 项目名称、一句话描述
-- 技术栈（语言、框架、数据库）
-- 部署方式
-
-## Architecture
-- 目录结构说明
-- 模块划分与职责
-- 数据流方向
-
-## Conventions
-- 命名规范（文件、函数、变量、数据库字段）
-- 错误处理模式
-- 日志格式
-- 测试策略
-
-## Constraints
-- 不能使用的库/模式
-- 性能要求（P99 延迟、QPS 上限）
-- 安全要求（禁止的 API、数据脱敏规则）
-
-## Glossary
-- 业务术语 → 代码概念映射
-- 易混淆概念区分</code></pre>
+  <p>本页只讲原则和定位；具体的 6 段推荐结构、progressive disclosure 模式、subdir 范式、6 个真实生产仓库实例、生产级反模式，详见 <a href="/handbook/agents-md"><strong>实践指南 · AGENTS.md 实践</strong></a>。</p>
 
   <div class="admonition tip">
     <div class="admonition-title">AGENTS.md 编写原则</div>

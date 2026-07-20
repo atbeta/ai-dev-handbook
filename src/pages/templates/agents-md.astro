@@ -1,0 +1,187 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const minimalTemplate = `# AGENTS.md
+
+本项目是 [一句话定位]。详情见 README，重复信息不在此堆。
+
+## 技术栈
+- Language: TypeScript 5.x
+- Framework: Next.js 15 (App Router)
+- DB: PostgreSQL + Prisma 5.x
+- Test: Vitest + Playwright
+- Package manager: pnpm 9.x（**不要用 npm / yarn**，会改 lockfile）
+
+## 命令
+- 装依赖: \`pnpm install\`
+- 跑 dev: \`pnpm dev\`
+- 单测: \`pnpm test <file>\`（**不要** \`pnpm test\` 跑全量）
+- Lint: \`pnpm lint --fix\`
+- 构建: \`pnpm build\`
+
+## 目录职责
+- \`app/\` — Next.js routes，**只能**被 \`lib/\` 依赖
+- \`lib/\` — 共享业务逻辑，**禁止** import \`app/\`
+- \`prisma/\` — schema + migrations，**禁止**手改数据库
+
+## Do
+- 改 schema 走 \`pnpm prisma migrate dev --name xxx\`
+- API route 必须有 Zod schema 校验
+- 提交前跑 \`pnpm lint && pnpm test <changed>\`
+
+## Don't
+- **不要** \`pnpm test\` 跑全量（CI 才跑）
+- **不要**手改 \`node_modules/\` 或 \`prisma/migrations/\` 已应用的
+- **不要** commit \`.env\` 或任何含 secret 的文件
+- **不要**改 \`package.json\` 的 lockfileVersion
+
+## Git
+- 分支: \`feat/xxx\` / \`fix/xxx\` / \`chore/xxx\`
+- Commit: conventional commits（\`feat:\`、\`fix:\`、\`docs:\`）
+- PR: 标题 conventional、body 关联 issue
+
+## 何时读 README / 子文档
+- 项目定位、阅读路径 → \`README.md\`
+- 数据库 schema 详情 → \`prisma/schema.prisma\` 注释
+- 部署流程 → \`docs/deploy.md\``;
+
+const tinyTemplate = `# AGENTS.md
+
+[项目一句话]
+
+## 技术栈
+- [语言 + 版本]、[框架 + 版本]、[DB]、[测试框架]
+- 包管理器: [pnpm/npm/yarn]（**只用这个**）
+
+## 命令
+- 安装: \`[包管理] install\`
+- 单测: \`[包管理] test <file>\`（**不要**跑全量）
+- Lint: \`[包管理] lint --fix\`
+- 构建: \`[包管理] build\`
+
+## Don't
+- **不要**跑全量测试
+- **不要** commit \`.env\` / secret
+- **不要**改 lockfile`;
+
+const subdirTemplate = `# AGENTS.md — packages/api
+
+只写这个子包特有的约定，**不重复** root AGENTS.md。
+
+## 接口契约
+- 所有 handler 入口做 Zod 校验
+- 错误码用 \`{HTTP, code, message}\` 三元组
+- 鉴权用 middleware，禁止 handler 内手写
+
+## 测试
+- 单测: \`pnpm test --filter @app/api\`
+- 集成测试必须用 \`testcontainers\` 起真实依赖，**禁止** mock 掉整个 DB
+
+## Don't
+- **不要** import \`@app/web\`（单向依赖）
+- **不要**直接调 DB，**必须**走 \`db/repositories/\` 里的 repository
+- **不要**在 handler 里 catch + log + rethrow，让全局 error handler 接`;
+
+const specOnlyTemplate = `# AGENTS.md — packages/web
+
+只写这个子包特有的约定，**不重复** root AGENTS.md。
+
+## 状态管理
+- 全局状态: Zustand
+- 服务端状态: TanStack Query
+- 表单: React Hook Form + Zod schema
+
+## 组件约定
+- 所有可复用组件放 \`components/ui/\`，**禁止**在 \`pages/\` 里塞大组件
+- 业务组件放 \`components/{feature}/\`
+- props 用 \`type Props = {}\` 而非 interface
+
+## 测试
+- 单测: Vitest + Testing Library
+- E2E: Playwright（只测关键 user flow，**不要**每个组件都写 E2E）
+
+## Don't
+- **不要** import \`@app/api\` 内部模块，只用 \`@app/api-client\`
+- **不要**直接 \`fetch()\`，**必须**走 \`api/\` 目录封装
+- **不要**用 \`any\`（tsconfig 里开了 \`noImplicitAny\`）`;
+
+const sopsTemplate = `# AGENTS.md — tests
+
+只写这个子包特有的约定，**不重复** root AGENTS.md。
+
+## 编写规范
+- 一个 it 一个断言，多个断言拆 \`it.each\`
+- mock 优先用 \`vi.spyOn\`，**避免** \`vi.mock\` 整个模块
+- fixture 放 \`tests/fixtures/\`，**不要**在 it 里内联造数据
+
+## 不要
+- **不要**为了过 test 改实现
+- **不要** skip 失败的 case，必须 fix 或 @todo
+- **不要**碰 \`tests/__snapshots__/\` 除非明确要更新 snapshot`;
+---
+
+<MainLayout title="AGENTS.md 模板" description="可直接复制的 AGENTS.md 骨架：minimal 6 段、极简、monorepo 子目录 4 变体（api / web / tests）">
+  <Sidebar currentPath="/templates/agents-md" slot="sidebar" />
+  <h1>AGENTS.md 模板</h1>
+  <div class="meta-line"><span class="tag">可复制模板</span> 4 个变体</div>
+
+  <p>→ 6 段结构的取舍依据、论文数据、6 个生产仓库实例见 <a href="/handbook/agents-md"><strong>AGENTS.md 实践</strong></a>。</p>
+
+  <h2 id="minimal">完整模板（6 段，40-60 行，新项目默认）</h2>
+  <p>对应 <a href="/handbook/agents-md#recommended-structure">6 段推荐结构</a>。直接复制到项目根目录 <code>AGENTS.md</code>，按需替换 <code>[...]</code> 占位符。</p>
+  <pre><code set:html={minimalTemplate} /></pre>
+
+  <h2 id="tiny">极简模板（&lt; 20 行，个人小项目）</h2>
+  <p>只放<strong>技术栈 + 命令 + Don't</strong>。适用于个人小项目、或只用一两种 agent 的场景。</p>
+  <pre><code set:html={tinyTemplate} /></pre>
+
+  <h2 id="subdir">Subdir 模板（monorepo 子包）</h2>
+  <p>monorepo 子目录的 AGENTS.md <strong>不重复 root</strong>，只写本包特有约定。参考 <a href="https://raw.githubusercontent.com/getsentry/sentry/master/AGENTS.md">Sentry 实际做法</a>。</p>
+
+  <h3 id="subdir-api">packages/api — 后端子包</h3>
+  <pre><code set:html={subdirTemplate} /></pre>
+
+  <h3 id="subdir-web">packages/web — 前端子包</h3>
+  <pre><code set:html={specOnlyTemplate} /></pre>
+
+  <h3 id="subdir-tests">tests — 测试子包</h3>
+  <pre><code set:html={sopsTemplate} /></pre>
+
+  <h2 id="checklist">自检清单</h2>
+  <p>复制完模板后，跑一遍下面 8 条，全部通过再 commit：</p>
+  <ol>
+    <li><strong>行数 &lt; 100</strong>：subdir 模板 &lt; 30</li>
+    <li><strong>技术栈带版本</strong>：<code>TypeScript 5.x</code> 写具体，<code>TypeScript</code> 不写</li>
+    <li><strong>命令带 flags</strong>：<code>pnpm test &lt;file&gt;</code> 比 <code>pnpm test</code> 好</li>
+    <li><strong>Don't 用粗体</strong>：每条都 <code>**不要** ...</code> 开头</li>
+    <li><strong>没有目录树</strong>：不列 src/、lib/、tests/，论文说没用</li>
+    <li><strong>没有和 README 重复</strong>：项目定位、阅读路径、贡献流程 → README</li>
+    <li><strong>Do 给例子，Don't 强语气</strong>：Do 是示范，Don't 是红线</li>
+    <li><strong>改完跑 build</strong>：<code>npm run build</code> 确认能跑过</li>
+  </ol>
+
+  <h2 id="variants">变体选择</h2>
+  <table>
+    <thead><tr><th>场景</th><th>用哪个</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>新项目（单包）</td><td>完整模板</td><td>6 段够覆盖大部分场景，&lt; 100 行</td></tr>
+      <tr><td>个人小项目（&lt; 5 文件）</td><td>极简模板</td><td>只放技术栈和命令，不堆纪律</td></tr>
+      <tr><td>monorepo root</td><td>完整模板 + subdir 模板</td><td>root 写 monorepo 约定，每个包一个 subdir AGENTS.md</td></tr>
+      <tr><td>monorepo 子包</td><td>对应 subdir 模板</td><td>只写本包特有，<strong>不重复</strong> root</td></tr>
+      <tr><td>内部工具（公司私库）</td><td>完整模板 + 加公司纪律</td><td>Do 段加公司规范，Don't 段加公司红线</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="evolution">迭代纪律</h2>
+  <p>AGENTS.md 不是一次性写完的，是<strong>和项目一起长</strong>的：</p>
+  <ul>
+    <li>agent 反复出错的位置 → 是 AGENTS.md 的 gap，加规则</li>
+    <li>改架构 / 改命令 / 改 lint → 当 PR 同步改 AGENTS.md</li>
+    <li>每季度 review 一次：删过时、补空白</li>
+    <li>行数超过 100 → 拆 subdir 或迁到 SKILL.md</li>
+  </ul>
+
+  <p style="margin-top:24px"><a href="/handbook/agents-md">← 返回 AGENTS.md 实践指南</a></p>
+</MainLayout>
+</MainLayout>
